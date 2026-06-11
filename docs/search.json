@@ -4,7 +4,14 @@
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "About this site"
+    "text": "I’m a researcher at the University of Burgos, Spain working on quantum gravity."
+  },
+  {
+    "objectID": "projects.html",
+    "href": "projects.html",
+    "title": "Projects",
+    "section": "",
+    "text": "Tessera: an alphabet of 3×3 binary grids\n\n\nA complete constructed writing system built from the 102 symmetry classes of the 3×3 binary grid, with its own calligraphy and a working font family.\n\n\n\n\n\n\nJun 12, 2026\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "projects/tessera-alphabet.html",
@@ -44,8 +51,8 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "my-site",
+    "title": "Flavio Mercati",
     "section": "",
-    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites."
+    "text": "Welcome to my personal site. I’m a [brief description]. Here I share research projects, side ideas, and notes."
   }
 ]

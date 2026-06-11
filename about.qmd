@@ -1,5 +1,15 @@
 ---
 title: "About"
+about:
+  template: jolla
+  image: profile.jpg
+  links:
+    - icon: envelope
+      text: Email
+      href: mailto:you@example.com
+    - icon: github
+      text: GitHub
+      href: https://github.com/yourusername
 ---
 
-About this site
+I'm a researcher at the University of Burgos, Spain working on quantum gravity.
