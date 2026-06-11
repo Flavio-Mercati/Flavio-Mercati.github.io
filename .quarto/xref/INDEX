@@ -1,0 +1,14 @@
+{
+  "projects/tessera-alphabet.qmd": {
+    "tessera-alphabet.html": "c7be0d46"
+  },
+  "projects.qmd": {
+    "projects.html": "a3b00cf9"
+  },
+  "index.qmd": {
+    "index.html": "adcb4c67"
+  },
+  "about.qmd": {
+    "about.html": "71b8dbf4"
+  }
+}
