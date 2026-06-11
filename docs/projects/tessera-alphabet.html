@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="dcterms.date" content="2026-06-12">
+<meta name="description" content="A complete constructed writing system built from the 102 symmetry classes of the 3×3 binary grid, with its own calligraphy and a working font family.">
 
-<title>tessera-alphabet – Flavio Mercati</title>
+<title>Tessera: an alphabet of 3×3 binary grids – Flavio Mercati</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -71,6 +73,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -114,17 +145,95 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-mathematics" id="toc-the-mathematics" class="nav-link active" data-scroll-target="#the-mathematics">The mathematics</a></li>
+  <li><a href="#try-it" id="toc-try-it" class="nav-link" data-scroll-target="#try-it">Try it</a></li>
+  <li><a href="#documents" id="toc-documents" class="nav-link" data-scroll-target="#documents">Documents</a></li>
+  <li><a href="#downloads" id="toc-downloads" class="nav-link" data-scroll-target="#downloads">Downloads</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Tessera: an alphabet of 3×3 binary grids</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">mathematics</div>
+    <div class="quarto-category">design</div>
+    <div class="quarto-category">typography</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    A complete constructed writing system built from the 102 symmetry classes of the 3×3 binary grid, with its own calligraphy and a working font family.
+  </div>
+</div>
 
 
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 12, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
 
 
+</header>
 
 
+<p><strong>Tessera</strong> is a constructed writing system whose characters are the 3×3 binary pixel grids, classified under the symmetries of the square.</p>
+<section id="the-mathematics" class="level2">
+<h2 class="anchored" data-anchor-id="the-mathematics">The mathematics</h2>
+<p>A 3×3 binary grid has <span class="math inline">\(2^9 = 512\)</span> possible states. Two grids are considered <em>the same character</em> if one can be obtained from the other by a rotation or reflection — that is, by an element of the dihedral group <span class="math inline">\(D_4\)</span>. The number of distinct characters is the number of orbits of <span class="math inline">\(D_4\)</span> acting on the 512 grids, which Burnside’s lemma counts as</p>
+<p><span class="math display">\[
+\frac{1}{|D_4|}\sum_{g \in D_4} |\mathrm{Fix}(g)|
+= \frac{1}{8}\left(2^9 + 2\cdot 2^3 + 2^5 + 2\cdot 2^6 + 2\cdot 2^5\right)
+= \frac{816}{8} = 102.
+\]</span></p>
+<p>Those <strong>102 orbits</strong> are the characters of Tessera. Excluding the empty grid and adding case and orientation variants, the full system maps onto <strong>128 characters</strong> covering the Latin alphabet, digits, punctuation, IPA symbols and accented letters. Every orbit has a name — from CARDINAL and ROCKET to BELLFLOWER, whose orbit contains the canonical glider from Conway’s Game of Life.</p>
+<p>One pleasant invariant: the center pixel is the unique fixed point of <span class="math inline">\(D_4\)</span> acting on the grid cells, so <em>“is the center filled?”</em> is constant on every orbit — it cleanly separates the alphabet into two families.</p>
+</section>
+<section id="try-it" class="level2">
+<h2 class="anchored" data-anchor-id="try-it">Try it</h2>
+<p>The font is real: TrueType outlines generated programmatically from the same JSON source of truth that produces all the documents below.</p>
+<p><strong><a href="tessera/docs/specimen.html">✒️ Type in Tessera — interactive specimen</a></strong> — a live demo with the full family (Regular, Bold, Italic, Bold Italic) embedded. Type anything and watch it render.</p>
+</section>
+<section id="documents" class="level2">
+<h2 class="anchored" data-anchor-id="documents">Documents</h2>
+<ul>
+<li><a href="tessera/docs/periodic.html">Periodic table of characters</a> — all 102 orbits arranged by structure</li>
+<li><a href="tessera/docs/orbits.html">Orbit explorer</a> — every orbit with its full set of grid representatives</li>
+<li><a href="tessera/docs/calli4.html">Calligraphic forms</a> — the stroke-based rendering algorithm</li>
+<li><a href="tessera/docs/notes.html">Notes on the Tessera</a> — the full mathematical write-up</li>
+</ul>
+</section>
+<section id="downloads" class="level2">
+<h2 class="anchored" data-anchor-id="downloads">Downloads</h2>
+<p>Install the fonts and type Tessera anywhere:</p>
+<ul>
+<li><a href="tessera/fonts/Tessera-Regular.ttf">Tessera-Regular.ttf</a></li>
+<li><a href="tessera/fonts/Tessera-Bold.ttf">Tessera-Bold.ttf</a></li>
+<li><a href="tessera/fonts/Tessera-Italic.ttf">Tessera-Italic.ttf</a></li>
+<li><a href="tessera/fonts/Tessera-BoldItalic.ttf">Tessera-BoldItalic.ttf</a></li>
+<li><a href="tessera/tessera.json">tessera.json</a> — the machine-readable source of truth (grids, orbits, names, codepoints)</li>
+</ul>
+
+
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

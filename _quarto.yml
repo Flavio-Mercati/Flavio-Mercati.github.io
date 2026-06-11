@@ -1,21 +1,20 @@
 project:
   type: website
+  output-dir: docs
 
 website:
-  title: "my-site"
+  title: "Flavio Mercati"
   navbar:
     left:
       - href: index.qmd
         text: Home
-      - about.qmd
+      - href: projects.qmd
+        text: Projects
+      - href: about.qmd
+        text: About
 
 format:
   html:
-    theme:
-      - cosmo
-      - brand
-    css: styles.css
+    theme: litera
+    mainfont: "Georgia"
     toc: true
-
-
-

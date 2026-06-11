@@ -1,0 +1,1161 @@
+{
+ "system": "Tessera",
+ "description": "Canonical Tessera character data. g = assigned grid value; gd = display variant if different; canonical = smallest g in the D4 orbit; readings = phonetic readings (Euro variants share a glyph).",
+ "orbits": 102,
+ "characters": 104,
+ "readings": 112,
+ "entries": [
+  {
+   "symbol": "a",
+   "g": 97,
+   "gd": null,
+   "name": "TROT",
+   "role": "rv",
+   "canonical": 97,
+   "readings": [
+    "a"
+   ]
+  },
+  {
+   "symbol": "b",
+   "g": 30,
+   "gd": null,
+   "name": "SNAKE",
+   "role": "rc",
+   "canonical": 30,
+   "readings": [
+    "b"
+   ]
+  },
+  {
+   "symbol": "c",
+   "g": 3,
+   "gd": null,
+   "name": "BUMP",
+   "role": "rc",
+   "canonical": 3,
+   "readings": [
+    "c"
+   ]
+  },
+  {
+   "symbol": "d",
+   "g": 367,
+   "gd": null,
+   "name": "PI",
+   "role": "rc",
+   "canonical": 367,
+   "readings": [
+    "d"
+   ]
+  },
+  {
+   "symbol": "e",
+   "g": 7,
+   "gd": null,
+   "name": "TOP BAR",
+   "role": "rv",
+   "canonical": 7,
+   "readings": [
+    "e"
+   ]
+  },
+  {
+   "symbol": "f",
+   "g": 15,
+   "gd": null,
+   "name": "J-TETRIMINO",
+   "role": "rc",
+   "canonical": 15,
+   "readings": [
+    "f"
+   ]
+  },
+  {
+   "symbol": "g",
+   "g": 41,
+   "gd": null,
+   "name": "LOWBALL",
+   "role": "rc",
+   "canonical": 41,
+   "readings": [
+    "g"
+   ]
+  },
+  {
+   "symbol": "h",
+   "g": 58,
+   "gd": null,
+   "name": "TEE-UP",
+   "role": "rc",
+   "canonical": 58,
+   "readings": [
+    "h"
+   ]
+  },
+  {
+   "symbol": "i",
+   "g": 45,
+   "gd": null,
+   "name": "GOAL POSTS",
+   "role": "rv",
+   "canonical": 45,
+   "readings": [
+    "i"
+   ]
+  },
+  {
+   "symbol": "j",
+   "g": 57,
+   "gd": null,
+   "name": "L-TETRIMINO",
+   "role": "rc",
+   "canonical": 57,
+   "readings": [
+    "j"
+   ]
+  },
+  {
+   "symbol": "k",
+   "g": 29,
+   "gd": null,
+   "name": "BOAT",
+   "role": "rc",
+   "canonical": 29,
+   "readings": [
+    "k"
+   ]
+  },
+  {
+   "symbol": "l",
+   "g": 239,
+   "gd": null,
+   "name": "BIG L",
+   "role": "rc",
+   "canonical": 239,
+   "readings": [
+    "l"
+   ]
+  },
+  {
+   "symbol": "m",
+   "g": 26,
+   "gd": null,
+   "name": "INNER ELL",
+   "role": "rc",
+   "canonical": 26,
+   "readings": [
+    "m"
+   ]
+  },
+  {
+   "symbol": "n",
+   "g": 79,
+   "gd": null,
+   "name": "GAMMA",
+   "role": "rc",
+   "canonical": 79,
+   "readings": [
+    "n"
+   ]
+  },
+  {
+   "symbol": "o",
+   "g": 105,
+   "gd": null,
+   "name": "CUP",
+   "role": "rv",
+   "canonical": 105,
+   "readings": [
+    "o"
+   ]
+  },
+  {
+   "symbol": "p",
+   "g": 70,
+   "gd": null,
+   "name": "ARKANOID",
+   "role": "rc",
+   "canonical": 70,
+   "readings": [
+    "p"
+   ]
+  },
+  {
+   "symbol": "q",
+   "g": 99,
+   "gd": null,
+   "name": "CAN-CAN",
+   "role": "rc",
+   "canonical": 99,
+   "readings": [
+    "q"
+   ]
+  },
+  {
+   "symbol": "r",
+   "g": 171,
+   "gd": null,
+   "name": "ROCKET",
+   "role": "rc",
+   "canonical": 171,
+   "readings": [
+    "r"
+   ]
+  },
+  {
+   "symbol": "s",
+   "g": 229,
+   "gd": null,
+   "name": "SLALOM",
+   "role": "rc",
+   "canonical": 229,
+   "readings": [
+    "s"
+   ]
+  },
+  {
+   "symbol": "t",
+   "g": 327,
+   "gd": null,
+   "name": "GATE",
+   "role": "rc",
+   "canonical": 327,
+   "readings": [
+    "t"
+   ]
+  },
+  {
+   "symbol": "u",
+   "g": 47,
+   "gd": null,
+   "name": "ARCH",
+   "role": "rv",
+   "canonical": 47,
+   "readings": [
+    "u"
+   ]
+  },
+  {
+   "symbol": "v",
+   "g": 17,
+   "gd": null,
+   "name": "CORNER DOT",
+   "role": "rc",
+   "canonical": 17,
+   "readings": [
+    "v"
+   ]
+  },
+  {
+   "symbol": "w",
+   "g": 13,
+   "gd": null,
+   "name": "OMEN",
+   "role": "rc",
+   "canonical": 13,
+   "readings": [
+    "w"
+   ]
+  },
+  {
+   "symbol": "x",
+   "g": 43,
+   "gd": 46,
+   "name": "PRAYER",
+   "role": "rc",
+   "canonical": 43,
+   "readings": [
+    "x"
+   ]
+  },
+  {
+   "symbol": "y",
+   "g": 106,
+   "gd": null,
+   "name": "CANDY CANE",
+   "role": "rc",
+   "canonical": 106,
+   "readings": [
+    "y"
+   ]
+  },
+  {
+   "symbol": "z",
+   "g": 335,
+   "gd": null,
+   "name": "KEY",
+   "role": "rc",
+   "canonical": 335,
+   "readings": [
+    "z"
+   ]
+  },
+  {
+   "symbol": "0",
+   "g": 495,
+   "gd": null,
+   "name": "FRAME",
+   "role": "rn",
+   "canonical": 495,
+   "readings": [
+    "0"
+   ]
+  },
+  {
+   "symbol": "1",
+   "g": 16,
+   "gd": null,
+   "name": "POINT",
+   "role": "rn",
+   "canonical": 16,
+   "readings": [
+    "1"
+   ]
+  },
+  {
+   "symbol": "2",
+   "g": 40,
+   "gd": null,
+   "name": "PAIRED EDGES",
+   "role": "rn",
+   "canonical": 40,
+   "readings": [
+    "2"
+   ]
+  },
+  {
+   "symbol": "3",
+   "g": 68,
+   "gd": null,
+   "name": "CORNER PAIR",
+   "role": "rn",
+   "canonical": 68,
+   "readings": [
+    "3"
+   ]
+  },
+  {
+   "symbol": "4",
+   "g": 56,
+   "gd": null,
+   "name": "ORTHOGONAL BAR",
+   "role": "rn",
+   "canonical": 56,
+   "readings": [
+    "4"
+   ]
+  },
+  {
+   "symbol": "5",
+   "g": 84,
+   "gd": null,
+   "name": "DIAGONAL STROKE",
+   "role": "rn",
+   "canonical": 84,
+   "readings": [
+    "5"
+   ]
+  },
+  {
+   "symbol": "6",
+   "g": 365,
+   "gd": null,
+   "name": "PARALLEL RAILS",
+   "role": "rn",
+   "canonical": 365,
+   "readings": [
+    "6"
+   ]
+  },
+  {
+   "symbol": "7",
+   "g": 238,
+   "gd": null,
+   "name": "OPEN CHEVRON",
+   "role": "rn",
+   "canonical": 238,
+   "readings": [
+    "7"
+   ]
+  },
+  {
+   "symbol": "8",
+   "g": 381,
+   "gd": null,
+   "name": "TIE FIGHTER",
+   "role": "rn",
+   "canonical": 381,
+   "readings": [
+    "8"
+   ]
+  },
+  {
+   "symbol": "9",
+   "g": 254,
+   "gd": null,
+   "name": "CHEVRON+CENTRE",
+   "role": "rn",
+   "canonical": 254,
+   "readings": [
+    "9"
+   ]
+  },
+  {
+   "symbol": "+",
+   "g": 186,
+   "gd": null,
+   "name": "CRUX",
+   "role": "ro",
+   "canonical": 186,
+   "readings": [
+    "+"
+   ]
+  },
+  {
+   "symbol": "−",
+   "g": 170,
+   "gd": null,
+   "name": "CARDINAL",
+   "role": "ro",
+   "canonical": 170,
+   "readings": [
+    "−"
+   ]
+  },
+  {
+   "symbol": "×",
+   "g": 341,
+   "gd": null,
+   "name": "ASTERISM",
+   "role": "ro",
+   "canonical": 341,
+   "readings": [
+    "×"
+   ]
+  },
+  {
+   "symbol": "=",
+   "g": 325,
+   "gd": null,
+   "name": "SALTIRE",
+   "role": "ro",
+   "canonical": 325,
+   "readings": [
+    "="
+   ]
+  },
+  {
+   "symbol": "^",
+   "g": 42,
+   "gd": null,
+   "name": "CARET",
+   "role": "ro",
+   "canonical": 42,
+   "readings": [
+    "^"
+   ]
+  },
+  {
+   "symbol": "⎵",
+   "g": 0,
+   "gd": null,
+   "name": "VOID",
+   "role": "ro",
+   "canonical": 0,
+   "readings": [
+    "⎵"
+   ]
+  },
+  {
+   "symbol": ".",
+   "g": 511,
+   "gd": null,
+   "name": "SOLID",
+   "role": "rp",
+   "canonical": 511,
+   "readings": [
+    "."
+   ]
+  },
+  {
+   "symbol": "(",
+   "g": 124,
+   "gd": null,
+   "name": "SPINE-STAGGER",
+   "role": "rb",
+   "canonical": 124,
+   "readings": [
+    "("
+   ]
+  },
+  {
+   "symbol": ")",
+   "g": 214,
+   "gd": null,
+   "name": "SPINE-STAGGER",
+   "role": "rb",
+   "canonical": 124,
+   "readings": [
+    ")"
+   ]
+  },
+  {
+   "symbol": "[",
+   "g": 108,
+   "gd": null,
+   "name": "STAGGER",
+   "role": "rb",
+   "canonical": 108,
+   "readings": [
+    "["
+   ]
+  },
+  {
+   "symbol": "]",
+   "g": 198,
+   "gd": null,
+   "name": "STAGGER",
+   "role": "rb",
+   "canonical": 108,
+   "readings": [
+    "]"
+   ]
+  },
+  {
+   "symbol": ",",
+   "g": 10,
+   "gd": null,
+   "name": "ELBOW",
+   "role": "rp",
+   "canonical": 10,
+   "readings": [
+    ","
+   ]
+  },
+  {
+   "symbol": ":",
+   "g": 18,
+   "gd": null,
+   "name": "STAFF DOT",
+   "role": "rp",
+   "canonical": 18,
+   "readings": [
+    ":"
+   ]
+  },
+  {
+   "symbol": "!",
+   "g": 191,
+   "gd": null,
+   "name": "NAIL",
+   "role": "rp",
+   "canonical": 191,
+   "readings": [
+    "!"
+   ]
+  },
+  {
+   "symbol": "?",
+   "g": 118,
+   "gd": null,
+   "name": "TUMBLER",
+   "role": "rp",
+   "canonical": 118,
+   "readings": [
+    "?"
+   ]
+  },
+  {
+   "symbol": "'",
+   "g": 1,
+   "gd": null,
+   "name": "SOLO CORNER",
+   "role": "rp",
+   "canonical": 1,
+   "readings": [
+    "'"
+   ]
+  },
+  {
+   "symbol": "\"",
+   "g": 5,
+   "gd": null,
+   "name": "TWIN CORNERS",
+   "role": "rp",
+   "canonical": 5,
+   "readings": [
+    "\""
+   ]
+  },
+  {
+   "symbol": "/",
+   "g": 11,
+   "gd": null,
+   "name": "ELL",
+   "role": "rp",
+   "canonical": 11,
+   "readings": [
+    "/"
+   ]
+  },
+  {
+   "symbol": "\\",
+   "g": 19,
+   "gd": null,
+   "name": "FANG",
+   "role": "rp",
+   "canonical": 19,
+   "readings": [
+    "\\"
+   ]
+  },
+  {
+   "symbol": "<",
+   "g": 14,
+   "gd": null,
+   "name": "RIFLE",
+   "role": "rp",
+   "canonical": 14,
+   "readings": [
+    "<"
+   ]
+  },
+  {
+   "symbol": ">",
+   "g": 28,
+   "gd": null,
+   "name": "HANDOUT",
+   "role": "rp",
+   "canonical": 28,
+   "readings": [
+    ">"
+   ]
+  },
+  {
+   "symbol": "ā",
+   "g": 113,
+   "gd": null,
+   "name": "WEST POINT",
+   "role": "rv",
+   "canonical": 113,
+   "readings": [
+    "ā"
+   ]
+  },
+  {
+   "symbol": "ē",
+   "g": 23,
+   "gd": null,
+   "name": "TEE-DOWN",
+   "role": "rv",
+   "canonical": 23,
+   "readings": [
+    "ē"
+   ]
+  },
+  {
+   "symbol": "ī",
+   "g": 61,
+   "gd": null,
+   "name": "BRIDGE",
+   "role": "rv",
+   "canonical": 61,
+   "readings": [
+    "ī"
+   ]
+  },
+  {
+   "symbol": "ō å",
+   "g": 121,
+   "gd": null,
+   "name": "WEST ARROW",
+   "role": "rv",
+   "canonical": 121,
+   "readings": [
+    "ō",
+    "å"
+   ]
+  },
+  {
+   "symbol": "ū ů",
+   "g": 63,
+   "gd": null,
+   "name": "UPPER BLOCK",
+   "role": "rv",
+   "canonical": 63,
+   "readings": [
+    "ū",
+    "ů"
+   ]
+  },
+  {
+   "symbol": "ã ą",
+   "g": 69,
+   "gd": null,
+   "name": "TRIO CORNERS",
+   "role": "rv",
+   "canonical": 69,
+   "readings": [
+    "ã",
+    "ą"
+   ]
+  },
+  {
+   "symbol": "ẽ ę",
+   "g": 78,
+   "gd": null,
+   "name": "BIG HOOK",
+   "role": "rv",
+   "canonical": 78,
+   "readings": [
+    "ẽ",
+    "ę"
+   ]
+  },
+  {
+   "symbol": "ĩ",
+   "g": 98,
+   "gd": null,
+   "name": "STEPS",
+   "role": "rv",
+   "canonical": 98,
+   "readings": [
+    "ĩ"
+   ]
+  },
+  {
+   "symbol": "õ",
+   "g": 102,
+   "gd": null,
+   "name": "ESS",
+   "role": "rv",
+   "canonical": 102,
+   "readings": [
+    "õ"
+   ]
+  },
+  {
+   "symbol": "ũ",
+   "g": 27,
+   "gd": null,
+   "name": "QUARTER BLOCK",
+   "role": "rv",
+   "canonical": 27,
+   "readings": [
+    "ũ"
+   ]
+  },
+  {
+   "symbol": "ə",
+   "g": 21,
+   "gd": null,
+   "name": "VEE",
+   "role": "rv",
+   "canonical": 21,
+   "readings": [
+    "ə"
+   ]
+  },
+  {
+   "symbol": "ɛ ä ě",
+   "g": 173,
+   "gd": null,
+   "name": "PEDESTAL",
+   "role": "rv",
+   "canonical": 173,
+   "readings": [
+    "ɛ",
+    "ä",
+    "ě"
+   ]
+  },
+  {
+   "symbol": "ɔ ô",
+   "g": 175,
+   "gd": null,
+   "name": "GOBLET",
+   "role": "rv",
+   "canonical": 175,
+   "readings": [
+    "ɔ",
+    "ô"
+   ]
+  },
+  {
+   "symbol": "ʔ",
+   "g": 2,
+   "gd": null,
+   "name": "SOLO EDGE",
+   "role": "rc",
+   "canonical": 2,
+   "readings": [
+    "ʔ"
+   ]
+  },
+  {
+   "symbol": "ŋ",
+   "g": 126,
+   "gd": null,
+   "name": "AVALANCHE",
+   "role": "rc",
+   "canonical": 126,
+   "readings": [
+    "ŋ"
+   ]
+  },
+  {
+   "symbol": "á",
+   "g": 12,
+   "gd": null,
+   "name": "KISS",
+   "role": "re",
+   "canonical": 12,
+   "readings": [
+    "á"
+   ]
+  },
+  {
+   "symbol": "é",
+   "g": 71,
+   "gd": null,
+   "name": "PIT",
+   "role": "re",
+   "canonical": 71,
+   "readings": [
+    "é"
+   ]
+  },
+  {
+   "symbol": "í",
+   "g": 86,
+   "gd": null,
+   "name": "COBRA",
+   "role": "re",
+   "canonical": 86,
+   "readings": [
+    "í"
+   ]
+  },
+  {
+   "symbol": "ó",
+   "g": 101,
+   "gd": null,
+   "name": "RAINDROPS",
+   "role": "re",
+   "canonical": 101,
+   "readings": [
+    "ó"
+   ]
+  },
+  {
+   "symbol": "ú",
+   "g": 31,
+   "gd": null,
+   "name": "TANKETTE",
+   "role": "re",
+   "canonical": 31,
+   "readings": [
+    "ú"
+   ]
+  },
+  {
+   "symbol": "à",
+   "g": 59,
+   "gd": null,
+   "name": "SNAIL",
+   "role": "re",
+   "canonical": 59,
+   "readings": [
+    "à"
+   ]
+  },
+  {
+   "symbol": "è",
+   "g": 87,
+   "gd": null,
+   "name": "TOMAHAWK",
+   "role": "re",
+   "canonical": 87,
+   "readings": [
+    "è"
+   ]
+  },
+  {
+   "symbol": "ì",
+   "g": 103,
+   "gd": null,
+   "name": "BALLDROP",
+   "role": "re",
+   "canonical": 103,
+   "readings": [
+    "ì"
+   ]
+  },
+  {
+   "symbol": "ò",
+   "g": 107,
+   "gd": null,
+   "name": "BELLFLOWER",
+   "role": "re",
+   "canonical": 107,
+   "readings": [
+    "ò"
+   ]
+  },
+  {
+   "symbol": "ù",
+   "g": 109,
+   "gd": null,
+   "name": "STOMP",
+   "role": "re",
+   "canonical": 109,
+   "readings": [
+    "ù"
+   ]
+  },
+  {
+   "symbol": "ý",
+   "g": 110,
+   "gd": null,
+   "name": "CAVE",
+   "role": "re",
+   "canonical": 110,
+   "readings": [
+    "ý"
+   ]
+  },
+  {
+   "symbol": "ö",
+   "g": 115,
+   "gd": null,
+   "name": "GRAB",
+   "role": "re",
+   "canonical": 115,
+   "readings": [
+    "ö"
+   ]
+  },
+  {
+   "symbol": "ü",
+   "g": 117,
+   "gd": null,
+   "name": "KEY",
+   "role": "re",
+   "canonical": 117,
+   "readings": [
+    "ü"
+   ]
+  },
+  {
+   "symbol": "ṭ",
+   "g": 343,
+   "gd": null,
+   "name": "SPINNER",
+   "role": "rc",
+   "canonical": 343,
+   "readings": [
+    "ṭ"
+   ]
+  },
+  {
+   "symbol": "ḍ",
+   "g": 383,
+   "gd": null,
+   "name": "SADDLE",
+   "role": "rc",
+   "canonical": 383,
+   "readings": [
+    "ḍ"
+   ]
+  },
+  {
+   "symbol": "ṇ",
+   "g": 95,
+   "gd": null,
+   "name": "WEDGE",
+   "role": "rc",
+   "canonical": 95,
+   "readings": [
+    "ṇ"
+   ]
+  },
+  {
+   "symbol": "ṛ",
+   "g": 187,
+   "gd": null,
+   "name": "TOTEM",
+   "role": "rc",
+   "canonical": 187,
+   "readings": [
+    "ṛ"
+   ]
+  },
+  {
+   "symbol": "ṣ",
+   "g": 245,
+   "gd": null,
+   "name": "WAVE",
+   "role": "rc",
+   "canonical": 245,
+   "readings": [
+    "ṣ"
+   ]
+  },
+  {
+   "symbol": "ḷ",
+   "g": 255,
+   "gd": null,
+   "name": "NEAR SOLID",
+   "role": "rc",
+   "canonical": 255,
+   "readings": [
+    "ḷ"
+   ]
+  },
+  {
+   "symbol": "ẓ ż",
+   "g": 351,
+   "gd": null,
+   "name": "BENT KEY",
+   "role": "rc",
+   "canonical": 351,
+   "readings": [
+    "ẓ",
+    "ż"
+   ]
+  },
+  {
+   "symbol": "š",
+   "g": 111,
+   "gd": null,
+   "name": "HANGMAN",
+   "role": "rc",
+   "canonical": 111,
+   "readings": [
+    "š"
+   ]
+  },
+  {
+   "symbol": "ž",
+   "g": 119,
+   "gd": null,
+   "name": "CHELA",
+   "role": "rc",
+   "canonical": 119,
+   "readings": [
+    "ž"
+   ]
+  },
+  {
+   "symbol": "ř",
+   "g": 85,
+   "gd": null,
+   "name": "HARPOON",
+   "role": "re",
+   "canonical": 85,
+   "readings": [
+    "ř"
+   ]
+  },
+  {
+   "symbol": "ś",
+   "g": 94,
+   "gd": null,
+   "name": "CASCADE",
+   "role": "re",
+   "canonical": 94,
+   "readings": [
+    "ś"
+   ]
+  },
+  {
+   "symbol": "ź",
+   "g": 114,
+   "gd": null,
+   "name": "SHIFT",
+   "role": "re",
+   "canonical": 114,
+   "readings": [
+    "ź"
+   ]
+  },
+  {
+   "symbol": "ń",
+   "g": 189,
+   "gd": null,
+   "name": "TRIDENT",
+   "role": "re",
+   "canonical": 189,
+   "readings": [
+    "ń"
+   ]
+  },
+  {
+   "symbol": "č",
+   "g": 122,
+   "gd": null,
+   "name": "FAUCET",
+   "role": "re",
+   "canonical": 122,
+   "readings": [
+    "č"
+   ]
+  },
+  {
+   "symbol": "ć",
+   "g": 123,
+   "gd": null,
+   "name": "HORSE",
+   "role": "re",
+   "canonical": 123,
+   "readings": [
+    "ć"
+   ]
+  },
+  {
+   "symbol": "ď",
+   "g": 125,
+   "gd": null,
+   "name": "CHAIR",
+   "role": "re",
+   "canonical": 125,
+   "readings": [
+    "ď"
+   ]
+  },
+  {
+   "symbol": "đ",
+   "g": 231,
+   "gd": null,
+   "name": "SILIUS",
+   "role": "re",
+   "canonical": 231,
+   "readings": [
+    "đ"
+   ]
+  },
+  {
+   "symbol": "ł",
+   "g": 127,
+   "gd": null,
+   "name": "FLAG",
+   "role": "re",
+   "canonical": 127,
+   "readings": [
+    "ł"
+   ]
+  },
+  {
+   "symbol": "ť",
+   "g": 247,
+   "gd": null,
+   "name": "NEAR FRAME",
+   "role": "re",
+   "canonical": 247,
+   "readings": [
+    "ť"
+   ]
+  }
+ ]
+}

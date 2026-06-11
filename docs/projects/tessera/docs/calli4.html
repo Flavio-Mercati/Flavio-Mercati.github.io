@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calligraphic Reference · Full Alphabet (v3)</title>
+<style>
+:root{
+  --bg:#0b0e13;--sf:#111520;--bd:#1e2d3d;
+  --hi:#e3c574;--mu:#5a6478;--tx:#cfc9b8;--rl:#1e2d3d;--ac:#5b8fa8;
+  --rv:#5fb89a;--rc:#7aaabf;--ro:#d08850;--rn:#e3c574;--rp:#a87acc;
+  --rb:#5b8fa8;--re:#c87464;
+}
+*,*::before,*::after{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--tx);
+  font-family:'Palatino Linotype',Palatino,'Book Antiqua',Georgia,serif;
+  -webkit-font-smoothing:antialiased;}
+.page{max-width:1260px;margin:0 auto;padding:48px 20px 80px;}
+header{border-bottom:1px solid var(--rl);padding-bottom:24px;margin-bottom:28px;}
+.ov{font-family:ui-monospace,monospace;font-size:11px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--ac);margin:0 0 12px;}
+h1{font-size:clamp(24px,4.5vw,36px);font-weight:400;font-style:italic;
+  line-height:1.1;margin:0 0 14px;color:#e8e0cc;}
+h1 strong{font-style:normal;font-weight:600;color:var(--hi);}
+.intro{font-size:13px;line-height:1.7;max-width:740px;color:var(--tx);}
+.intro em{color:var(--hi);}
+.leg{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:16px;
+  font-family:ui-monospace,monospace;font-size:10.5px;color:var(--mu);}
+.li{display:flex;align-items:center;gap:5px;}
+.dot{width:7px;height:7px;border-radius:50%;}
+.sec{margin-top:32px;}
+.shead{display:flex;align-items:baseline;gap:10px;padding-bottom:7px;
+  margin-bottom:12px;border-bottom:1px solid var(--rl);}
+.stag{font-family:ui-monospace,monospace;font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;}
+.sdesc{font-size:11px;color:var(--mu);font-style:italic;font-family:ui-monospace,monospace;}
+.cards{display:flex;flex-wrap:wrap;gap:3px;}
+.card{background:var(--sf);border:1px solid var(--bd);
+  padding:9px 10px 7px;display:flex;flex-direction:column;align-items:center;gap:5px;}
+.csym{line-height:1;font-size:17px;}
+.csym.rv{color:var(--rv);}.csym.rc{color:var(--rc);}.csym.ro{color:var(--ro);}
+.csym.rn{color:var(--rn);}.csym.rp{color:var(--rp);}.csym.rb{color:var(--rb);}
+.csym.re{color:var(--re);}.csym.sp{color:var(--mu);font-size:11px;}
+.crow{display:flex;align-items:center;gap:6px;}
+.arr{color:var(--mu);font-size:11px;}
+.cname{font-family:ui-monospace,monospace;font-size:7.5px;color:var(--mu);
+  letter-spacing:.04em;text-align:center;max-width:115px;white-space:nowrap;overflow:hidden;}
+footer{margin-top:52px;padding-top:18px;border-top:1px solid var(--rl);
+  font-size:11px;color:var(--mu);font-style:italic;
+  font-family:ui-monospace,monospace;letter-spacing:.04em;line-height:1.6;}
+</style>
+</head>
+<body>
+<div class="page">
+<header>
+  <p class="ov">Tessera · Calligraphic Reference · v3</p>
+  <h1>The <strong>full alphabet</strong> in hand-written form</h1>
+  <p class="intro">Every character in canonical orientation (pixel grid, left) and its derived
+    calligraphic stroke form (right). Rule priority — (1) closed border → FRAME; all-nine → SOLID;
+    full top-two or top-two-cols → parallel pair. (2) Full-row and full-column triples fire next,
+    each requiring <em>at most one of its three pixels to be already covered</em>. (3) 2×2 blocks
+    among the remaining pixels become ovals. (4) Diagonal triples fire under the same overlap
+    constraint. (5) Pixels adjacent to a covered pixel get a short connector. (6) Two-pixel
+    orthogonal chains become short strokes; isolated pixels become triangular ticks pointing
+    toward the centre. <em>Diagonal adjacency never connects.</em> Whenever the centre pixel is
+    filled, a solid centre node is drawn over the strokes — marking the crossing.
+  </p>
+  <div class="leg">
+    <div class="li"><span class="dot" style="background:var(--rn)"></span>numeral</div>
+    <div class="li"><span class="dot" style="background:var(--ro)"></span>operator</div>
+    <div class="li"><span class="dot" style="background:var(--rp)"></span>punctuation</div>
+    <div class="li"><span class="dot" style="background:var(--rb)"></span>bracket</div>
+    <div class="li"><span class="dot" style="background:var(--rv)"></span>vowel</div>
+    <div class="li"><span class="dot" style="background:var(--rc)"></span>consonant</div>
+    <div class="li"><span class="dot" style="background:var(--re)"></span>Euro pack</div>
+  </div>
+</header>
+<div id="content"></div>
+<footer>
+  104 characters (112 readings) in 102 D₄ orbits. Changes from v2 — line firing now respects the
+  <em>at-most-one-overlap</em> rule (a new full line can share at most one pixel with previous
+  lines), so NAIL becomes the natural "two bars plus bottom stem" instead of the spurious
+  spine-through-both-bars. Centre pixel now rendered as a solid node when filled, marking
+  crossings explicitly. Ticks rendered as sharp triangles rather than rounded teardrops.
+</footer>
+</div>
+
+<script>
+const AMB = '#ead082';
+const ST = `stroke="${AMB}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"`;
+const PX = i => [12+(i%3)*18, 12+Math.floor(i/3)*18];
+const RW = i => Math.floor(i/3);
+const CL = i => i%3;
+const orthoAdj = (a,b) =>
+  (RW(a)===RW(b) && Math.abs(CL(a)-CL(b))===1) ||
+  (CL(a)===CL(b) && Math.abs(RW(a)-RW(b))===1);
+
+function findComps(pixels) {
+  const rem=new Set(pixels), comps=[];
+  while(rem.size){
+    const s=rem.values().next().value;
+    const comp=[],q=[s]; rem.delete(s);
+    while(q.length){
+      const p=q.shift(); comp.push(p);
+      for(const r of rem) if(orthoAdj(p,r)){q.push(r);rem.delete(r);}
+    }
+    comps.push(comp);
+  }
+  return comps;
+}
+
+// Tick: a solid circle (same r=5 as the centre node) with a tangent-smooth arrowhead pointing
+// toward the grid centre.  Tangent lines from the tip T touch the circle at P1 and P2;
+// the back arc P1→P2 is drawn large (>180°) CCW, so the straight edges meet the circle
+// without any angle discontinuity.
+function tick(idx) {
+  const [px,py] = PX(idx);
+  if (px===30 && py===30) return ''; // centre handled by the centre-node rule
+  const dx=30-px, dy=30-py, dist=Math.sqrt(dx*dx+dy*dy);
+  const nx=dx/dist, ny=dy/dist;
+  const R = 5.0;   // circle radius — same as centre node
+  const L = 11.0;  // distance from pixel centre to arrowhead tip
+  const a = R*R/L;
+  const b = R*Math.sqrt(L*L - R*R)/L;
+  // P1, P2 are the tangent points on the circle (TP1 ⊥ circle-radius at P1, idem P2)
+  const P1 = [px + nx*a + ny*b, py + ny*a - nx*b];
+  const P2 = [px + nx*a - ny*b, py + ny*a + nx*b];
+  const T  = [px + nx*L, py + ny*L];
+  const f  = v => v.toFixed(2);
+  // M tip  →  line to P1  →  back arc (large-arc=1, sweep=0 = CCW on screen)  →  close to tip
+  return `<path d="M${f(T[0])} ${f(T[1])} L${f(P1[0])} ${f(P1[1])} A${R} ${R} 0 1 0 ${f(P2[0])} ${f(P2[1])} Z" fill="${AMB}"/>`;
+}
+
+const ORTHO = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8]];
+const DIAG  = [[0,4,8],[2,4,6]];
+const SQ2   = [[0,1,3,4],[1,2,4,5],[3,4,6,7],[4,5,7,8]];
+
+function lineFires(ln, ps, inL, blk){
+  if(!ln.every(p=>ps.has(p)&&!blk.has(p))) return false;
+  return ln.filter(p=>inL.has(p)).length <= 1; // at most one overlap
+}
+
+function computeForm(g) {
+  if(g===0) return [];
+  const pix=[]; for(let i=0;i<9;i++) if((g>>i)&1) pix.push(i);
+  const ps=new Set(pix);
+  if(pix.length===9) return [{t:'SOLID'}];
+  if(g===495)        return [{t:'FRAME'}];
+  if(g===63)         return [{t:'PAR_H',ys:[12,30]}];
+
+  const cmds=[], blk=new Set(), inL=new Set();
+
+  // Pass 1: orthogonal full lines (rows then columns) — at-most-one-overlap
+  for(const ln of ORTHO){
+    if(lineFires(ln,ps,inL,blk)){
+      cmds.push({t:'LINE',a:PX(ln[0]),b:PX(ln[2])});
+      ln.forEach(p=>inL.add(p));
+    }
+  }
+  // Pass 2: 2×2 blocks among yet-uncovered pixels
+  for(const sq of SQ2){
+    if(sq.every(p=>ps.has(p)&&!inL.has(p)&&!blk.has(p))){
+      const cx=sq.reduce((s,p)=>s+PX(p)[0],0)/4;
+      const cy=sq.reduce((s,p)=>s+PX(p)[1],0)/4;
+      cmds.push({t:'CIRC',cx,cy,r:11.5});
+      sq.forEach(p=>blk.add(p));
+    }
+  }
+  // Pass 3: diagonal full lines — same at-most-one-overlap rule
+  for(const ln of DIAG){
+    if(lineFires(ln,ps,inL,blk)){
+      cmds.push({t:'LINE',a:PX(ln[0]),b:PX(ln[2])});
+      ln.forEach(p=>inL.add(p));
+    }
+  }
+
+  // Connector rule: remaining pixel adjacent to a covered pixel → short bridge
+  const remAll = pix.filter(p=>!blk.has(p)&&!inL.has(p));
+  const bridged = new Set();
+  for(const p of remAll){
+    const nb=[...inL].filter(q=>orthoAdj(p,q));
+    if(nb.length>0){ cmds.push({t:'LINE',a:PX(nb[0]),b:PX(p)}); bridged.add(p); }
+  }
+
+  // Remaining: orthogonal components
+  const rem = remAll.filter(p=>!bridged.has(p));
+  for(const comp of findComps(rem)){
+    if(comp.length===1){
+      // skip centre tick — centre node will be added at the end
+      if(comp[0]!==4) cmds.push({t:'TICK',i:comp[0]});
+    } else {
+      const adj={};
+      for(const p of comp) adj[p]=comp.filter(q=>orthoAdj(p,q));
+      const deg=p=>adj[p].length;
+      const ends=comp.filter(p=>deg(p)===1);
+      const junc=comp.filter(p=>deg(p)>2);
+      if(!junc.length){
+        const start=ends.length?ends[0]:comp[0];
+        const path=[start],seen=new Set([start]);let cur=start;
+        while(true){
+          const nx=adj[cur].find(p=>!seen.has(p));
+          if(!nx) break;
+          path.push(nx);seen.add(nx);cur=nx;
+        }
+        cmds.push({t:'PATH',pts:path.map(p=>PX(p))});
+      } else {
+        const used=new Set();
+        for(const end of ends){
+          if(used.has(end)) continue;
+          const path=[end]; used.add(end); let cur=end;
+          while(true){
+            const nx=adj[cur].find(p=>!used.has(p));
+            if(!nx) break;
+            path.push(nx);
+            if(deg(nx)>2) break;
+            used.add(nx); cur=nx;
+          }
+          if(path.length>=2) cmds.push({t:'PATH',pts:path.map(p=>PX(p))});
+        }
+        for(const p of junc) if(!used.has(p)) cmds.push({t:'TICK',i:p});
+      }
+    }
+  }
+
+  // Centre-node overlay: whenever centre is filled, draw a solid node on top
+  if((g>>4)&1) cmds.push({t:'CENTER'});
+
+  return cmds;
+}
+
+function renderCmds(cmds){
+  let s='';
+  for(const c of cmds){
+    if(c.t==='SOLID')      s+=`<rect x="9" y="9" width="42" height="42" fill="${AMB}" rx="2.5"/>`;
+    else if(c.t==='FRAME') s+=`<rect x="12" y="12" width="36" height="36" ${ST} rx="2"/>`;
+    else if(c.t==='PAR_H') c.ys.forEach(y=>s+=`<line x1="12" y1="${y}" x2="48" y2="${y}" ${ST}/>`);
+    else if(c.t==='CIRC')  s+=`<circle cx="${c.cx.toFixed(1)}" cy="${c.cy.toFixed(1)}" r="${c.r}" ${ST}/>`;
+    else if(c.t==='LINE')  s+=`<line x1="${c.a[0]}" y1="${c.a[1]}" x2="${c.b[0]}" y2="${c.b[1]}" ${ST}/>`;
+    else if(c.t==='PATH'){
+      const d='M'+c.pts.map(([x,y])=>`${x} ${y}`).join(' L');
+      s+=`<path d="${d}" ${ST}/>`;
+    }
+    else if(c.t==='TICK')   s+=tick(c.i);
+    else if(c.t==='CENTER') s+=`<circle cx="30" cy="30" r="5" fill="${AMB}"/>`;
+  }
+  return s;
+}
+
+const GUIDE=`<rect width="60" height="60" fill="#0d1018"/>
+<rect x="3" y="3" width="54" height="54" fill="none" stroke="#1e2d3d" stroke-width="0.8"/>
+<line x1="21" y1="3" x2="21" y2="57" stroke="#1e2d3d" stroke-width="0.5"/>
+<line x1="39" y1="3" x2="39" y2="57" stroke="#1e2d3d" stroke-width="0.5"/>
+<line x1="3" y1="21" x2="57" y2="21" stroke="#1e2d3d" stroke-width="0.5"/>
+<line x1="3" y1="39" x2="57" y2="39" stroke="#1e2d3d" stroke-width="0.5"/>`;
+
+function cSVG(g){
+  return `<svg width="56" height="56" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">${GUIDE}${renderCmds(computeForm(g))}</svg>`;
+}
+function gSVG(g){
+  const C=11,G=1,W=3*C+2*G;
+  let s=`<svg width="${W}" height="${W}" viewBox="0 0 ${W} ${W}" xmlns="http://www.w3.org/2000/svg"><rect width="${W}" height="${W}" fill="#0d1018"/>`;
+  for(let i=0;i<9;i++){
+    const r=Math.floor(i/3),c=i%3;
+    s+=`<rect x="${c*(C+G)}" y="${r*(C+G)}" width="${C}" height="${C}" fill="${(g>>i)&1?AMB:'#1a2030'}"/>`;
+  }
+  return s+'</svg>';
+}
+
+const SECS = [
+{title:'Operators', cat:'ro', desc:'arithmetic and logical operators',
+ chars:[
+  {s:'+', n:'CRUX', g:186},{s:'−', n:'CARDINAL', g:170},
+  {s:'×', n:'ASTERISM', g:341},{s:'=', n:'SALTIRE', g:325},
+  {s:'^', n:'CARET', g:42},
+]},
+{title:'Punctuation', cat:'rp', desc:'sentence and prose markers',
+ chars:[
+  {s:'.', n:'SOLID', g:511},{s:',', n:'ELBOW', g:10},
+  {s:':', n:'STAFF DOT', g:18}, {s:'!', n:'NAIL', g:191},
+  {s:'?', n:'TUMBLER', g:118},{s:"'", n:'SOLO CORNER', g:1},
+  {s:'"', n:'TWIN CORNERS', g:5},  {s:'/', n:'ELL', g:11},
+  {s:'\\', n:'FANG', g:19}, {s:'<', n:'RIFLE', g:14},
+  {s:'>', n:'HANDOUT', g:28},
+  {s:'⎵',  n:'VOID',        g:0, sp:true},
+]},
+{title:'Brackets', cat:'rb', desc:'matched delimiters — each pair shares one D₄ orbit',
+ chars:[
+  {s:'(', n:'SPINE-STAGGER', g:124},{s:')', n:'SPINE-STAGGER', g:214},
+  {s:'[', n:'STAGGER', g:108},{s:']', n:'STAGGER', g:198},
+]},
+{title:'Numerals', cat:'rn', desc:'digits 0–9',
+ chars:[
+  {s:'0', n:'FRAME', g:495},{s:'1', n:'POINT', g:16},
+  {s:'2', n:'PAIRED EDGES', g:40}, {s:'3', n:'CORNER PAIR', g:68},
+  {s:'4', n:'ORTHOGONAL BAR', g:56}, {s:'5', n:'DIAGONAL STROKE', g:84},
+  {s:'6', n:'PARALLEL RAILS', g:365},{s:'7', n:'OPEN CHEVRON', g:238},
+  {s:'8', n:'TIE FIGHTER', g:381},{s:'9', n:'CHEVRON+CENTRE', g:254},
+]},
+{title:'Vowels — short & long', cat:'rv',
+ desc:'+centre rule: short vowel + central pixel = long vowel',
+ chars:[
+  {s:'a', n:'TROT', g:97}, {s:'ā', n:'WEST POINT', g:113},
+  {s:'e', n:'TOP BAR', g:7},  {s:'ē', n:'TEE-DOWN', g:23},
+  {s:'i', n:'GOAL POSTS', g:45}, {s:'ī', n:'BRIDGE', g:61},
+  {s:'o', n:'CUP', g:105},{s:'ō', n:'WEST ARROW', g:121, v:'ō/å'},
+  {s:'u', n:'ARCH', g:47}, {s:'ū', n:'UPPER BLOCK', g:63, v:'ū/ů'},
+  {s:'ə', n:'VEE', g:21}, {s:'ɛ', n:'PEDESTAL', g:173, v:'ɛ/ä/ě'},
+  {s:'ɔ', n:'GOBLET', g:175, v:'ɔ/ô'},
+]},
+{title:'Nasal vowels', cat:'rv', desc:'ã ẽ ĩ õ ũ — nasality marks these five',
+ chars:[
+  {s:'ã', n:'TRIO CORNERS', g:69, v:'ã/ą'}, {s:'ẽ', n:'BIG HOOK', g:78, v:'ẽ/ę'},
+  {s:'ĩ', n:'STEPS', g:98}, {s:'õ', n:'ESS', g:102},
+  {s:'ũ', n:'QUARTER BLOCK', g:27},
+]},
+{title:'Consonants — core', cat:'rc',
+ desc:'basic consonant inventory; octuplets shown with master-table number',
+ chars:[
+  {s:'h', n:'TEE-UP', g:58},  {s:'ʔ', n:'SOLO EDGE', g:2},
+  {s:'m', n:'INNER ELL', g:26},  {s:'v', n:'CORNER DOT', g:17},
+  {s:'n', n:'GAMMA', g:79},  {s:'r', n:'ROCKET', g:171},
+  {s:'s', n:'SLALOM', g:229}, {s:'l', n:'BIG L', g:239},
+  {s:'z', n:'KEY', g:335}, {s:'t', n:'GATE', g:327},
+  {s:'d', n:'PI', g:367},
+  {s:'b', n:'SNAKE', g:30},  {s:'c', n:'BUMP', g:3},
+  {s:'f', n:'J-TETRIMINO', g:15},  {s:'g', n:'LOWBALL', g:41},
+  {s:'j', n:'L-TETRIMINO', g:57},  {s:'k', n:'BOAT', g:29},
+  {s:'p', n:'ARKANOID', g:70},  {s:'q', n:'CAN-CAN', g:99},
+  {s:'w', n:'OMEN', g:13},  {s:'x', n:'PRAYER', g:43, gd:46},
+  {s:'y', n:'CANDY CANE', g:106}, {s:'š', n:'HANGMAN', g:111},
+  {s:'ž', n:'CHELA', g:119}, {s:'ŋ', n:'AVALANCHE', g:126},
+]},
+{title:'Retroflex consonants', cat:'rc',
+ desc:'+centre of the paired dental gives the retroflex',
+ chars:[
+  {s:'ṭ', n:'SPINNER', g:343}, {s:'ḍ', n:'SADDLE', g:383},
+  {s:'ṇ', n:'WEDGE', g:95},  {s:'ṛ', n:'TOTEM', g:187},
+  {s:'ṣ', n:'WAVE', g:245}, {s:'ḷ', n:'NEAR SOLID', g:255},
+  {s:'ẓ', n:'BENT KEY', g:351, v:'ẓ/ż'},
+]},
+{title:'Euro pack — consonants', cat:'re',
+ desc:'Central/Eastern European consonants using reserved orbits and octuplets',
+ chars:[
+  {s:'ř', n:'HARPOON', g:85},  {s:'ś', n:'CASCADE', g:94},
+  {s:'ź', n:'SHIFT', g:114}, {s:'ń', n:'TRIDENT', g:189},
+  {s:'č', n:'FAUCET', g:122}, {s:'ć', n:'HORSE', g:123},
+  {s:'ď', n:'CHAIR', g:125}, {s:'đ', n:'SILIUS', g:231},
+  {s:'ł', n:'FLAG', g:127}, {s:'ť', n:'NEAR FRAME', g:247},
+]},
+{title:'Euro pack — accented vowels', cat:'re',
+ desc:'Acute, grave, umlaut and other European vowel forms; 19 octuplets',
+ chars:[
+  {s:'á', n:'KISS', g:12},  {s:'é', n:'PIT', g:71},  {s:'í', n:'COBRA', g:86},
+  {s:'ó', n:'RAINDROPS', g:101}, {s:'ú', n:'TANKETTE', g:31},  {s:'à', n:'SNAIL', g:59},
+  {s:'è', n:'TOMAHAWK', g:87},  {s:'ì', n:'BALLDROP', g:103}, {s:'ò', n:'BELLFLOWER', g:107},
+  {s:'ù', n:'STOMP', g:109}, {s:'ý', n:'CAVE', g:110},
+  {s:'ö', n:'GRAB', g:115}, {s:'ü', n:'KEY', g:117},
+]},
+];
+
+const content=document.getElementById('content');
+for(const sec of SECS){
+  const sd=document.createElement('div');sd.className='sec';
+  sd.innerHTML=`<div class="shead"><span class="stag" style="color:var(--${sec.cat})">${sec.title}</span><span class="sdesc">· ${sec.desc}</span></div>`;
+  const cards=document.createElement('div');cards.className='cards';
+  for(const ch of sec.chars){
+    const card=document.createElement('div');card.className='card';
+    const sym=document.createElement('div');
+    sym.className=ch.sp?'csym sp':'csym '+sec.cat;
+    sym.textContent=ch.sp?'SPC':ch.s;
+    card.appendChild(sym);
+    const row=document.createElement('div');row.className='crow';
+    row.innerHTML=gSVG(ch.gd||ch.g)+'<span class="arr">→</span>'+cSVG(ch.gd||ch.g);
+    card.appendChild(row);
+    const nm=document.createElement('div');nm.className='cname';
+    nm.textContent=ch.n||'';
+    card.appendChild(nm);
+    cards.appendChild(card);
+  }
+  sd.appendChild(cards);
+  content.appendChild(sd);
+}
+</script>
+</body>
+</html>

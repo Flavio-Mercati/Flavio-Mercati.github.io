@@ -7,6 +7,41 @@
     "text": "About this site"
   },
   {
+    "objectID": "projects/tessera-alphabet.html",
+    "href": "projects/tessera-alphabet.html",
+    "title": "Tessera: an alphabet of 3×3 binary grids",
+    "section": "",
+    "text": "Tessera is a constructed writing system whose characters are the 3×3 binary pixel grids, classified under the symmetries of the square."
+  },
+  {
+    "objectID": "projects/tessera-alphabet.html#the-mathematics",
+    "href": "projects/tessera-alphabet.html#the-mathematics",
+    "title": "Tessera: an alphabet of 3×3 binary grids",
+    "section": "The mathematics",
+    "text": "The mathematics\nA 3×3 binary grid has \\(2^9 = 512\\) possible states. Two grids are considered the same character if one can be obtained from the other by a rotation or reflection — that is, by an element of the dihedral group \\(D_4\\). The number of distinct characters is the number of orbits of \\(D_4\\) acting on the 512 grids, which Burnside’s lemma counts as\n\\[\n\\frac{1}{|D_4|}\\sum_{g \\in D_4} |\\mathrm{Fix}(g)|\n= \\frac{1}{8}\\left(2^9 + 2\\cdot 2^3 + 2^5 + 2\\cdot 2^6 + 2\\cdot 2^5\\right)\n= \\frac{816}{8} = 102.\n\\]\nThose 102 orbits are the characters of Tessera. Excluding the empty grid and adding case and orientation variants, the full system maps onto 128 characters covering the Latin alphabet, digits, punctuation, IPA symbols and accented letters. Every orbit has a name — from CARDINAL and ROCKET to BELLFLOWER, whose orbit contains the canonical glider from Conway’s Game of Life.\nOne pleasant invariant: the center pixel is the unique fixed point of \\(D_4\\) acting on the grid cells, so “is the center filled?” is constant on every orbit — it cleanly separates the alphabet into two families."
+  },
+  {
+    "objectID": "projects/tessera-alphabet.html#try-it",
+    "href": "projects/tessera-alphabet.html#try-it",
+    "title": "Tessera: an alphabet of 3×3 binary grids",
+    "section": "Try it",
+    "text": "Try it\nThe font is real: TrueType outlines generated programmatically from the same JSON source of truth that produces all the documents below.\n✒️ Type in Tessera — interactive specimen — a live demo with the full family (Regular, Bold, Italic, Bold Italic) embedded. Type anything and watch it render."
+  },
+  {
+    "objectID": "projects/tessera-alphabet.html#documents",
+    "href": "projects/tessera-alphabet.html#documents",
+    "title": "Tessera: an alphabet of 3×3 binary grids",
+    "section": "Documents",
+    "text": "Documents\n\nPeriodic table of characters — all 102 orbits arranged by structure\nOrbit explorer — every orbit with its full set of grid representatives\nCalligraphic forms — the stroke-based rendering algorithm\nNotes on the Tessera — the full mathematical write-up"
+  },
+  {
+    "objectID": "projects/tessera-alphabet.html#downloads",
+    "href": "projects/tessera-alphabet.html#downloads",
+    "title": "Tessera: an alphabet of 3×3 binary grids",
+    "section": "Downloads",
+    "text": "Downloads\nInstall the fonts and type Tessera anywhere:\n\nTessera-Regular.ttf\nTessera-Bold.ttf\nTessera-Italic.ttf\nTessera-BoldItalic.ttf\ntessera.json — the machine-readable source of truth (grids, orbits, names, codepoints)"
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "my-site",
