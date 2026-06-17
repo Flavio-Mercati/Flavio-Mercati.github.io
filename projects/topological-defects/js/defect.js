@@ -62,6 +62,7 @@ const PORTAL_FRAG = /* glsl */ `
   }`;
 
 const _zAxis = new THREE.Vector3(0, 0, 1);
+const _yAxis = new THREE.Vector3(0, 1, 0);
 const _n = new THREE.Vector3();
 const _gn = new THREE.Vector3();
 const _c = new THREE.Vector3();
@@ -293,6 +294,37 @@ function bakeFace(geo, n, dist) {
   return geo;
 }
 
+// Rigidly rotate a whole cell so its local +y "screw axis" points along `axis`
+// instead. Used by the cap-twist cells (the hex prisms and the lens spaces),
+// whose only twisted faces are the two ±y caps: stood upright (axis = +y, the
+// default) the observer floating beside the cell only ever sees the straight
+// side walls or grazes a cap, so the screw reads as plain glass. Laying the
+// axis down to point at the observer turns a twisted cap to face them, and
+// looking into it shows the world beyond rolled by the screw angle — the same
+// legible roll the cube cells already show.
+//
+// This is a genuine rigid rotation of BOTH the geometry and the gluing, baked
+// in so group.quaternion stays identity (teleport/render read the baked normals
+// directly). Each face's world gluing g(x)=Q·glueQuat·Qᵀ·x + Q·glueT is the
+// correct conjugate of the upright gluing, because the constructor derives
+// glueQuat from spec.n and glueT from spec.n·(−D): rotating the normals by Q is
+// all it takes for setFromAxisAngle(Q·n,θ)=Q·setFromAxisAngle(n,θ)·Qᵀ to fall
+// out. boundPlane normals rotate the same way; their offsets d are unchanged
+// (distances from a centre-passing rotation). A null/+y axis is a no-op.
+function orientCell(faceSpecs, boundPlanes, outlineGeometry, axis) {
+  if (!axis) return;
+  const a = axis.clone().normalize();
+  if (a.distanceToSquared(_yAxis) < 1e-12) return; // already upright
+  const Q = new THREE.Quaternion().setFromUnitVectors(_yAxis, a);
+  const M = new THREE.Matrix4().makeRotationFromQuaternion(Q);
+  for (const s of faceSpecs) {
+    s.n.applyQuaternion(Q).normalize();
+    s.geometry.applyMatrix4(M);
+  }
+  for (const b of boundPlanes) b.n.applyQuaternion(Q).normalize();
+  outlineGeometry.applyMatrix4(M);
+}
+
 function cubeFaceSpecs(size, theta) {
   const N = [
     new THREE.Vector3(1, 0, 0), new THREE.Vector3(-1, 0, 0),
@@ -337,7 +369,7 @@ export function createHalfTurnDefect(position, size = 0.5) {
 // Hexagonal prism: side faces glued straight across (θ=0), caps glued with a
 // screw twist. θ=π/3 is the flat "sixth-turn space" gluing; θ=2π/3 the
 // "third-turn space". Both are genuine flat 3-manifold structures.
-export function createHexScrewDefect(position, capTheta, label, hexRadius = 0.32, height = 0.5) {
+export function createHexScrewDefect(position, capTheta, label, hexRadius = 0.32, height = 0.5, axis = null) {
   const apothem = hexRadius * Math.sqrt(3) / 2;
   const specs = [];
   const up = new THREE.Vector3(0, 1, 0);
@@ -358,12 +390,15 @@ export function createHexScrewDefect(position, capTheta, label, hexRadius = 0.32
       geometry: bakeFace(new THREE.PlaneGeometry(hexRadius, height), n, apothem),
     });
   }
+  // thetaStart π/2 aligns the outline's hexagon with the cap vertices
+  const outline = new THREE.CylinderGeometry(hexRadius, hexRadius, height, 6, 1, false, Math.PI / 2);
+  // optionally lay the screw axis down to face the observer (see orientCell)
+  orientCell(specs, [], outline, axis);
   return new PortalDefect({
     position,
     label,
     faceSpecs: specs,
-    // thetaStart π/2 aligns the outline's hexagon with the cap vertices
-    outlineGeometry: new THREE.CylinderGeometry(hexRadius, hexRadius, height, 6, 1, false, Math.PI / 2),
+    outlineGeometry: outline,
   });
 }
 
@@ -376,7 +411,7 @@ export function createHexScrewDefect(position, capTheta, label, hexRadius = 0.32
 // crossing teleports just when the observer passes through a cap within the
 // polygon. Lens spaces are the cyclic spherical space forms S³/(ℤ/p): exactly
 // the non-spinorial S³ quotients → yellow sign.
-export function createLensSpaceDefect(position, p, q, label, radius = 0.5, height = 0.36) {
+export function createLensSpaceDefect(position, p, q, label, radius = 0.5, height = 0.36, axis = null) {
   const up = new THREE.Vector3(0, 1, 0);
   const down = new THREE.Vector3(0, -1, 0);
   const theta = (2 * Math.PI * q) / p;
@@ -390,12 +425,19 @@ export function createLensSpaceDefect(position, p, q, label, radius = 0.5, heigh
     const a = (Math.PI * (2 * k + 1)) / p; // p-gon edge-midpoint directions
     boundPlanes.push({ n: new THREE.Vector3(Math.cos(a), 0, Math.sin(a)), d: apothem });
   }
+  // thetaStart π/2 aligns the outline's p-gon with the cap vertices: the caps
+  // are CircleGeometry (vertices from +x via (cos,sin)) but CylinderGeometry
+  // lays its first vertex from +z via (sin,cos), a 90° phase difference — so
+  // without this the wireframe sits a fraction of a step off the cap polygon.
+  const outline = new THREE.CylinderGeometry(radius, radius, height, p, 1, false, Math.PI / 2);
+  // optionally lay the screw axis down to face the observer (see orientCell)
+  orientCell(faceSpecs, boundPlanes, outline, axis);
   return new PortalDefect({
     position,
     label,
     faceSpecs,
     boundPlanes,
-    outlineGeometry: new THREE.CylinderGeometry(radius, radius, height, p, 1, false, 0),
+    outlineGeometry: outline,
   });
 }
 
