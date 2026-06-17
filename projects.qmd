@@ -2,7 +2,7 @@
 title: "Projects"
 listing:
   contents: projects
-  type: grid
+  type: default
   sort: "date desc"
   grid-columns: 3          # cards per row
   image-height: 200px      # thumbnail height
