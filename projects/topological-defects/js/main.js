@@ -90,6 +90,17 @@ const atSite = (i, height = 2) => {
   return new THREE.Vector3(s.x, world.getHeight(s.x, s.z) + height, s.z);
 };
 
+// Horizontal unit vector from a site toward the world origin — the side the
+// observer approaches from and the way the signpost faces. The cap-twist cells
+// (hex prisms, lens spaces) are laid on their side along this axis so a twisted
+// cap faces the observer (see orientCell in defect.js); upright they only show
+// their straight side walls and read as plain glass.
+const towardOrigin = (i) => {
+  const s = DEFECT_SITES[i];
+  const v = new THREE.Vector3(-s.x, 0, -s.z);
+  return v.lengthSq() < 1e-6 ? new THREE.Vector3(0, 0, 1) : v.normalize();
+};
+
 // Red signs: spinorial defects (their prime is not S³, S²×S¹, or a lens space
 // — Hendriks; Friedman–Witt — so they can carry spin-1/2). Yellow signs: the
 // non-spinorial space forms. Yellow returns here with the lens spaces L(7,1)
@@ -109,7 +120,7 @@ const entries = [
     aka: `the tetracosm · the quarter-turn flat space form (holonomy ℤ/4)`,
     body: `A cube whose opposite faces are glued with a 90° twist. A flat 3-manifold in which a wall meets its partner rotated a quarter turn; circulate the right loop and the world comes back spun by 90°. Shown as a flattened stand-in: all three face-pairs twist, so the edges carry conical seams the smooth manifold has not.`,
   } },
-  { d: createHexScrewDefect(atSite(2), Math.PI / 3, 'Sixth-turn defect', 0.64, 1.0), red: true, label: {
+  { d: createHexScrewDefect(atSite(2), Math.PI / 3, 'Sixth-turn defect', 0.64, 1.0, towardOrigin(2)), red: true, label: {
     title: 'Sixth-turn defect',
     aka: `the hexacosm · the sixth-turn flat space form (holonomy ℤ/6)`,
     body: `A hexagonal cell: the six sides glue straight, the two caps glue with a 60° screw. One of the six closed flat 3-manifolds, the one with the tightest rotational holonomy.`,
@@ -124,7 +135,7 @@ const entries = [
     aka: `the dicosm · the half-turn flat space form (holonomy ℤ/2)`,
     body: `A cube whose opposite faces are glued with a 180° twist. A flat 3-manifold; the partner wall arrives rotated a half turn, so “up” through it points down. Shown as a flattened stand-in: all three face-pairs twist, so the edges carry conical seams the smooth manifold has not.`,
   } },
-  { d: createHexScrewDefect(atSite(5), 2 * Math.PI / 3, 'Third-turn defect', 0.64, 1.0), red: true, label: {
+  { d: createHexScrewDefect(atSite(5), 2 * Math.PI / 3, 'Third-turn defect', 0.64, 1.0, towardOrigin(5)), red: true, label: {
     title: 'Third-turn defect',
     aka: `the tricosm · the third-turn flat space form (holonomy ℤ/3)`,
     body: `A hexagonal cell: sides glued straight, caps glued with a 120° screw. Another of the six closed flat 3-manifolds, sibling to the sixth-turn cell.`,
@@ -139,12 +150,12 @@ const entries = [
     aka: `the Seifert–Weber dodecahedral space · the hyperbolic dodecahedral space`,
     body: `The same dodecahedron as the Poincaré cell, but the opposite faces are glued with a 108° twist instead of 36°. That single change tips it out of spherical geometry into hyperbolic — a closed hyperbolic 3-manifold. Same shape, different universe.`,
   } },
-  { d: createLensSpaceDefect(atSite(8), 7, 1, 'Lens space L(7,1)'), red: false, label: {
+  { d: createLensSpaceDefect(atSite(8), 7, 1, 'Lens space L(7,1)', 0.5, 0.36, towardOrigin(8)), red: false, label: {
     title: 'Lens space L(7,1)',
     aka: `a lens space · the cyclic spherical space form S³/(ℤ/7) · gluing screw 2π/7`,
     body: `A lens-shaped cell whose top cap glues to its bottom by a 2π/7 screw. A cyclic quotient of the 3-sphere — one of the non-spinorial spherical space forms. Paired here with L(7,2): same shape, same group, a different screw.`,
   } },
-  { d: createLensSpaceDefect(atSite(9), 7, 2, 'Lens space L(7,2)'), red: false, label: {
+  { d: createLensSpaceDefect(atSite(9), 7, 2, 'Lens space L(7,2)', 0.5, 0.36, towardOrigin(9)), red: false, label: {
     title: 'Lens space L(7,2)',
     aka: `a lens space · S³/(ℤ/7) · gluing screw 4π/7`,
     body: `The same heptagonal lens as L(7,1), glued with a 4π/7 screw instead of 2π/7. L(7,1) and L(7,2) are homotopy-equivalent yet not homeomorphic — the classic case where homotopy type fails to pin down a 3-manifold, and Reidemeister torsion is needed to tell them apart.`,
