@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>Topological defects — gallery</title>
+<style>
+  :root {
+    --bar: rgba(18, 28, 38, .62); --ink:#f3f7fb; --muted: rgba(243,247,251,.72);
+    --plaque-bg: rgba(11, 20, 29, .94);
+    /* desktop column counts are set by the breakpoints below (capped at 4) */
+    --gap: 22px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: Georgia, 'Times New Roman', serif; color:#20303c;
+    background: linear-gradient(180deg, #aed6ee 0%, #d9eef8 38%, #cfe6c4 100%) fixed;
+    min-height: 100vh;
+  }
+
+  /* ---- page header ---- */
+  header.page { max-width: 1180px; margin: 0 auto; padding: 30px 5vw 10px; }
+  header.page h1 { margin: 0; font-size: 26px; font-weight: normal; letter-spacing: .01em; }
+  header.page .lede { margin: 9px 0 0; font-size: 15px; line-height: 1.55; color: #2f4655; max-width: 75ch; }
+  header.page .how {
+    margin: 14px 0 0; display: flex; flex-wrap: wrap; gap: 10px 22px;
+    font-size: 13.5px; color: #38505f;
+  }
+  header.page .how div { flex: 1 1 280px; min-width: 0; }
+  header.page .how b { font-variant: small-caps; letter-spacing: .04em; color: #1f3744; }
+  header.page .key { margin: 12px 0 0; font-size: 13px; color: #38505f; display: flex; gap: 18px; align-items: center; }
+  header.page .key i { font-style: normal; display: inline-flex; align-items: center; gap: 7px; }
+  header.page .key .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .dot.red { background: #e8554a; box-shadow: 0 0 0 1px rgba(0,0,0,.15); }
+  .dot.yellow { background: #ffd23f; box-shadow: 0 0 0 1px rgba(0,0,0,.25); }
+
+  /* ---- layout: mobile = vertical column, desktop = grid ---- */
+  #gallery { padding: 8px 0 4vh; }
+  .tile {
+    width: 90vw; height: 90vh; height: 90dvh; margin: 4vh auto;
+    display: flex; flex-direction: column; border-radius: 16px; overflow: hidden;
+    background: #0c1a26; box-shadow: 0 12px 34px rgba(20, 45, 65, .22);
+  }
+  @media (max-width: 700px) { .tile { width: 90vw; margin: 3vh auto; } }
+
+  @media (min-width: 1000px) {
+    #gallery {
+      display: grid; gap: var(--gap); padding: 4px var(--gap) 40px; align-items: stretch;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .tile { width: auto; height: 46dvh; min-height: 360px; margin: 0; }
+  }
+  @media (min-width: 1400px) { #gallery { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (min-width: 1700px) { #gallery { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+  /* ---- window chrome ---- */
+  .bar { flex: 0 0 auto; display: flex; align-items: baseline; gap: 10px;
+         padding: 11px 16px; background: var(--bar); backdrop-filter: blur(4px); color: var(--ink); }
+  .bar .dot { width: 9px; height: 9px; border-radius: 50%; align-self: center; flex: 0 0 auto; }
+  .bar .title { font-size: 16px; letter-spacing: .02em; }
+  .bar .sub   { font-size: 13px; color: var(--muted); }
+
+  .stage { position: relative; flex: 1 1 auto; min-height: 0; background: #9ecbe8; cursor: pointer; overflow: hidden; }
+  .stage:focus-visible { outline: 3px solid #fff; outline-offset: -3px; }
+  .poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;
+            user-select: none; -webkit-user-drag: none; }
+  .live { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; z-index: 2;
+          opacity: 0; transition: opacity .25s ease; }
+  .stage.ready .live { opacity: 1; }
+  .gen { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; z-index: 1; }
+
+  .play, .loading { position: absolute; inset: 0; z-index: 10; display: flex; flex-direction: column;
+                    align-items: center; justify-content: center; gap: 10px; pointer-events: none;
+                    color: #fff; text-shadow: 0 1px 8px rgba(0,0,0,.5); }
+  .play .tri { width: 60px; height: 60px; border-radius: 50%; background: rgba(18,28,38,.5);
+               backdrop-filter: blur(3px); display: flex; align-items: center; justify-content: center;
+               font-size: 22px; padding-left: 4px; }
+  .play .cta { font-size: 15px; letter-spacing: .03em; }
+  .loading { font-size: 15px; letter-spacing: .03em; display: none; }
+  .stage.active .play { display: none; }
+  .stage.loading-on .loading { display: flex; }
+
+  .stage.pending::after { content:""; position:absolute; inset:0; z-index:3;
+      background: linear-gradient(100deg, rgba(255,255,255,0) 30%, rgba(255,255,255,.35) 50%, rgba(255,255,255,0) 70%);
+      background-size: 220% 100%; animation: shimmer 1.3s linear infinite; }
+  @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -120% 0; } }
+
+  .close { position: absolute; top: 10px; right: 10px; z-index: 11; width: 38px; height: 38px;
+           border-radius: 10px; display: none; align-items: center; justify-content: center;
+           background: rgba(18,28,38,.55); backdrop-filter: blur(4px);
+           border: 1px solid rgba(255,255,255,.18); color: #fff; font-family: inherit;
+           font-size: 16px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .stage.active .close { display: flex; }
+  .close:hover { background: rgba(18,28,38,.72); }
+
+  /* ---- plaque (signpost text) ---- */
+  .plaque { flex: 0 0 auto; max-height: 38%; overflow: auto; padding: 11px 16px 13px;
+            background: var(--plaque-bg); color: #e9eef3; border-top: 1px solid rgba(255,255,255,.10);
+            -webkit-overflow-scrolling: touch; }
+  .plaque .aka  { font-style: italic; font-size: 12.5px; line-height: 1.4; color: rgba(243,247,251,.8); }
+  .plaque .rule { border: 0; border-top: 1px solid; width: 44%; margin: 8px 0; opacity: .6; }
+  .plaque.red  .rule { color: #e58c7c; }
+  .plaque.yellow .rule { color: #e6b833; }
+  .plaque .body { font-size: 13px; line-height: 1.5; color: rgba(233,238,243,.94); }
+
+  @media (prefers-reduced-motion: reduce) { .stage.pending::after { animation: none; } .live { transition: none; } }
+</style>
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.js" } }
+</script>
+</head>
+<body>
+<header class="page">
+  <h1>Topological defects</h1>
+  <p class="lede">Each window is a small region of space whose boundary faces are glued to one
+    another by a rigid motion, so light — and your view — leaves through one wall and returns
+    through its partner, possibly rotated. Orbit a defect to watch its identification warp the
+    world seen through it. The plaque beneath each window names the 3-manifold it stands for.</p>
+  <div class="how">
+    <div><b>On mobile</b> — scroll the column; tap a window to bring it to life. Drag to orbit,
+      pinch to zoom. Tap ✕ (or another window) to stop it.</div>
+    <div><b>On desktop</b> — windows tile into a grid. Click one to run it; click‑drag to orbit,
+      scroll or trackpad‑pinch to zoom, ✕ to stop. Only one runs at a time.</div>
+  </div>
+  <p class="key">
+    <i><span class="dot red"></span> spinorial (admits spin‑½)</i>
+    <i><span class="dot yellow"></span> non‑spinorial (integer spin)</i>
+  </p>
+</header>
+<main id="gallery"></main>
+
+<script type="module">
+import { VIEWER_DEFECTS } from './js/viewer-defects.js';
+
+const el = (tag, cls) => { const e = document.createElement(tag); if (cls) e.className = cls; return e; };
+const gallery = document.getElementById('gallery');
+const pending = {};   // id -> resolve(url)
+const readyCb = {};   // id -> first-frame callback
+let currentLive = null;
+
+const TILES = VIEWER_DEFECTS.map((d, i) => ({ ...d, id: 't' + i }));
+
+TILES.forEach((t) => {
+  const tile = el('section', 'tile');
+
+  const bar = el('div', 'bar');
+  const dot = el('span', 'dot ' + (t.red ? 'red' : 'yellow'));
+  dot.title = t.red ? 'spinorial (admits spin-½)' : 'non-spinorial (integer spin)';
+  const title = el('span', 'title'); title.textContent = t.label.title;
+  const sub = el('span', 'sub'); sub.textContent = t.sub;
+  bar.append(dot, title, sub);
+
+  const stage = el('div', 'stage pending');
+  stage.tabIndex = 0; stage.setAttribute('role', 'button');
+  stage.setAttribute('aria-label', 'Explore ' + t.label.title);
+  const poster = el('img', 'poster'); poster.alt = t.label.title + ' — first frame';
+  const play = el('div', 'play');
+  const tri = el('span', 'tri'); tri.textContent = '▶';
+  const cta = el('span', 'cta'); cta.textContent = 'Tap to explore';
+  play.append(tri, cta);
+  const loading = el('div', 'loading'); loading.textContent = 'Loading…';
+  const close = el('button', 'close'); close.type = 'button';
+  close.setAttribute('aria-label', 'Stop and return to preview'); close.textContent = '✕';
+  stage.append(poster, play, loading, close);
+
+  const plaque = el('div', 'plaque ' + (t.red ? 'red' : 'yellow'));
+  const aka = el('div', 'aka'); aka.textContent = t.label.aka;
+  const rule = el('hr', 'rule');
+  const body = el('div', 'body'); body.textContent = t.label.body;
+  plaque.append(aka, rule, body);
+
+  tile.append(bar, stage, plaque);
+  gallery.append(tile);
+
+  t.stage = stage; t.poster = poster; stage.__tile = t;
+  const go = () => { if (!stage.classList.contains('active')) activate(t); };
+  stage.addEventListener('click', (e) => { if (e.target !== close) go(); });
+  stage.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+  close.addEventListener('click', (e) => { e.stopPropagation(); deactivate(t); });
+});
+
+// lazy poster generation: one window at a time, as each nears the viewport
+const queue = [];
+let busy = false;
+function enqueue(t) { if (t.gen || t.queued) return; t.queued = true; queue.push(t); pump(); }
+function pump() {
+  if (busy) return;
+  const t = queue.shift();
+  if (!t) return;
+  busy = true;
+  makePoster(t).then(() => { t.gen = true; busy = false; pump(); });
+}
+function makePoster(t) {
+  return new Promise((resolve) => {
+    const f = el('iframe', 'gen');
+    f.setAttribute('scrolling', 'no'); f.setAttribute('tabindex', '-1');
+    f.src = `viewer.html?poster&id=${t.id}#${t.key}`;
+    pending[t.id] = (url) => { if (url) t.poster.src = url; t.stage.classList.remove('pending'); f.remove(); resolve(); };
+    t.stage.appendChild(f);
+    setTimeout(() => { if (pending[t.id]) { const r = pending[t.id]; delete pending[t.id]; r(''); } }, 20000);
+  });
+}
+const io = new IntersectionObserver((entries) => {
+  for (const en of entries) if (en.isIntersecting) enqueue(en.target.__tile);
+}, { rootMargin: '500px 0px' });
+TILES.forEach((t) => io.observe(t.stage));
+
+// one live window at a time
+function activate(t) {
+  if (currentLive && currentLive !== t) deactivate(currentLive);
+  const stage = t.stage; stage.classList.add('active', 'loading-on');
+  const f = el('iframe', 'live'); f.setAttribute('title', t.label.title);
+  f.src = `viewer.html?id=${t.id}#${t.key}`;
+  readyCb[t.id] = () => { stage.classList.remove('loading-on'); stage.classList.add('ready'); };
+  stage.appendChild(f); t.live = f; currentLive = t;
+}
+function deactivate(t) {
+  const stage = t.stage; if (t.live) { t.live.remove(); t.live = null; }
+  stage.classList.remove('active', 'loading-on', 'ready'); delete readyCb[t.id];
+  if (currentLive === t) currentLive = null;
+}
+
+addEventListener('message', (e) => {
+  const d = e.data || {};
+  if (d.type === 'poster' && pending[d.id]) { const r = pending[d.id]; delete pending[d.id]; r(d.url); }
+  else if (d.type === 'ready' && readyCb[d.id]) { readyCb[d.id](); }
+});
+</script>
+</body>
+</html>

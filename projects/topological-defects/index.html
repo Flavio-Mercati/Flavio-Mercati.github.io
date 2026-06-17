@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"/>
+<title>Topological Defects — Observer Simulation</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #9ecbe8;
+               font-family: Georgia, 'Times New Roman', serif; overscroll-behavior: none; }
+  canvas { display: block; touch-action: none; }
+  #hud { position: fixed; top: calc(14px + env(safe-area-inset-top)); left: 14px; color: #fff;
+         background: rgba(18, 28, 38, .45); backdrop-filter: blur(4px);
+         padding: 10px 14px; border-radius: 10px; font-size: 13px;
+         line-height: 1.55; pointer-events: none; letter-spacing: .02em; max-width: 72vw; }
+  #hud b { font-size: 14px; display: block; margin-bottom: 4px; }
+  #crosshair { position: fixed; left: 50%; top: 50%; width: 5px; height: 5px;
+               margin: -2.5px; background: rgba(255,255,255,.85); border-radius: 50%;
+               pointer-events: none; box-shadow: 0 0 4px rgba(0,0,0,.5); }
+  #prompt { position: fixed; inset: 0; display: flex; align-items: center;
+            justify-content: center; color: #fff; font-size: 20px;
+            text-shadow: 0 1px 6px rgba(0,0,0,.6); background: rgba(0,0,0,.12);
+            cursor: pointer; user-select: none; }
+  #prompt.hidden { display: none; }
+  #errbox { position: fixed; left: 0; right: 0; bottom: 0; max-height: 45%;
+            overflow: auto; margin: 0; padding: 10px 14px; display: none;
+            background: rgba(122, 14, 14, .94); color: #fff; z-index: 9999;
+            white-space: pre-wrap; letter-spacing: 0;
+            font: 13px/1.45 ui-monospace, Menlo, Consolas, monospace; }
+
+  /* --- mobile overlay: simplified legend, drag hint, three thumb buttons --- */
+  /* legend swaps to the compact line; buttons + hint appear only on touch UI */
+  .mobile-only { display: none; }
+  body.mobile .desktop-only { display: none; }
+  body.mobile .mobile-only { display: block; }
+  body.mobile #crosshair { opacity: .75; }
+
+  #hint { position: fixed; left: 50%; bottom: calc(84px + env(safe-area-inset-bottom));
+          transform: translateX(-50%); color: #fff; font-size: 14px; display: none;
+          text-shadow: 0 1px 6px rgba(0,0,0,.6); pointer-events: none;
+          opacity: .9; transition: opacity .6s ease; letter-spacing: .02em; white-space: nowrap; }
+  body.mobile #hint { display: block; }
+  #hint.gone { opacity: 0; }
+
+  .ctrl-btn { position: fixed; display: none; min-height: 52px; padding: 0 18px;
+              color: #fff; background: rgba(18, 28, 38, .55); backdrop-filter: blur(4px);
+              border: 1px solid rgba(255,255,255,.18); border-radius: 12px;
+              font-family: inherit; font-size: 15px; letter-spacing: .02em;
+              cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+  body.mobile .ctrl-btn { display: block; }
+  .ctrl-btn:active { transform: translateY(1px); }
+  .ctrl-btn.active { background: rgba(120, 196, 120, .8); border-color: rgba(255,255,255,.5); }
+  #moveSlow { left: calc(16px + env(safe-area-inset-left)); bottom: calc(16px + env(safe-area-inset-bottom)); }
+  #moveFast { right: calc(16px + env(safe-area-inset-right)); bottom: calc(16px + env(safe-area-inset-bottom)); }
+  #edgesBtn { right: calc(16px + env(safe-area-inset-right)); top: calc(14px + env(safe-area-inset-top)); }
+</style>
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.js" } }
+</script>
+</head>
+<body>
+<div id="hud">
+  <b>Topological defects — follow the signs</b>
+  <span class="desktop-only">
+    red sign = spinorial (admits spin-&frac12;) &nbsp;&middot;&nbsp; yellow = integer spin<br/>
+    WASD — move (W/S along view) &nbsp;&middot;&nbsp; mouse — look<br/>
+    Space / C — rise / fall (world) &nbsp;&middot;&nbsp; E / Q — rise / fall (view)<br/>
+    Shift / CapsLock — run &nbsp;&middot;&nbsp; R — rotate (6 rpm)<br/>
+    click — cruise (slow) &nbsp;&middot;&nbsp; double-click — cruise (fast)<br/>
+    right-click / T — outlines
+  </span>
+  <span class="mobile-only">
+    red = spin-&frac12; &nbsp;&middot;&nbsp; yellow = integer spin<br/>
+    drag — look &nbsp;&middot;&nbsp; buttons — cruise &amp; outlines
+  </span>
+</div>
+<div id="crosshair"></div>
+<div id="hint">Drag to look &middot; tap the speed buttons to cruise</div>
+<div id="prompt">Click to take the observer's seat</div>
+<button id="edgesBtn" class="ctrl-btn" type="button" aria-pressed="true">Outlines</button>
+<button id="moveSlow" class="ctrl-btn" type="button" aria-pressed="false">▶ Slow</button>
+<button id="moveFast" class="ctrl-btn" type="button" aria-pressed="false">▶▶ Fast</button>
+<div id="errbox"></div>
+<script>
+  // Surface startup/runtime errors on screen instead of a silent blue page.
+  (function () {
+    var box = document.getElementById('errbox');
+    function show(t) { box.style.display = 'block'; box.textContent += t + '\n'; }
+    addEventListener('error', function (e) {
+      var m = e.message || (e.error && e.error.message) || String(e.error || e);
+      show('ERROR: ' + m + (e.filename ? '\n   at ' + e.filename + ':' + e.lineno + ':' + e.colno : ''));
+      if (e.error && e.error.stack) show(e.error.stack);
+    });
+    addEventListener('unhandledrejection', function (e) {
+      var r = e.reason; show('UNHANDLED REJECTION: ' + ((r && (r.stack || r.message)) || String(r)));
+    });
+  })();
+</script>
+<script type="module" src="./js/main.js"></script>
+</body>
+</html>
