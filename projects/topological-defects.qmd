@@ -4,6 +4,11 @@ date: 2026-06-17
 description: "A real-time 3D simulation of how a topological defect in space would look to an observer free to fly around — and through — it."
 categories: [physics, topology, graphics]
 image: topological-defects/thumb.png
+resources:
+  - topological-defects/js/
+  - topological-defects/vendor/
+  - topological-defects/viewer.html
+  - topological-defects/scene.svg
 ---
 
 **A topological defect** is a region of space that has been cut out and
