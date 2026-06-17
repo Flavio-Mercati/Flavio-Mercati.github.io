@@ -1,7 +1,0 @@
----
-title: "Flavio Mercati"
-subtitle: "Researcher in mathematical physics · University of Burgos, Spain"
----
-
-Welcome to my personal site. I'm a [brief description].
-Here I share research projects, side ideas, and notes.
