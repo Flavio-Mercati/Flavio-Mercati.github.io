@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Topological Defects — Observer Simulation</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #9ecbe8;
+               font-family: Georgia, 'Times New Roman', serif; }
+  #hud { position: fixed; top: 14px; left: 14px; color: #fff;
+         background: rgba(18, 28, 38, .45); backdrop-filter: blur(4px);
+         padding: 10px 14px; border-radius: 10px; font-size: 13px;
+         line-height: 1.55; pointer-events: none; letter-spacing: .02em; }
+  #hud b { font-size: 14px; display: block; margin-bottom: 4px; }
+  #crosshair { position: fixed; left: 50%; top: 50%; width: 5px; height: 5px;
+               margin: -2.5px; background: rgba(255,255,255,.85); border-radius: 50%;
+               pointer-events: none; box-shadow: 0 0 4px rgba(0,0,0,.5); }
+  #prompt { position: fixed; inset: 0; display: flex; align-items: center;
+            justify-content: center; color: #fff; font-size: 20px;
+            text-shadow: 0 1px 6px rgba(0,0,0,.6); background: rgba(0,0,0,.12);
+            cursor: pointer; user-select: none; }
+  #prompt.hidden { display: none; }
+  #errbox { position: fixed; left: 0; right: 0; bottom: 0; max-height: 45%;
+            overflow: auto; margin: 0; padding: 10px 14px; display: none;
+            background: rgba(122, 14, 14, .94); color: #fff; z-index: 9999;
+            white-space: pre-wrap; letter-spacing: 0;
+            font: 13px/1.45 ui-monospace, Menlo, Consolas, monospace; }
+</style>
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.js" } }
+</script>
+</head>
+<body>
+<div id="hud">
+  <b>Topological defects — follow the signs</b>
+  red sign = spinorial (admits spin-&frac12;) &nbsp;&middot;&nbsp; yellow = integer spin<br/>
+  WASD — move (W/S along view) &nbsp;&middot;&nbsp; mouse — look<br/>
+  Space / C — rise / fall (world) &nbsp;&middot;&nbsp; E / Q — rise / fall (view)<br/>
+  Shift / CapsLock — run &nbsp;&middot;&nbsp; T — outlines &nbsp;&middot;&nbsp; R — rotate (6 rpm)
+</div>
+<div id="crosshair"></div>
+<div id="prompt">Click to take the observer's seat</div>
+<div id="errbox"></div>
+<script>
+  // Surface startup/runtime errors on screen instead of a silent blue page.
+  (function () {
+    var box = document.getElementById('errbox');
+    function show(t) { box.style.display = 'block'; box.textContent += t + '\n'; }
+    addEventListener('error', function (e) {
+      var m = e.message || (e.error && e.error.message) || String(e.error || e);
+      show('ERROR: ' + m + (e.filename ? '\n   at ' + e.filename + ':' + e.lineno + ':' + e.colno : ''));
+      if (e.error && e.error.stack) show(e.error.stack);
+    });
+    addEventListener('unhandledrejection', function (e) {
+      var r = e.reason; show('UNHANDLED REJECTION: ' + ((r && (r.stack || r.message)) || String(r)));
+    });
+  })();
+</script>
+<script type="module" src="./js/main.js"></script>
+</body>
+</html>

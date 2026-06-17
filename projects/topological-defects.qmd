@@ -1,0 +1,84 @@
+---
+title: "Topological defects: flying through space glued to itself"
+date: 2026-06-17
+description: "A real-time 3D simulation of how a topological defect in space would look to an observer free to fly around — and through — it."
+categories: [physics, topology, graphics]
+image: topological-defects/thumb.png
+---
+
+**A topological defect** is a region of space that has been cut out and
+re-glued to itself. Its boundary faces are identified in pairs by rigid
+motions, so light — and an observer — that leaves through one wall returns
+through the partner wall, possibly rotated. The simplest case is a cube whose
+opposite faces are glued straight across by translation: a perfectly
+transparent block that simply displaces whatever you see through it. Twist the
+gluing, or glue the faces of a different polyhedron, and you get a whole zoo of
+richer defects — the *space forms* and *geons* that classify the closed
+3-manifolds.
+
+This project makes those abstract identifications something you can *see and
+move through*. You take the seat of a free-floating camera in a stylized open
+world — rolling hills, a winding river under a stone bridge, cottages, a ring
+of mountains, drifting clouds — and eleven defects float above the meadow, each
+marked by a signpost. Fly through one and the full gluing is applied to you,
+orientation included; the view then rights itself with a short, springy wobble.
+
+## The mathematics
+
+Each identified face carries a **gluing isometry** — a rotation $R$ and a
+translation $\mathbf{t}$, applied in the defect's local frame as
+
+$$ g(\mathbf{x}) = R\,\mathbf{x} + \mathbf{t}. $$
+
+The familiar "twist about the face's own normal" family is the special case
+$R = R(\hat{\mathbf n},\theta)$, $\mathbf{t} = -D\,\hat{\mathbf n}$; the more
+exotic cells supply an arbitrary $(R,\mathbf{t})$.
+
+The signs are colour-coded by **spinoriality** — whether the defect's
+underlying 3-manifold admits half-integer spin, the Friedman–Sorkin mechanism
+by which topology alone lets a lump of curved space behave like a fermion. The
+classification is clean: the only non-spinorial prime 3-manifolds are $S^3$,
+$S^2\times S^1$, and the lens spaces, so
+
+- **red** signs mark **spinorial** defects (admit spin-$\tfrac12$) — almost all of them;
+- **yellow** signs mark the **non-spinorial** ones (integer spin) — here, the lens spaces.
+
+## Explore
+
+::: {layout-ncol=1}
+
+- **[Navigator →](topological-defects/index.html)** — the full open world. Take
+  the observer's seat and fly through all eleven defects in one continuous
+  landscape. *(Desktop; mouse + keyboard.)*
+
+- **[Gallery →](topological-defects/gallery.html)** — a grid of windows, one per
+  manifold. Orbit each defect on its own and read its plaque. *(Works beautifully
+  on a phone.)*
+
+- **[Documentation →](topological-defects/docs.html)** — the mathematics of the
+  defects, the story of how the visualization was built (wormholes and all), and
+  the rendering technology behind it.
+
+:::
+
+## The defects
+
+Eleven gluing-cells, spanning all three constant-curvature geometries:
+
+- **Flat** (the six orientable *platycosms*) — the 3-torus $T^3$, the
+  half-, third-, quarter- and sixth-turn flat space forms, and the
+  Hantzsche–Wendt *didicosm* that completes the list.
+- **Spherical** — an octahedral cell, the **Poincaré homology sphere**
+  $S^3/2I$, and the two lens spaces $L(7,1)$ and $L(7,2)$ shown side by side
+  (famously homotopy-equivalent yet not homeomorphic).
+- **Hyperbolic** — the **Seifert–Weber dodecahedral space**: the same
+  dodecahedron as the Poincaré cell, glued with a $108^\circ$ twist instead of
+  $36^\circ$, which tips it out of spherical geometry into hyperbolic. Same
+  shape, different universe.
+
+The twisted cube cells are shown as *flattened stand-ins* — all three face-pairs
+twist, so their edges carry conical seams (deficit angles) that the smooth
+manifold has not. That is the real physics of such a defect, not a rendering
+artefact; the [documentation](topological-defects/docs.html) explains where the
+honesty line falls and why four of the eight Thurston geometries can't be shown
+this way at all.
