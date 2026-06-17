@@ -11,7 +11,11 @@
 //   sub    short tag shown in the window's title bar
 //   label  the full signpost copy {title, aka, body}, verbatim from main.js /
 //          defect_labels.md — shown on the window's plaque
-//   make   builds the defect at position p, identically to main.js
+//   make   builds the defect at position p, identically to main.js. The second
+//          argument `front` is a horizontal unit vector toward the initial
+//          orbit camera; the cap-twist cells (hex prisms, lens spaces) lay their
+//          screw axis along it so a twisted cap faces the opening view instead
+//          of presenting blank side walls. Cells that twist every face ignore it.
 
 import {
   createTorusDefect, createQuarterTurnDefect, createHalfTurnDefect,
@@ -45,7 +49,7 @@ export const VIEWER_DEFECTS = [
       aka:   `the hexacosm · the sixth-turn flat space form (holonomy ℤ/6)`,
       body:  `A hexagonal cell: the six sides glue straight, the two caps glue with a 60° screw. One of the six closed flat 3-manifolds, the one with the tightest rotational holonomy.`,
     },
-    make: (p) => createHexScrewDefect(p, Math.PI / 3, 'Sixth-turn defect', 0.64, 1.0),
+    make: (p, front) => createHexScrewDefect(p, Math.PI / 3, 'Sixth-turn defect', 0.64, 1.0, front),
   },
   {
     key: 'dodeca', site: 3, red: true, sub: 'Poincaré sphere · 36° twist',
@@ -72,7 +76,7 @@ export const VIEWER_DEFECTS = [
       aka:   `the tricosm · the third-turn flat space form (holonomy ℤ/3)`,
       body:  `A hexagonal cell: sides glued straight, caps glued with a 120° screw. Another of the six closed flat 3-manifolds, sibling to the sixth-turn cell.`,
     },
-    make: (p) => createHexScrewDefect(p, 2 * Math.PI / 3, 'Third-turn defect', 0.64, 1.0),
+    make: (p, front) => createHexScrewDefect(p, 2 * Math.PI / 3, 'Third-turn defect', 0.64, 1.0, front),
   },
   {
     key: 'octa', site: 6, red: true, sub: 'spherical space form · 60° twist',
@@ -99,7 +103,7 @@ export const VIEWER_DEFECTS = [
       aka:   `a lens space · the cyclic spherical space form S³/(ℤ/7) · gluing screw 2π/7`,
       body:  `A lens-shaped cell whose top cap glues to its bottom by a 2π/7 screw. A cyclic quotient of the 3-sphere — one of the non-spinorial spherical space forms. Paired here with L(7,2): same shape, same group, a different screw.`,
     },
-    make: (p) => createLensSpaceDefect(p, 7, 1, 'Lens space L(7,1)'),
+    make: (p, front) => createLensSpaceDefect(p, 7, 1, 'Lens space L(7,1)', 0.5, 0.36, front),
   },
   {
     key: 'lens72', site: 9, red: false, sub: 'S³/(ℤ/7) · 4π/7 screw',
@@ -108,7 +112,7 @@ export const VIEWER_DEFECTS = [
       aka:   `a lens space · S³/(ℤ/7) · gluing screw 4π/7`,
       body:  `The same heptagonal lens as L(7,1), glued with a 4π/7 screw instead of 2π/7. L(7,1) and L(7,2) are homotopy-equivalent yet not homeomorphic — the classic case where homotopy type fails to pin down a 3-manifold, and Reidemeister torsion is needed to tell them apart.`,
     },
-    make: (p) => createLensSpaceDefect(p, 7, 2, 'Lens space L(7,2)'),
+    make: (p, front) => createLensSpaceDefect(p, 7, 2, 'Lens space L(7,2)', 0.5, 0.36, front),
   },
   {
     key: 'hw', site: 10, red: true, sub: 'didicosm · holonomy ℤ/2×ℤ/2',
