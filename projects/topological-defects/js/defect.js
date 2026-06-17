@@ -72,6 +72,7 @@ const _q = new THREE.Quaternion();
 const _qi = new THREE.Quaternion();
 const _qIso = new THREE.Quaternion();
 const _plane = new THREE.Plane();
+const _sphere = new THREE.Sphere();
 
 export class PortalDefect {
   // faceSpecs: [{ n: unit Vector3 (local outward normal), D: distance to the
@@ -95,6 +96,7 @@ export class PortalDefect {
     this.renderTargets = []; // allocated lazily (only near defects hold any)
     this._rtW = 1;
     this._rtH = 1;
+    this.rtSamples = 2;      // portal-target MSAA; main.js drops this to 0 on mobile
     this.maxVisibleFaces = Math.ceil(faceSpecs.length / 2);
 
     this.faces = faceSpecs.map((spec) => {
@@ -131,6 +133,13 @@ export class PortalDefect {
       new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.4 })
     );
     this.group.add(this.edges);
+
+    // World-space bounding radius (the cell sits at this.position; the outline
+    // is centred on the local origin, so its sphere radius is the world radius).
+    // Used for optional frustum culling of off-screen cells; the 1.2 margin
+    // keeps a cell that is only partly on-screen from being culled.
+    outlineGeometry.computeBoundingSphere();
+    this.boundingRadius = (outlineGeometry.boundingSphere?.radius || 1) * 1.2;
   }
 
   setRotation(angleY) {
@@ -151,14 +160,18 @@ export class PortalDefect {
   _getRT(i) {
     while (this.renderTargets.length <= i) {
       this.renderTargets.push(
-        new THREE.WebGLRenderTarget(this._rtW, this._rtH, { samples: 2 })
+        new THREE.WebGLRenderTarget(this._rtW, this._rtH, { samples: this.rtSamples })
       );
     }
     return this.renderTargets[i];
   }
 
   // Render the portal textures. Caller must have hidden all defect groups.
-  render(renderer, scene, camera, fullResolution) {
+  // `frustum` is optional: when supplied, a cell whose bounding sphere lies
+  // fully outside the view is skipped (its portal passes would never be seen).
+  // This is lossless — during portal passes every defect group is hidden, so a
+  // cell can never appear inside another cell's portal, only as itself.
+  render(renderer, scene, camera, fullResolution, frustum = null) {
     const dist = camera.position.distanceTo(this.position);
     if (dist > this.maxRenderDistance) {
       for (const f of this.faces) f.mesh.visible = false;
@@ -168,6 +181,14 @@ export class PortalDefect {
         this.renderTargets = [];
       }
       return;
+    }
+    if (frustum) {
+      _sphere.center.copy(this.position);
+      _sphere.radius = this.boundingRadius;
+      if (!frustum.intersectsSphere(_sphere)) {     // off-screen: nothing to draw
+        for (const f of this.faces) f.mesh.visible = false;
+        return;                                      // keep RTs warm for the turn back
+      }
     }
 
     _q.copy(this.group.quaternion);

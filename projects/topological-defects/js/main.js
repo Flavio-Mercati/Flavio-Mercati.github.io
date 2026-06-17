@@ -32,7 +32,13 @@ function detectMobile() {
 const IS_MOBILE = detectMobile();
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+// Pixel ratio is the single biggest lever: the main pass AND every portal pass
+// are drawn at this resolution. Phones like the S24 report devicePixelRatio ~3;
+// capping at 1 on mobile renders ~9× fewer pixels per pass than the raw DPR
+// (and 4× fewer than the desktop cap of 2). Raise MOBILE_PIXEL_RATIO toward 1.5
+// for a sharper image if the frame budget allows.
+const MOBILE_PIXEL_RATIO = 1;
+renderer.setPixelRatio(Math.min(devicePixelRatio, IS_MOBILE ? MOBILE_PIXEL_RATIO : 2));
 renderer.setSize(innerWidth, innerHeight);
 renderer.shadowMap.enabled = true;
 // Variance shadow maps: prefiltered (blurred) depth moments give smooth,
@@ -46,12 +52,12 @@ document.body.appendChild(renderer.domElement);
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(70, innerWidth / innerHeight, 0.05, 2000);
 
-const world = createWorld(scene);
+const world = createWorld(scene, { lowDetail: IS_MOBILE });
 
 // ---- lighting ---------------------------------------------------------------
 const sun = new THREE.DirectionalLight(0xfff3d6, 3.0);
 sun.castShadow = true;
-sun.shadow.mapSize.set(2048, 2048);
+sun.shadow.mapSize.set(IS_MOBILE ? 1024 : 2048, IS_MOBILE ? 1024 : 2048);
 sun.shadow.camera.left = -55;
 sun.shadow.camera.right = 55;
 sun.shadow.camera.top = 55;
@@ -60,8 +66,8 @@ sun.shadow.camera.near = 1;
 sun.shadow.camera.far = 400;
 sun.shadow.bias = -0.0002;
 sun.shadow.normalBias = 0.02;
-sun.shadow.radius = 4;       // VSM penumbra blur radius
-sun.shadow.blurSamples = 8;
+sun.shadow.radius = IS_MOBILE ? 2 : 4;       // VSM penumbra blur radius
+sun.shadow.blurSamples = IS_MOBILE ? 4 : 8;
 scene.add(sun);
 scene.add(sun.target);
 scene.add(new THREE.HemisphereLight(0xbfdcff, 0x6a8a4f, 1.1));
@@ -151,6 +157,15 @@ const entries = [
 ];
 const defects = entries.map((e) => e.d);
 
+if (IS_MOBILE) {
+  // Drop per-target MSAA on mobile (tile GPUs pay a resolve per pass; the
+  // portal texture is sampled on a small face, so the aliasing is minor). The
+  // 45 m cutoff and maxVisibleFaces are left at their desktop values: the big
+  // structural win comes from frustum-culling off-screen cells (see the render
+  // loop), which adds no pop-in, whereas shortening the cutoff would.
+  for (const d of defects) d.rtSamples = 0;
+}
+
 entries.forEach(({ d, red, label }) => {
   scene.add(d.group);
   // signpost a couple of meters in front of the defect, on the side facing
@@ -168,7 +183,7 @@ entries.forEach(({ d, red, label }) => {
 
 // ---- resize -------------------------------------------------------------------
 const drawSize = new THREE.Vector2();
-const PORTAL_RT_SCALE = 0.75; // portal textures at 75% of screen resolution
+const PORTAL_RT_SCALE = IS_MOBILE ? 0.5 : 0.75; // portal textures: half buffer res on mobile, 75% desktop
 
 function onResize() {
   camera.aspect = innerWidth / innerHeight;
@@ -241,9 +256,25 @@ if (IS_MOBILE) {
 // its gluing-transformed virtual camera into its own render targets, then show
 // them all for the main pass. (No recursion any more — the wormhole nesting that
 // needed it was removed; see WORMHOLE_NOTES.md.)
+//
+// On mobile we also pass the view frustum so cells fully off-screen skip their
+// portal passes entirely. This is lossless: during portal passes every defect
+// group is hidden, so a cell never appears inside another cell's portal — only
+// as itself — and a cell you can't see contributes nothing. (Safe on desktop
+// too; gated to mobile only because that is where the budget is tight.)
+const _frustum = new THREE.Frustum();
+const _viewProj = new THREE.Matrix4();
+function computeFrustum() {
+  camera.updateMatrixWorld();
+  camera.matrixWorldInverse.copy(camera.matrixWorld).invert();
+  _viewProj.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse);
+  _frustum.setFromProjectionMatrix(_viewProj);
+  return _frustum;
+}
 function renderDefectPortals() {
+  const frustum = IS_MOBILE ? computeFrustum() : null;
   for (const d of defects) d.group.visible = false;
-  for (const d of defects) d.render(renderer, scene, camera, drawSize);
+  for (const d of defects) d.render(renderer, scene, camera, drawSize, frustum);
   for (const d of defects) d.group.visible = true;
 }
 
