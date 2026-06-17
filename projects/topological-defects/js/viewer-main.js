@@ -7,11 +7,12 @@
 // no signposts, and the free-fly PlayerController is replaced by an orbit
 // camera you steer by dragging (one finger on touch, hold-drag on desktop).
 //
-// Which defect this page shows is chosen by the URL hash, so a single
+// Which defect this page shows is chosen by ?key= or the URL hash, so a single
 // viewer.html serves every defect:
-//   viewer.html            -> torus (the first defect; the default)
+//   viewer.html                      -> torus (the first defect; the default)
 //   viewer.html#quarter  #hex6  #dodeca  #half  #hex3  #octa
 //   viewer.html#seifert  #lens71  #lens72  #hw
+//   viewer.html?key=quarter          -> same, via query param (used by make-posters)
 // (Keys, sites and sizes all come from js/viewer-defects.js.)
 //
 // Two run modes, selected by the query string (used by gallery.html):
@@ -30,7 +31,10 @@ import { VIEWER_DEFECTS } from './viewer-defects.js';
 const params = new URLSearchParams(location.search);
 const POSTER = params.has('poster');
 const FRAME_ID = params.get('id');
-const SEL_KEY = location.hash.replace('#', '');
+// Key comes from ?key= (used by make-posters.mjs so every URL has a unique
+// query string, preventing Chromium's same-document hash-change optimisation)
+// or from the URL hash (used by gallery.html live links and direct linking).
+const SEL_KEY = params.get('key') || location.hash.replace('#', '');
 
 const BY_KEY = Object.fromEntries(VIEWER_DEFECTS.map((d) => [d.key, d]));
 const CHOICE = BY_KEY[SEL_KEY] || VIEWER_DEFECTS[0];

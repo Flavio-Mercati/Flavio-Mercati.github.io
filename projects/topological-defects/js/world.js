@@ -23,14 +23,19 @@ function smoothstep(e0, e1, x) {
 }
 const lerp = (a, b, t) => a + (b - a) * t;
 
-export function createWorld(scene) {
+export function createWorld(scene, opts = {}) {
+  // lowDetail (mobile): coarser visual meshes and less grass. The collision
+  // floor is analytic (worldFloor -> height(x,z)), independent of the terrain
+  // MESH resolution, so coarsening the mesh changes only how the ground looks,
+  // never where the observer stands or how the river/bridge/pads anchor.
+  const LOW = !!opts.lowDetail;
   const noise = createNoise(20260610);
   const rand = mulberry32(1337);
 
   const BOUNDS_RADIUS = 130;
   const MAX_ALTITUDE = 32;
   const TERRAIN_SIZE = 400;
-  const TERRAIN_SEG = 280;
+  const TERRAIN_SEG = LOW ? 150 : 280;
 
   // ---- height function, layer by layer -------------------------------------
   function pathDist(x, z) {
@@ -256,7 +261,8 @@ export function createWorld(scene) {
     // inside the terrain footprint so the rim mountains occlude its edge. Water
     // appears wherever the ground dips below it (the canyon + the pond) and is
     // hidden by terrain everywhere else — no ribbon seams, fills any depression.
-    const g = new THREE.PlaneGeometry(TERRAIN_SIZE - 4, TERRAIN_SIZE - 4, 200, 200);
+    const wSeg = LOW ? 100 : 200;
+    const g = new THREE.PlaneGeometry(TERRAIN_SIZE - 4, TERRAIN_SIZE - 4, wSeg, wSeg);
     g.rotateX(-Math.PI / 2);
     const mat = toon({ color: '#3ea7c4', transparent: true, opacity: 0.85 });
     mat.onBeforeCompile = (shader) => {
@@ -495,11 +501,12 @@ export function createWorld(scene) {
 
   {
     const acceptGrass = meadow(2.0, 5.0, 5.5);
-    const centers = scatter(3400, acceptGrass);
+    const centers = scatter(LOW ? 1400 : 3400, acceptGrass);
     const spots = [];
+    const spotCap = LOW ? 32000 : 110000;
     for (const ctr of centers) {
       const n = 16 + Math.floor(rand() * 20);
-      for (let i = 0; i < n && spots.length < 110000; i++) {
+      for (let i = 0; i < n && spots.length < spotCap; i++) {
         const ang = rand() * Math.PI * 2;
         const rr = Math.sqrt(rand()) * 2.4;
         const x = ctr.x + Math.cos(ang) * rr;
