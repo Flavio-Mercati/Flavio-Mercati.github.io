@@ -1,15 +1,19 @@
 project:
   type: website
   output-dir: docs
-  
+
 website:
   title: "Flavio Mercati"
   navbar:
     left:
       - href: index.qmd
         text: Home
+      - href: work.qmd
+        text: Work
       - href: projects.qmd
-        text: Projects
+        text: Play
+      - href: learn.qmd
+        text: Learn
       - href: about.qmd
         text: About
 
@@ -21,3 +25,4 @@ format:
       light: [simplex, styles.css]
     mainfont: "Georgia"
     toc: true
+    include-after-body: navbar-tooltips.html

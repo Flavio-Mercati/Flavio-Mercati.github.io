@@ -1,0 +1,13 @@
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const tips = {
+    "Work":  "Research Projects",
+    "Play":  "Personal Interests and Miscellanea",
+    "Learn": "Teaching"
+  };
+  document.querySelectorAll(".navbar .nav-link").forEach(function (link) {
+    const label = link.textContent.trim();
+    if (tips[label]) link.setAttribute("title", tips[label]);
+  });
+});
+</script>
