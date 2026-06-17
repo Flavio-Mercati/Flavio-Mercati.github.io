@@ -4,4 +4,10 @@ listing:
   contents: projects
   type: grid
   sort: "date desc"
+  grid-columns: 3          # cards per row
+  image-height: 200px      # thumbnail height
+  categories: true         # show a clickable tag cloud / filter
+  sort-ui: true            # let visitors re-sort
+  filter-ui: true          # add a search box
+  fields: [image, title, description, date, categories]
 ---
