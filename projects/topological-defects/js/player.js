@@ -34,12 +34,18 @@ const _qNew = new THREE.Quaternion();
 const _qInv = new THREE.Quaternion();
 
 export class PlayerController {
-  constructor(camera, dom, world) {
+  constructor(camera, dom, world, opts = {}) {
     this.camera = camera;
     this.world = world;
     this.dom = dom;
+    this.mobile = !!opts.mobile;
     this.yaw = 0;
     this.pitch = 0;
+    // Constant-speed "cruise" toggled by clicks (desktop) or the on-screen
+    // speed buttons (mobile): 0 = off, 1 = slow (walk), 2 = fast (run). It
+    // flies along the FULL view direction, exactly like holding W, so you
+    // steer a cruise by aiming. Manual WASD still adds on top of it.
+    this.cruise = 0;
     this.keys = new Set();
     this.capsRun = false;
     this.prev = new THREE.Vector3();
@@ -53,19 +59,24 @@ export class PlayerController {
     this._tiltAngle = 0;
     this._tiltVel = 0;
 
-    const prompt = document.getElementById('prompt');
-    document.addEventListener('click', () => {
-      if (document.pointerLockElement !== dom) dom.requestPointerLock();
-    });
-    document.addEventListener('pointerlockchange', () => {
-      prompt.classList.toggle('hidden', document.pointerLockElement === dom);
-    });
-    document.addEventListener('mousemove', (e) => {
-      if (document.pointerLockElement !== dom) return;
-      this.yaw -= e.movementX * 0.0022;
-      this.pitch -= e.movementY * 0.0022;
-      this.pitch = Math.max(-1.55, Math.min(1.55, this.pitch));
-    });
+    // Mouse-look needs pointer lock, which only exists on desktop; on a touch
+    // device the on-screen drag (js/input-touch.js) writes yaw/pitch directly,
+    // so we skip all of this there (and avoid hijacking taps into lock requests).
+    if (!this.mobile) {
+      const prompt = document.getElementById('prompt');
+      document.addEventListener('click', () => {
+        if (document.pointerLockElement !== dom) dom.requestPointerLock();
+      });
+      document.addEventListener('pointerlockchange', () => {
+        prompt.classList.toggle('hidden', document.pointerLockElement === dom);
+      });
+      document.addEventListener('mousemove', (e) => {
+        if (document.pointerLockElement !== dom) return;
+        this.yaw -= e.movementX * 0.0022;
+        this.pitch -= e.movementY * 0.0022;
+        this.pitch = Math.max(-1.55, Math.min(1.55, this.pitch));
+      });
+    }
     const trackCaps = (e) => {
       if (e.getModifierState) this.capsRun = e.getModifierState('CapsLock');
     };
@@ -126,6 +137,15 @@ export class PlayerController {
     if (v.lengthSq() > 0) {
       v.normalize().multiplyScalar(speed * dt);
       cam.position.add(v);
+    }
+
+    // Constant-speed cruise (click / speed buttons): glide forward along the
+    // full view direction at a fixed speed, independent of the keys. Slow =
+    // walk, fast = run. Added separately so its speed stays exact (the key
+    // vector above is normalised, which would otherwise rescale it).
+    if (this.cruise) {
+      const cs = WALK_SPEED * (this.cruise === 2 ? RUN_MULT : 1);
+      cam.position.addScaledVector(fwd, cs * dt);
     }
 
     // Pass through any defect we flew into: apply the FULL gluing isometry.
