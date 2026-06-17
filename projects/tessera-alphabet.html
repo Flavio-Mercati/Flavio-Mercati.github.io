@@ -298,8 +298,16 @@ window.Quarto = {
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="../work.html"> 
+<span class="menu-text">Work</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../projects.html"> 
-<span class="menu-text">Projects</span></a>
+<span class="menu-text">Play</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../learn.html"> 
+<span class="menu-text">Learn</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../about.html"> 
@@ -409,6 +417,19 @@ window.Quarto = {
 </section>
 
 </main> <!-- /main -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const tips = {
+    "Work":  "Research Projects",
+    "Play":  "Personal Interests and Miscellanea",
+    "Learn": "Teaching"
+  };
+  document.querySelectorAll(".navbar .nav-link").forEach(function (link) {
+    const label = link.textContent.trim();
+    if (tips[label]) link.setAttribute("title", tips[label]);
+  });
+});
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right

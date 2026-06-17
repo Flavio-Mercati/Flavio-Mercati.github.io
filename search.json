@@ -7,20 +7,6 @@
     "text": "Welcome to my personal site. I’m a [brief description]. Here I share research projects, side ideas, and notes."
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "I’m a researcher at the University of Burgos, Spain working on quantum gravity."
-  },
-  {
-    "objectID": "projects.html",
-    "href": "projects.html",
-    "title": "Projects",
-    "section": "",
-    "text": "Order By\n      Default\n      \n        Title\n      \n      \n        Date - Oldest\n      \n      \n        Date - Newest\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\n\n\nTessera: an alphabet of 3×3 binary grids\n\n\n\nmathematics\n\ndesign\n\ntypography\n\n\n\nA complete constructed writing system built from the 102 symmetry classes of the 3×3 binary grid, with its own calligraphy and a working font family.\n\n\n\nJun 12, 2026\n\n\n\n\n\n\nNo matching items"
-  },
-  {
     "objectID": "projects/tessera-alphabet.html",
     "href": "projects/tessera-alphabet.html",
     "title": "Tessera: an alphabet of 3×3 binary grids",
@@ -54,5 +40,33 @@
     "title": "Tessera: an alphabet of 3×3 binary grids",
     "section": "Downloads",
     "text": "Downloads\nInstall the fonts and type Tessera anywhere:\n\nTessera-Regular.ttf\nTessera-Bold.ttf\nTessera-Italic.ttf\nTessera-BoldItalic.ttf\ntessera.json — the machine-readable source of truth (grids, orbits, names, codepoints)"
+  },
+  {
+    "objectID": "work.html",
+    "href": "work.html",
+    "title": "Work",
+    "section": "",
+    "text": "Content here."
+  },
+  {
+    "objectID": "projects.html",
+    "href": "projects.html",
+    "title": "Projects",
+    "section": "",
+    "text": "Order By\n      Default\n      \n        Title\n      \n      \n        Date - Oldest\n      \n      \n        Date - Newest\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\n\n\nTessera: an alphabet of 3×3 binary grids\n\n\n\nmathematics\n\ndesign\n\ntypography\n\n\n\nA complete constructed writing system built from the 102 symmetry classes of the 3×3 binary grid, with its own calligraphy and a working font family.\n\n\n\nJun 12, 2026\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "I’m a researcher at the University of Burgos, Spain working on quantum gravity."
+  },
+  {
+    "objectID": "learn.html",
+    "href": "learn.html",
+    "title": "Learn",
+    "section": "",
+    "text": "Content here."
   }
 ]
