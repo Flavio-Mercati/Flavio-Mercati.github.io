@@ -1,5 +1,6 @@
 ---
 title: "Tessera: an alphabet of 3×3 binary grids"
+image: tessera/thumb.png
 date: 2026-06-12
 description: "A complete constructed writing system built from the 102 symmetry classes of the 3×3 binary grid, with its own calligraphy and a working font family."
 categories: [mathematics, design, typography]
