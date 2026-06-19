@@ -27,11 +27,9 @@
             white-space: pre-wrap; letter-spacing: 0;
             font: 13px/1.45 ui-monospace, Menlo, Consolas, monospace; }
 
-  /* --- mobile overlay: simplified legend, drag hint, three thumb buttons --- */
-  /* legend swaps to the compact line; buttons + hint appear only on touch UI */
-  .mobile-only { display: none; }
-  body.mobile .desktop-only { display: none; }
-  body.mobile .mobile-only { display: block; }
+  /* --- mobile overlay: drag hint + four thumb buttons (no on-screen legend) --- */
+  /* on touch UI the desktop legend is hidden outright; the buttons + hint appear */
+  body.mobile #hud { display: none; }
   body.mobile #crosshair { opacity: .75; }
 
   #hint { position: fixed; left: 50%; bottom: calc(84px + env(safe-area-inset-bottom));
@@ -49,9 +47,13 @@
   body.mobile .ctrl-btn { display: block; }
   .ctrl-btn:active { transform: translateY(1px); }
   .ctrl-btn.active { background: rgba(120, 196, 120, .8); border-color: rgba(255,255,255,.5); }
-  #moveSlow { left: calc(16px + env(safe-area-inset-left)); bottom: calc(16px + env(safe-area-inset-bottom)); }
-  #moveFast { right: calc(16px + env(safe-area-inset-right)); bottom: calc(16px + env(safe-area-inset-bottom)); }
-  #edgesBtn { right: calc(16px + env(safe-area-inset-right)); top: calc(14px + env(safe-area-inset-top)); }
+  /* corners: up top-left, down bottom-left, speed bottom-right, outlines top-right;
+     the bottom pair sits the same 14px off the bottom edge as the top pair off the top. */
+  #moveUp   { left:  calc(16px + env(safe-area-inset-left));  top:    calc(14px + env(safe-area-inset-top)); }
+  #moveDown { left:  calc(16px + env(safe-area-inset-left));  bottom: calc(14px + env(safe-area-inset-bottom)); }
+  #speedBtn { right: calc(16px + env(safe-area-inset-right)); bottom: calc(14px + env(safe-area-inset-bottom)); }
+  #edgesBtn { right: calc(16px + env(safe-area-inset-right)); top:    calc(14px + env(safe-area-inset-top)); }
+  #moveUp, #moveDown { touch-action: none; } /* hold buttons: never treat the press as a browser gesture */
 </style>
 <script type="importmap">
 { "imports": { "three": "./vendor/three.module.js" } }
@@ -68,17 +70,14 @@
     click — cruise (slow) &nbsp;&middot;&nbsp; double-click — cruise (fast)<br/>
     right-click / T — outlines
   </span>
-  <span class="mobile-only">
-    signs &mdash; yellow orientable (spin&nbsp;&frac12; / 1) &middot; green non-orientable<br/>
-    drag — look &nbsp;&middot;&nbsp; buttons — cruise &amp; outlines
-  </span>
 </div>
 <div id="crosshair"></div>
-<div id="hint">Drag to look &middot; tap the speed buttons to cruise</div>
+<div id="hint">Drag to look &middot; hold ▲ ▼ to rise &amp; fall</div>
 <div id="prompt">Click to take the observer's seat</div>
+<button id="moveUp"   class="ctrl-btn" type="button" aria-label="Rise (hold)">▲ Up</button>
+<button id="moveDown" class="ctrl-btn" type="button" aria-label="Descend (hold)">▼ Down</button>
+<button id="speedBtn" class="ctrl-btn" type="button" aria-pressed="false">■ Still</button>
 <button id="edgesBtn" class="ctrl-btn" type="button" aria-pressed="true">Outlines</button>
-<button id="moveSlow" class="ctrl-btn" type="button" aria-pressed="false">▶ Slow</button>
-<button id="moveFast" class="ctrl-btn" type="button" aria-pressed="false">▶▶ Fast</button>
 <div id="errbox"></div>
 <script>
   // Surface startup/runtime errors on screen instead of a silent blue page.
