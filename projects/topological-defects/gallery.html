@@ -68,6 +68,8 @@
   .live { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; z-index: 2;
           opacity: 0; transition: opacity .25s ease; }
   .stage.ready .live { opacity: 1; }
+  .stage.no-poster .poster { display: none; }   /* missing poster: no broken-image icon */
+  .capture { position: fixed; left: -10000px; top: 0; width: 600px; height: 400px; border: 0; }
 
   .play, .loading { position: absolute; inset: 0; z-index: 10; display: flex; flex-direction: column;
                     align-items: center; justify-content: center; gap: 10px; pointer-events: none;
@@ -135,6 +137,7 @@ import { VIEWER_DEFECTS } from './js/viewer-defects.js';
 const el = (tag, cls) => { const e = document.createElement(tag); if (cls) e.className = cls; return e; };
 const gallery = document.getElementById('gallery');
 const readyCb = {};   // id -> first-frame callback
+const posterCap = {}; // id -> { tile, frame } for on-demand poster capture
 let currentLive = null;
 
 const TILES = VIEWER_DEFECTS.map((d, i) => ({ ...d, id: 't' + i }));
@@ -158,7 +161,25 @@ TILES.forEach((t) => {
   // shimmer until the still loads; clear on load OR error so a missing file never spins forever
   const clearPending = () => stage.classList.remove('pending');
   poster.addEventListener('load', clearPending);
-  poster.addEventListener('error', clearPending);
+  // Missing posters/<key>.jpg? Don't show a broken image — render the still on
+  // demand. Boot the viewer's one-shot ?poster mode in an off-screen iframe, take
+  // the first-frame JPEG it posts back (see the message handler below), and use
+  // that as the poster src: the same render make-posters.mjs bakes offline,
+  // produced client-side only for the defects whose poster file is absent. It is
+  // lazy — the <img loading=lazy> error fires only as the tile nears the viewport,
+  // so nothing boots up front — and the capture iframe is torn down after one
+  // frame, so no live WebGL context lingers.
+  poster.addEventListener('error', () => {
+    clearPending();
+    if (t.posterFallbackTried) return;          // one attempt per tile
+    t.posterFallbackTried = true;
+    stage.classList.add('no-poster');           // hide the broken <img> while rendering
+    const cap = el('iframe', 'capture');
+    cap.setAttribute('title', t.label.title + ' (rendering preview)');
+    cap.src = `viewer.html?poster&key=${t.key}&id=${t.id}-poster`;
+    posterCap[t.id + '-poster'] = { tile: t, frame: cap };
+    document.body.appendChild(cap);
+  });
   const play = el('div', 'play');
   const tri = el('span', 'tri'); tri.textContent = '▶';
   const cta = el('span', 'cta'); cta.textContent = 'Tap to explore';
@@ -207,6 +228,17 @@ function deactivate(t) {
 addEventListener('message', (e) => {
   const d = e.data || {};
   if (d.type === 'ready' && readyCb[d.id]) readyCb[d.id]();
+  // first-frame still from an on-demand capture iframe (missing poster fallback)
+  if (d.type === 'poster' && posterCap[d.id]) {
+    const { tile, frame } = posterCap[d.id]; delete posterCap[d.id];
+    frame.remove();                                   // tear down the one-shot context
+    if (typeof d.url === 'string' && d.url.includes(',')) {
+      tile.poster.src = d.url;                         // use the freshly rendered still
+      tile.stage.classList.remove('no-poster');        // reveal it (load clears the shimmer)
+    }
+    // empty url (render failed): keep .no-poster — a clean placeholder whose
+    // "tap to explore" CTA still live-renders on tap, never a broken image.
+  }
 });
 </script>
 </body>

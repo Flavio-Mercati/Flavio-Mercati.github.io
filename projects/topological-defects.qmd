@@ -24,7 +24,7 @@ richer defects — the *space forms* and *geons* that classify the closed
 This project makes those abstract identifications something you can *see and
 move through*. You take the seat of a free-floating camera in a stylized open
 world — rolling hills, a winding river under a stone bridge, cottages, a ring
-of mountains, drifting clouds — and eleven defects float above the meadow, each
+of mountains, drifting clouds — and nine defects float above the meadow, each
 marked by a signpost. Fly through one and the full gluing is applied to you,
 orientation included; the view then rights itself with a short, springy wobble.
 
@@ -37,23 +37,33 @@ $$ g(\mathbf{x}) = R\,\mathbf{x} + \mathbf{t}. $$
 
 The familiar "twist about the face's own normal" family is the special case
 $R = R(\hat{\mathbf n},\theta)$, $\mathbf{t} = -D\,\hat{\mathbf n}$; the more
-exotic cells supply an arbitrary $(R,\mathbf{t})$.
+exotic cells supply an arbitrary $(R,\mathbf{t})$ — and for the
+non-orientable cells $R$ is a *reflection* ($\det R = -1$), which is exactly
+what hands the world back mirror-reversed as you cross.
 
-The signs are colour-coded by **spinoriality** — whether the defect's
-underlying 3-manifold admits half-integer spin, the Friedman–Sorkin mechanism
-by which topology alone lets a lump of curved space behave like a fermion. The
-classification is clean: the only non-spinorial prime 3-manifolds are $S^3$,
-$S^2\times S^1$, and the lens spaces, so
+The signs are colour-coded by **orientability** — whether a consistent sense of
+handedness survives every loop through the cell:
 
-- **red** signs mark **spinorial** defects (admit spin-$\tfrac12$) — almost all of them;
-- **yellow** signs mark the **non-spinorial** ones (integer spin) — here, the lens spaces.
+- **yellow** signs mark the **orientable** cells — here, all six flat platycosms;
+- **green** signs mark the **non-orientable** ones, where crossing a
+  glide-reflected wall hands the world back mirror-reversed, so "left" and
+  "right" stop being globally defined.
+
+Written into each yellow sign is a second property, **spinoriality** — whether
+the cell's underlying 3-manifold admits half-integer spin, the Friedman–Sorkin
+mechanism by which topology alone lets a region of space behave like a fermion.
+The classification is clean: by Hendriks' theorem the only non-spinorial prime
+3-manifolds are $S^3$, $S^2\times S^1$, and the lens spaces, so every flat
+orientable cell here is spinorial and its sign reads **(spin $\tfrac12$)**; the
+**(spin 1)** tag returns with the lens spaces. The non-orientable cells carry
+pin± rather than spin structure, so they take no tag.
 
 ## Explore
 
 ::: {layout-ncol=1}
 
 - **[Navigator →](topological-defects/index.html)** — the full open world. Take
-  the observer's seat and fly through all eleven defects in one continuous
+  the observer's seat and fly through all nine defects in one continuous
   landscape. *(Desktop; mouse + keyboard.)*
 
 - **[Gallery →](topological-defects/gallery.html)** — a grid of windows, one per
@@ -68,22 +78,23 @@ $S^2\times S^1$, and the lens spaces, so
 
 ## The defects
 
-Eleven gluing-cells, spanning all three constant-curvature geometries:
+Nine gluing-cells, all of them closed, flat, and prime — the space forms you
+get by gluing a Euclidean solid to itself.
 
-- **Flat** (the six orientable *platycosms*) — the 3-torus $T^3$, the
-  half-, third-, quarter- and sixth-turn flat space forms, and the
-  Hantzsche–Wendt *didicosm* that completes the list.
-- **Spherical** — an octahedral cell, the **Poincaré homology sphere**
-  $S^3/2I$, and the two lens spaces $L(7,1)$ and $L(7,2)$ shown side by side
-  (famously homotopy-equivalent yet not homeomorphic).
-- **Hyperbolic** — the **Seifert–Weber dodecahedral space**: the same
-  dodecahedron as the Poincaré cell, glued with a $108^\circ$ twist instead of
-  $36^\circ$, which tips it out of spherical geometry into hyperbolic. Same
-  shape, different universe.
+- **Orientable** (the six *platycosms*) — the 3-torus $T^3$, the half-, third-,
+  quarter- and sixth-turn flat space forms, and the Hantzsche–Wendt *didicosm*
+  that completes the list.
+- **Non-orientable** — three of the four non-orientable flat manifolds: the
+  **first amphicosm** (Klein bottle $\times S^1$), the **second amphicosm** (its
+  swap-glide sibling, glued across a diagonal mirror), and the **first
+  amphidicosm**, the mirror counterpart of the Hantzsche–Wendt cell. Cross a
+  glide-reflected wall in any of them and the world comes back left–right
+  reversed; cross it twice and the reversal cancels.
 
-The twisted cube cells are shown as *flattened stand-ins* — all three face-pairs
-twist, so their edges carry conical seams (deficit angles) that the smooth
-manifold has not. That is the real physics of such a defect, not a rendering
-artefact; the [documentation](topological-defects/docs.html) explains where the
-honesty line falls and why four of the eight Thurston geometries can't be shown
-this way at all.
+The twisted cube cells (the quarter- and half-turn) are shown as *flattened
+stand-ins* — all three face-pairs twist, so their edges carry conical seams
+(deficit angles) the smooth manifold has not. That is the real physics of such a
+defect, not a rendering artefact; the
+[documentation](topological-defects/docs.html) explains where the honesty line
+falls, why the curved space forms were pulled out pending a faithful rebuild,
+and why four of the eight Thurston geometries can't be shown this way at all.

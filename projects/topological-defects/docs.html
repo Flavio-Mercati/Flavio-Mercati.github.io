@@ -29,7 +29,7 @@
     --ink:#20303c; --head:#1f3744; --body:#2f4655; --muted:#38505f;
     --win:#0c1a26; --winink:#eef4f9; --winmuted:rgba(238,244,249,.74);
     --bar: rgba(18,28,38,.62);
-    --red:#e8554a; --yellow:#ffd23f; --red-soft:#e58c7c; --yellow-soft:#e6b833;
+    --red:#e8554a; --yellow:#ffd23f; --green:#3fae6a; --red-soft:#e58c7c; --yellow-soft:#e6b833; --green-soft:#6cc78f;
     --rule: rgba(31,55,68,.22);
     --maxprose: 720px; --maxwide: 1080px;
   }
@@ -71,6 +71,7 @@
   .key .dot, .dot { width: 11px; height: 11px; border-radius: 50%; display: inline-block; flex: 0 0 auto; }
   .dot.red { background: var(--red); box-shadow: 0 0 0 1px rgba(0,0,0,.15); }
   .dot.yellow { background: var(--yellow); box-shadow: 0 0 0 1px rgba(0,0,0,.25); }
+  .dot.green { background: var(--green); box-shadow: 0 0 0 1px rgba(0,0,0,.2); }
 
   /* ---------- contents ---------- */
   nav.toc { margin: 30px auto 0; max-width: var(--maxprose); background: rgba(12,26,38,.94);
@@ -127,7 +128,7 @@
   figure.shot figcaption { font-size: 13.5px; color: var(--muted); margin-top: 9px; max-width: var(--maxprose);
                            margin-left: auto; margin-right: auto; text-align: center; }
 
-  /* the eleven defects table */
+  /* the defects table */
   .defects { max-width: var(--maxprose); margin: 1.6em auto; border-collapse: collapse; width: 100%; font-size: 16px; }
   .defects th, .defects td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
   .defects th { font-variant: small-caps; letter-spacing: .06em; color: var(--muted); font-weight: normal; font-size: 14px; }
@@ -161,8 +162,8 @@
   </figure>
 
   <p class="key">
-    <i><span class="dot red"></span> spinorial &mdash; admits spin-&frac12;</i>
-    <i><span class="dot yellow"></span> non-spinorial &mdash; integer spin</i>
+    <i><span class="dot yellow"></span> orientable &mdash; spin &frac12; (spinorial) or spin 1 (integer)</i>
+    <i><span class="dot green"></span> non-orientable &mdash; pin&plusmn;, no spin tag</i>
   </p>
 
   <nav class="toc" aria-label="Contents">
@@ -224,32 +225,30 @@
   </figure>
 
   <div class="prose">
-    <h3>Three geometries, eleven cells</h3>
-    <p>By Thurston's geometrization, every closed 3-manifold is assembled from pieces modelled on eight homogeneous geometries. Three of them have <em>constant</em> sectional curvature &mdash; flat $\mathbf{E}^3$, spherical $\mathbf{S}^3$, hyperbolic $\mathbf{H}^3$ &mdash; and their compact quotients are the <em>space forms</em>. Those are exactly what is faithfully renderable here, and the scene draws one of each:</p>
+    <h3>Nine cells, all flat</h3>
+    <p>By Thurston's geometrization, every closed 3-manifold is built from pieces modelled on eight homogeneous geometries. Three have <em>constant</em> sectional curvature &mdash; flat $\mathbf{E}^3$, spherical $\mathbf{S}^3$, hyperbolic $\mathbf{H}^3$ &mdash; and their compact quotients are the <em>space forms</em>. All three constant-curvature geometries are projectively flat, so a flat portal can render them (Part&nbsp;IV) &mdash; but the scene is currently just the <strong>flat</strong> space forms: the complete set of orientable platycosms (six) together with three of the four non-orientable flat manifolds. The spherical and hyperbolic cells of an earlier build were pulled out pending a faithful rebuild.</p>
   </div>
 
   <table class="defects">
-    <thead><tr><th>Cell</th><th>Manifold</th><th class="s">Geometry</th><th class="s">Spin</th></tr></thead>
+    <thead><tr><th>Cell</th><th>Manifold</th><th class="s">Sign</th><th class="s">Spin</th></tr></thead>
     <tbody>
-      <tr><td class="name">Torus (no twist)</td><td>3-torus $T^3$ &mdash; the <em>torocosm</em></td><td class="geo">flat</td><td class="s"><span class="dot red"></span></td></tr>
-      <tr><td class="name">Half-turn cube</td><td>dicosm (holonomy $\mathbb{Z}/2$)</td><td class="geo">flat</td><td class="s"><span class="dot red"></span></td></tr>
-      <tr><td class="name">Third-turn prism</td><td>tricosm (holonomy $\mathbb{Z}/3$)</td><td class="geo">flat</td><td class="s"><span class="dot red"></span></td></tr>
-      <tr><td class="name">Quarter-turn cube</td><td>tetracosm (holonomy $\mathbb{Z}/4$)</td><td class="geo">flat</td><td class="s"><span class="dot red"></span></td></tr>
-      <tr><td class="name">Sixth-turn prism</td><td>hexacosm (holonomy $\mathbb{Z}/6$)</td><td class="geo">flat</td><td class="s"><span class="dot red"></span></td></tr>
-      <tr><td class="name">Hantzsche&ndash;Wendt</td><td>didicosm (holonomy $\mathbb{Z}/2\times\mathbb{Z}/2$)</td><td class="geo">flat</td><td class="s"><span class="dot red"></span></td></tr>
-      <tr><td class="name">Octahedral cell</td><td>a spherical space form</td><td class="geo">spherical</td><td class="s"><span class="dot red"></span></td></tr>
-      <tr><td class="name">Dodecahedral, 36&deg;</td><td>Poincar&eacute; homology sphere $S^3/2I$</td><td class="geo">spherical</td><td class="s"><span class="dot red"></span></td></tr>
-      <tr><td class="name">Lens cell, $2\pi/7$</td><td>lens space $L(7,1)$</td><td class="geo">spherical</td><td class="s"><span class="dot yellow"></span></td></tr>
-      <tr><td class="name">Lens cell, $4\pi/7$</td><td>lens space $L(7,2)$</td><td class="geo">spherical</td><td class="s"><span class="dot yellow"></span></td></tr>
-      <tr><td class="name">Dodecahedral, 108&deg;</td><td>Seifert&ndash;Weber space</td><td class="geo">hyperbolic</td><td class="s"><span class="dot red"></span></td></tr>
+      <tr><td class="name">Torus (no twist)</td><td>3-torus $T^3$ &mdash; the <em>torocosm</em></td><td class="s"><span class="dot yellow"></span></td><td class="s">&frac12;</td></tr>
+      <tr><td class="name">Half-turn cube</td><td>dicosm (holonomy $\mathbb{Z}/2$)</td><td class="s"><span class="dot yellow"></span></td><td class="s">&frac12;</td></tr>
+      <tr><td class="name">Third-turn prism</td><td>tricosm (holonomy $\mathbb{Z}/3$)</td><td class="s"><span class="dot yellow"></span></td><td class="s">&frac12;</td></tr>
+      <tr><td class="name">Quarter-turn cube</td><td>tetracosm (holonomy $\mathbb{Z}/4$)</td><td class="s"><span class="dot yellow"></span></td><td class="s">&frac12;</td></tr>
+      <tr><td class="name">Sixth-turn prism</td><td>hexacosm (holonomy $\mathbb{Z}/6$)</td><td class="s"><span class="dot yellow"></span></td><td class="s">&frac12;</td></tr>
+      <tr><td class="name">Hantzsche&ndash;Wendt</td><td>didicosm (holonomy $\mathbb{Z}/2\times\mathbb{Z}/2$)</td><td class="s"><span class="dot yellow"></span></td><td class="s">&frac12;</td></tr>
+      <tr><td class="name">First amphicosm</td><td>Klein bottle $\times\,S^1$ &mdash; holonomy $\mathbb{Z}/2$</td><td class="s"><span class="dot green"></span></td><td class="s">pin$^\pm$</td></tr>
+      <tr><td class="name">Second amphicosm</td><td>swap-glide torus bundle &mdash; $\mathbb{Z}/2$</td><td class="s"><span class="dot green"></span></td><td class="s">pin$^\pm$</td></tr>
+      <tr><td class="name">First amphidicosm</td><td>mirror sibling of the didicosm &mdash; $\mathbb{Z}/2\times\mathbb{Z}/2$</td><td class="s"><span class="dot green"></span></td><td class="s">pin$^\pm$</td></tr>
     </tbody>
   </table>
 
   <div class="prose">
-    <p>The six flat ones are the orientable <em>platycosms</em> &mdash; the complete Bieberbach list, named by Conway and Rossetti. The lens spaces $L(7,1)$ and $L(7,2)$ sit side by side as the famous pair that is homotopy-equivalent yet not homeomorphic. And the Seifert&ndash;Weber space is the Poincar&eacute; dodecahedron with one number changed: glue the opposite pentagons by $108^\circ$ instead of $36^\circ$ and the cell tips out of spherical geometry into hyperbolic. Same shape, different universe.</p>
+    <p>The six orientable cells are the <em>platycosms</em> &mdash; the complete orientable Bieberbach list, named by Conway and Rossetti. The three non-orientable cells are flat too: cross a glide-reflected wall in any of them and the world comes back left&ndash;right reversed, and crossing twice undoes it. The <strong>first amphicosm</strong> is Klein bottle $\times\,S^1$; the <strong>second amphicosm</strong> is its sibling glued across a <em>diagonal</em> mirror (the swap glide); the <strong>first amphidicosm</strong> is the non-orientable counterpart of the Hantzsche&ndash;Wendt cell. The fourth non-orientable platycosm, the second amphidicosm, needs a non-cube cell and is still to come.</p>
 
     <h3>Why some cells have seams</h3>
-    <p>A faithful flat space form twists only some of its face-pairs. The cube cells here twist <em>all three</em>, which is what makes them sit still and read clearly &mdash; but it turns them into flattened <em>cone-manifold</em> stand-ins: their edges carry a deficit angle, and the deficit shows up as a visible seam in the image where two faces meet. That is the genuine physics of such a defect, not a rendering bug. The torus, twisting nothing, is the only seam-free cell.</p>
+    <p>A faithful flat space form twists only <em>some</em> of its face-pairs &mdash; or, like the torus, none. The two cube cells (the quarter- and half-turn) instead twist <em>all three</em>, which is what makes them sit still and read clearly &mdash; but it turns them into flattened <em>cone-manifold</em> stand-ins: their edges carry a deficit angle, and the deficit shows up as a visible seam in the image where two faces meet. That is the genuine physics of such a defect, not a rendering bug. The torus, the two hexagonal prisms (which twist only their caps), the Hantzsche&ndash;Wendt cell, and all three non-orientable cells are honest smooth manifolds &mdash; joined seamlessly across every edge.</p>
   </div>
 
   <figure class="fig narrow">
@@ -277,7 +276,7 @@
 
   <div class="prose">
     <h3>Spinoriality: when topology makes a fermion</h3>
-    <p>The sign colours encode one deeper property. In 1980 Friedman and Sorkin showed that the gravitational field of certain asymptotically-flat 3-manifolds can carry <strong>half-integer angular momentum</strong> &mdash; a localized lump of nontrivial spatial topology, a <em>geon</em>, can behave like a fermion, with no spinning matter anywhere, from topology alone.</p>
+    <p>Beyond orientability, each orientable sign carries a second property as a tag &mdash; its <em>spinoriality</em>. In 1980 Friedman and Sorkin showed that the gravitational field of certain asymptotically-flat 3-manifolds can carry <strong>half-integer angular momentum</strong> &mdash; a localized lump of nontrivial spatial topology, a <em>geon</em>, can behave like a fermion, with no spinning matter anywhere, from topology alone.</p>
 
     <p>The mechanism is the belt trick. A $2\pi$ rotation of the geon, performed at infinity, is a diffeomorphism of the spatial slice. The geon is <strong>spinorial</strong> precisely when that $2\pi$ rotation is <em>not</em> deformable to the identity through motions fixing the boundary &mdash; while the $4\pi$ rotation always is. That is the $\mathbb{Z}_2$ of $\pi_1\big(\mathrm{SO}(3)\big)$ made physical: a belt given one full twist cannot be undone by sliding it, but two full twists can.</p>
 
@@ -285,7 +284,7 @@
 
     $$ S^3, \qquad S^2\times S^1, \qquad \text{and the lens spaces } L(p,q). $$
 
-    <p>Everything else is spinorial. So almost every cell here is red; yellow is reserved for the two lens spaces (and would also mark the $S^2\times S^1$ wormhole handles, of which more in Part&nbsp;II).</p>
+    <p>Everything else is spinorial. Every flat <em>orientable</em> cell in the scene lies outside that short list, so each is spin-&frac12; &mdash; its yellow sign reads <strong>(spin &frac12;)</strong>. The <strong>(spin 1)</strong> tag is reserved for the non-spinorial lens spaces and returns when the curved forms come back &mdash; it once also marked the $S^2\times S^1$ wormhole handles, of which more in Part&nbsp;II. The non-orientable (green) cells carry pin$^\pm$ rather than spin structure, so they take no spin tag at all.</p>
   </div>
 
   <figure class="fig">
@@ -294,23 +293,21 @@
         <text x="380" y="30" fill="#cfe0ee" font-family="Georgia,serif" font-size="17" text-anchor="middle">prime 3-manifolds</text>
         <line x1="380" y1="40" x2="200" y2="78" stroke="#9ec3dd" stroke-width="1.6"/>
         <line x1="380" y1="40" x2="560" y2="78" stroke="#9ec3dd" stroke-width="1.6"/>
-        <!-- yellow panel -->
-        <rect x="40" y="80" width="320" height="148" rx="12" fill="#13283a" stroke="#e6b833" stroke-width="1.6"/>
-        <circle cx="64" cy="106" r="7" fill="#ffd23f"/>
-        <text x="80" y="111" fill="#ffd23f" font-family="Georgia,serif" font-size="16">non-spinorial &mdash; integer spin</text>
-        <text x="64" y="146" fill="#eef4f9" font-family="Georgia,serif" font-size="16">$S^3$</text>
-        <text x="64" y="176" fill="#eef4f9" font-family="Georgia,serif" font-size="16">$S^2 \times S^1$</text>
-        <text x="64" y="206" fill="#eef4f9" font-family="Georgia,serif" font-size="16">lens spaces $L(p,q)$</text>
-        <!-- red panel -->
-        <rect x="400" y="80" width="320" height="148" rx="12" fill="#13283a" stroke="#e58c7c" stroke-width="1.6"/>
-        <circle cx="424" cy="106" r="7" fill="#e8554a"/>
-        <text x="440" y="111" fill="#e8554a" font-family="Georgia,serif" font-size="16">spinorial &mdash; admits spin-&frac12;</text>
-        <text x="424" y="146" fill="#eef4f9" font-family="Georgia,serif" font-size="15">everything else:</text>
-        <text x="424" y="174" fill="#cfe0ee" font-family="Georgia,serif" font-size="14.5">$T^3$ &amp; the platycosms, octahedral</text>
-        <text x="424" y="198" fill="#cfe0ee" font-family="Georgia,serif" font-size="14.5">&amp; Poincar&eacute; cells, Seifert&ndash;Weber, &hellip;</text>
+        <!-- non-spinorial panel -->
+        <rect x="40" y="80" width="320" height="148" rx="12" fill="#13283a" stroke="#9ec3dd" stroke-width="1.6"/>
+        <text x="60" y="111" fill="#eef4f9" font-family="Georgia,serif" font-size="15.5">non-spinorial &mdash; the (spin 1) tag</text>
+        <text x="60" y="146" fill="#cfe0ee" font-family="Georgia,serif" font-size="16">$S^3$</text>
+        <text x="60" y="176" fill="#cfe0ee" font-family="Georgia,serif" font-size="16">$S^2 \times S^1$</text>
+        <text x="60" y="206" fill="#cfe0ee" font-family="Georgia,serif" font-size="16">lens spaces $L(p,q)$</text>
+        <!-- spinorial panel -->
+        <rect x="400" y="80" width="320" height="148" rx="12" fill="#13283a" stroke="#9ec3dd" stroke-width="1.6"/>
+        <text x="420" y="111" fill="#eef4f9" font-family="Georgia,serif" font-size="15.5">spinorial &mdash; the (spin &frac12;) tag</text>
+        <text x="420" y="146" fill="#cfe0ee" font-family="Georgia,serif" font-size="15">everything else:</text>
+        <text x="420" y="174" fill="#cfe0ee" font-family="Georgia,serif" font-size="14.5">$T^3$ and the platycosms,</text>
+        <text x="420" y="198" fill="#cfe0ee" font-family="Georgia,serif" font-size="14.5">the spherical &amp; hyperbolic forms, &hellip;</text>
       </svg>
     </div>
-    <figcaption><b>The dividing line.</b> Spinoriality is a property of the manifold, not of how tightly a face is twisted. Hendriks' classification leaves only three families on the non-spinorial side.</figcaption>
+    <figcaption><b>The dividing line.</b> Spinoriality is a property of the manifold, not of how tightly a face is twisted &mdash; and it is written into each yellow (orientable) sign as a spin tag. Hendriks' classification leaves only three families on the non-spinorial side.</figcaption>
   </figure>
 
   <div class="prose">
@@ -465,7 +462,7 @@
     <p>The portal passes render into pooled off-screen targets at a tunable resolution, with an oblique clip plane placed at each exit face and soft (variance) shadows over the landscape. Defects past a cutoff distance skip their portal pass entirely &mdash; a half-metre cell is sub-pixel from across the valley anyway.</p>
 
     <h3>One simulation, two front ends</h3>
-    <p>The desktop <strong>Navigator</strong> is the full first-person world. For phones, the same defect catalog drives a <strong>Gallery</strong>: a grid of windows, each a single defect you can orbit on its own. Posters are baked lazily, one at a time, as each window nears the viewport &mdash; an off-screen frame renders the first image, which is swapped for a live, interactive view only when you tap. Just one window runs live at a time, so a page of eleven defects stays light. A small build script can also inline the entire gallery &mdash; code, catalog, and all &mdash; into a single self-contained HTML file.</p>
+    <p>The desktop <strong>Navigator</strong> is the full first-person world. For phones, the same defect catalog drives a <strong>Gallery</strong>: a grid of windows, each a single defect you can orbit on its own. Posters are baked lazily, one at a time, as each window nears the viewport &mdash; an off-screen frame renders the first image, which is swapped for a live, interactive view only when you tap. Just one window runs live at a time, so a page of nine defects stays light. A small build script can also inline the entire gallery &mdash; code, catalog, and all &mdash; into a single self-contained HTML file.</p>
 
     <h3>Physics you can regression-test</h3>
     <p>The claims this project makes are mathematical, so they are checked mathematically. A headless harness &mdash; Node.js driving the same Three.js &mdash; verifies the invariants deterministically before any version is called stable:</p>
@@ -473,7 +470,7 @@
       <li><strong>Round-trip:</strong> crossing $A\to B\to A$ returns you exactly home.</li>
       <li><strong>Mutual inverses:</strong> a face's gluing and its partner's are exact inverses.</li>
       <li><strong>Holonomy &amp; orientability:</strong> the deck group is the right one &mdash; for instance the Klein four-group $\mathbb{Z}/2\times\mathbb{Z}/2$ of the Hantzsche&ndash;Wendt cell &mdash; and orientation-preserving where it should be.</li>
-      <li><strong>Containment:</strong> the lens cell's rim is a genuine radial bound; no centreline point sits inside a cell.</li>
+      <li><strong>Containment:</strong> each cell is radially bounded, and no point on the observer's centreline sits inside one.</li>
       <li><strong>Frame-rate independence:</strong> the twist values at phase boundaries are identical regardless of frame rate.</li>
     </ul>
     <p>That harness is what let the codebase take on the <em>rigid-isometry refactor</em> &mdash; generalizing every face from a bare (normal, angle) to an explicit $(R,\mathbf{t})$ &mdash; needed for the Hantzsche&ndash;Wendt cell, while proving the older twist cells still reproduced their previous behaviour to the bit.</p>
@@ -512,7 +509,7 @@
   <div class="prose">
     <p>Two limits are practical. Defects are hidden during portal passes, so a defect seen <em>through</em> another defect &mdash; including itself, once rotations are in play &mdash; is invisible; recursive passes with a depth cap are the planned fix. And within a few centimetres of a face the camera's near plane can clip a thin sliver. Neither changes what the simulation is for.</p>
 
-    <p>The deep limit is more interesting, and it is a theorem. By <strong>Beltrami's theorem</strong>, a geometry admits a chart in which <em>every</em> geodesic is a straight line if and only if it has constant sectional curvature. The three constant-curvature geometries &mdash; $\mathbf{E}^3$, $\mathbf{S}^3$, $\mathbf{H}^3$ &mdash; are therefore the only <em>projectively flat</em> ones. That is precisely why the flattened spherical and hyperbolic cells are even approximately renderable: a rigid isometry maps straight light rays to straight light rays, the real and virtual cameras can share one perspective projection, and the only thing fudged is interior curvature while the gluing stays exact on the central ray.</p>
+    <p>The deep limit is more interesting, and it is a theorem. By <strong>Beltrami's theorem</strong>, a geometry admits a chart in which <em>every</em> geodesic is a straight line if and only if it has constant sectional curvature. The three constant-curvature geometries &mdash; $\mathbf{E}^3$, $\mathbf{S}^3$, $\mathbf{H}^3$ &mdash; are therefore the only <em>projectively flat</em> ones. That is precisely why a flattened spherical or hyperbolic cell can even be approximately rendered at all: a rigid isometry maps straight light rays to straight light rays, the real and virtual cameras can share one perspective projection, and the only thing fudged is interior curvature while the gluing stays exact on the central ray.</p>
 
     <p>The other four anisotropic Thurston geometries &mdash; <strong>Nil, Sol, $\mathbf{H}^2\times\mathbb{R}$, and $\widetilde{\mathrm{SL}_2(\mathbb{R})}$</strong> &mdash; are <em>not</em> projectively flat, and no linear or projective warp of the rendered image can straighten their geodesics. Sol's geodesics are chaotic; Nil's are helical; the two product-like geometries have a distinguished fibre direction that can't be straightened at the same time as the hyperbolic factor. The error is structural &mdash; present everywhere except the central ray &mdash; not the small off-axis drift a flat portal tolerates. Rendering these faithfully needs a different paradigm entirely: per-pixel geodesic ray-marching <em>inside</em> the geometry, integrating the actual geodesic flow, as Coulon, Matsumoto, Segerman and Trettel do for all eight Thurston geometries. That is a second renderer living beside this one, not a transform bolted on. Nil and Sol can still appear here as honest <em>gluing-only stand-ins</em> &mdash; their identification patterns are linear &mdash; but their signs say so.</p>
 
