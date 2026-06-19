@@ -376,17 +376,18 @@ window.Quarto = {
 
 
 <p><strong>A topological defect</strong> is a region of space that has been cut out and re-glued to itself. Its boundary faces are identified in pairs by rigid motions, so light — and an observer — that leaves through one wall returns through the partner wall, possibly rotated. The simplest case is a cube whose opposite faces are glued straight across by translation: a perfectly transparent block that simply displaces whatever you see through it. Twist the gluing, or glue the faces of a different polyhedron, and you get a whole zoo of richer defects — the <em>space forms</em> and <em>geons</em> that classify the closed 3-manifolds.</p>
-<p>This project makes those abstract identifications something you can <em>see and move through</em>. You take the seat of a free-floating camera in a stylized open world — rolling hills, a winding river under a stone bridge, cottages, a ring of mountains, drifting clouds — and eleven defects float above the meadow, each marked by a signpost. Fly through one and the full gluing is applied to you, orientation included; the view then rights itself with a short, springy wobble.</p>
+<p>This project makes those abstract identifications something you can <em>see and move through</em>. You take the seat of a free-floating camera in a stylized open world — rolling hills, a winding river under a stone bridge, cottages, a ring of mountains, drifting clouds — and nine defects float above the meadow, each marked by a signpost. Fly through one and the full gluing is applied to you, orientation included; the view then rights itself with a short, springy wobble.</p>
 <section id="the-mathematics" class="level2">
 <h2 class="anchored" data-anchor-id="the-mathematics">The mathematics</h2>
 <p>Each identified face carries a <strong>gluing isometry</strong> — a rotation <span class="math inline">\(R\)</span> and a translation <span class="math inline">\(\mathbf{t}\)</span>, applied in the defect’s local frame as</p>
 <p><span class="math display">\[ g(\mathbf{x}) = R\,\mathbf{x} + \mathbf{t}. \]</span></p>
-<p>The familiar “twist about the face’s own normal” family is the special case <span class="math inline">\(R = R(\hat{\mathbf n},\theta)\)</span>, <span class="math inline">\(\mathbf{t} = -D\,\hat{\mathbf n}\)</span>; the more exotic cells supply an arbitrary <span class="math inline">\((R,\mathbf{t})\)</span>.</p>
-<p>The signs are colour-coded by <strong>spinoriality</strong> — whether the defect’s underlying 3-manifold admits half-integer spin, the Friedman–Sorkin mechanism by which topology alone lets a lump of curved space behave like a fermion. The classification is clean: the only non-spinorial prime 3-manifolds are <span class="math inline">\(S^3\)</span>, <span class="math inline">\(S^2\times S^1\)</span>, and the lens spaces, so</p>
+<p>The familiar “twist about the face’s own normal” family is the special case <span class="math inline">\(R = R(\hat{\mathbf n},\theta)\)</span>, <span class="math inline">\(\mathbf{t} = -D\,\hat{\mathbf n}\)</span>; the more exotic cells supply an arbitrary <span class="math inline">\((R,\mathbf{t})\)</span> — and for the non-orientable cells <span class="math inline">\(R\)</span> is a <em>reflection</em> (<span class="math inline">\(\det R = -1\)</span>), which is exactly what hands the world back mirror-reversed as you cross.</p>
+<p>The signs are colour-coded by <strong>orientability</strong> — whether a consistent sense of handedness survives every loop through the cell:</p>
 <ul>
-<li><strong>red</strong> signs mark <strong>spinorial</strong> defects (admit spin-<span class="math inline">\(\tfrac12\)</span>) — almost all of them;</li>
-<li><strong>yellow</strong> signs mark the <strong>non-spinorial</strong> ones (integer spin) — here, the lens spaces.</li>
+<li><strong>yellow</strong> signs mark the <strong>orientable</strong> cells — here, all six flat platycosms;</li>
+<li><strong>green</strong> signs mark the <strong>non-orientable</strong> ones, where crossing a glide-reflected wall hands the world back mirror-reversed, so “left” and “right” stop being globally defined.</li>
 </ul>
+<p>Written into each yellow sign is a second property, <strong>spinoriality</strong> — whether the cell’s underlying 3-manifold admits half-integer spin, the Friedman–Sorkin mechanism by which topology alone lets a region of space behave like a fermion. The classification is clean: by Hendriks’ theorem the only non-spinorial prime 3-manifolds are <span class="math inline">\(S^3\)</span>, <span class="math inline">\(S^2\times S^1\)</span>, and the lens spaces, so every flat orientable cell here is spinorial and its sign reads <strong>(spin <span class="math inline">\(\tfrac12\)</span>)</strong>; the <strong>(spin 1)</strong> tag returns with the lens spaces. The non-orientable cells carry pin± rather than spin structure, so they take no tag.</p>
 </section>
 <section id="explore" class="level2">
 <h2 class="anchored" data-anchor-id="explore">Explore</h2>
@@ -394,7 +395,7 @@ window.Quarto = {
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 100.0%;justify-content: flex-start;">
 <ul>
-<li><p><strong><a href="topological-defects/index.html">Navigator →</a></strong> — the full open world. Take the observer’s seat and fly through all eleven defects in one continuous landscape. <em>(Desktop; mouse + keyboard.)</em></p></li>
+<li><p><strong><a href="topological-defects/index.html">Navigator →</a></strong> — the full open world. Take the observer’s seat and fly through all nine defects in one continuous landscape. <em>(Desktop; mouse + keyboard.)</em></p></li>
 <li><p><strong><a href="topological-defects/gallery.html">Gallery →</a></strong> — a grid of windows, one per manifold. Orbit each defect on its own and read its plaque. <em>(Works beautifully on a phone.)</em></p></li>
 <li><p><strong><a href="topological-defects/docs.html">Documentation →</a></strong> — the mathematics of the defects, the story of how the visualization was built (wormholes and all), and the rendering technology behind it.</p></li>
 </ul>
@@ -404,13 +405,12 @@ window.Quarto = {
 </section>
 <section id="the-defects" class="level2">
 <h2 class="anchored" data-anchor-id="the-defects">The defects</h2>
-<p>Eleven gluing-cells, spanning all three constant-curvature geometries:</p>
+<p>Nine gluing-cells, all of them closed, flat, and prime — the space forms you get by gluing a Euclidean solid to itself.</p>
 <ul>
-<li><strong>Flat</strong> (the six orientable <em>platycosms</em>) — the 3-torus <span class="math inline">\(T^3\)</span>, the half-, third-, quarter- and sixth-turn flat space forms, and the Hantzsche–Wendt <em>didicosm</em> that completes the list.</li>
-<li><strong>Spherical</strong> — an octahedral cell, the <strong>Poincaré homology sphere</strong> <span class="math inline">\(S^3/2I\)</span>, and the two lens spaces <span class="math inline">\(L(7,1)\)</span> and <span class="math inline">\(L(7,2)\)</span> shown side by side (famously homotopy-equivalent yet not homeomorphic).</li>
-<li><strong>Hyperbolic</strong> — the <strong>Seifert–Weber dodecahedral space</strong>: the same dodecahedron as the Poincaré cell, glued with a <span class="math inline">\(108^\circ\)</span> twist instead of <span class="math inline">\(36^\circ\)</span>, which tips it out of spherical geometry into hyperbolic. Same shape, different universe.</li>
+<li><strong>Orientable</strong> (the six <em>platycosms</em>) — the 3-torus <span class="math inline">\(T^3\)</span>, the half-, third-, quarter- and sixth-turn flat space forms, and the Hantzsche–Wendt <em>didicosm</em> that completes the list.</li>
+<li><strong>Non-orientable</strong> — three of the four non-orientable flat manifolds: the <strong>first amphicosm</strong> (Klein bottle <span class="math inline">\(\times S^1\)</span>), the <strong>second amphicosm</strong> (its swap-glide sibling, glued across a diagonal mirror), and the <strong>first amphidicosm</strong>, the mirror counterpart of the Hantzsche–Wendt cell. Cross a glide-reflected wall in any of them and the world comes back left–right reversed; cross it twice and the reversal cancels.</li>
 </ul>
-<p>The twisted cube cells are shown as <em>flattened stand-ins</em> — all three face-pairs twist, so their edges carry conical seams (deficit angles) that the smooth manifold has not. That is the real physics of such a defect, not a rendering artefact; the <a href="topological-defects/docs.html">documentation</a> explains where the honesty line falls and why four of the eight Thurston geometries can’t be shown this way at all.</p>
+<p>The twisted cube cells (the quarter- and half-turn) are shown as <em>flattened stand-ins</em> — all three face-pairs twist, so their edges carry conical seams (deficit angles) the smooth manifold has not. That is the real physics of such a defect, not a rendering artefact; the <a href="topological-defects/docs.html">documentation</a> explains where the honesty line falls, why the curved space forms were pulled out pending a faithful rebuild, and why four of the eight Thurston geometries can’t be shown this way at all.</p>
 
 
 </section>
