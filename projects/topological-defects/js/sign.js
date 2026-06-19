@@ -6,14 +6,18 @@
 // rule + body) fits the board's content box, so labels of very different
 // lengths each render as large as they can while staying inside the frame.
 //
-// Red signs mark spinorial defects (those that can carry spin-½);
-// yellow marks the non-spinorial ones.
+// Sign colour encodes ORIENTABILITY: yellow = orientable, green = non-orientable.
+// For orientable cells the spinoriality is ALSO written into the label as a
+// "(spin ½)" / "(spin 1)" tag; non-orientable cells (which carry pin±, not spin)
+// show no spin tag.
 
 import * as THREE from 'three';
 
+// Two themes (parchment face, coloured frame/edge): a warm yellow for the
+// orientable cells, a green for the non-orientable ones; text stays dark on both.
 const THEMES = {
-  yellow: { bg: '#ffd23f', border: '#5e431f', text: '#3a2c18', sub: '#5b4322', rule: '#b98e2c', edge: '#e6b833' },
-  red:    { bg: '#cf3b32', border: '#571410', text: '#fff6ea', sub: '#f4cdc1', rule: '#e58c7c', edge: '#b03028' },
+  yellow: { bg: '#f1e4ad', border: '#9a7d1e', text: '#2c2510', sub: '#6a5616', rule: '#b89a32', edge: '#7e6618' },
+  green:  { bg: '#d6e8c4', border: '#3f6e2a', text: '#1f2c14', sub: '#3c5a24', rule: '#5e8a3a', edge: '#3a5e24' },
 };
 
 const FONT = "Georgia, 'Times New Roman', serif";
@@ -37,10 +41,16 @@ function wrapLines(ctx, text, maxWidth) {
   return lines;
 }
 
-export function createSignpost(label, red = false) {
-  const theme = red ? THEMES.red : THEMES.yellow;
+export function createSignpost(label, opts = {}) {
+  // opts.orientable → colour (yellow when true, green when false). For an
+  // orientable cell the spinoriality is written as a spin tag (opts.spinorial:
+  // true → spin-½, false → spin-1); a non-orientable cell shows no spin tag.
+  const orientable = opts.orientable !== false; // default orientable / yellow
+  const theme = orientable ? THEMES.yellow : THEMES.green;
+  const spinTag = orientable ? (opts.spinorial === false ? '(spin 1)' : '(spin ½)') : '';
   const title = label.title || '';
-  const aka = label.aka || '';
+  const akaText = label.aka || '';
+  const aka = spinTag ? (akaText ? `${spinTag} · ${akaText}` : spinTag) : akaText;
   const body = label.body || '';
 
   const g = new THREE.Group();

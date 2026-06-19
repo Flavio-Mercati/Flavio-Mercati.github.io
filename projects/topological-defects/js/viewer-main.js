@@ -77,13 +77,7 @@ scene.add(new THREE.HemisphereLight(0xbfdcff, 0x6a8a4f, 1.1));
 // ---- the one defect, at its real site, ~2 m above the terrain ---------------
 const s = DEFECT_SITES[CHOICE.site];
 const center = new THREE.Vector3(s.x, world.getHeight(s.x, s.z) + 2, s.z);
-// Horizontal bearing of the opening orbit view (azimuth AZ0). The cap-twist
-// cells lay their screw axis along this so a twisted cap faces the first frame
-// (and the gallery still-preview) instead of a blank side wall; orbit away and
-// the cap sweeps to edge-on. Cells that twist every face ignore it.
-const AZ0 = 0.6;
-const FRONT = new THREE.Vector3(Math.sin(AZ0), 0, Math.cos(AZ0));
-const defect = CHOICE.make(center, FRONT);
+const defect = CHOICE.make(center);
 scene.add(defect.group);
 const defects = [defect];
 
@@ -104,7 +98,7 @@ const ACROSS = Math.max(_ext.x, _ext.y, _ext.z);
 const MIN_DIST = og.boundingSphere.radius * 2.0; // never enter the cell on wide screens
 
 let radius = MIN_DIST;
-let az = AZ0;   // initial 3/4 view so the displacement through the defect reads
+let az = 0.6;   // initial 3/4 view so the displacement through the defect reads
 let el = 0.34;
 const EL_MIN = -1.2;
 const EL_MAX = 1.45;

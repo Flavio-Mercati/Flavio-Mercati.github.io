@@ -45,7 +45,7 @@ export function createWorld(scene, opts = {}) {
     return Math.abs(x - 22 * Math.sin(z / 30));
   }
 
-  const RIVER_LEVEL = -0.55;
+  const RIVER_LEVEL = -0.05;  // water plane (raised 0.5 m from the old -0.55)
 
   // River centreline z(x): a gentle meander through the meadow that grows long
   // and tortuous once it reaches the mountains (|x| > ~55), so the gorge keeps
@@ -56,7 +56,16 @@ export function createWorld(scene, opts = {}) {
     const base = -14 + 10 * Math.sin(x / 30);
     const w = smoothstep(55, 120, Math.abs(x));          // 0 meadow -> 1 deep range
     const wind = 22 * Math.sin(x / 12 + 1.7) + 12 * Math.sin(x / 6 + 4.0);
-    return base + w * wind;
+    // Local swing so the channel meets the stone bridge square-on. At the deck
+    // centre xb the value is unchanged (the river still lands on the bridge),
+    // but A·(x-xb) sets the tangent there to be perpendicular to the deck axis
+    // (deck dir = (cos ry, -sin ry); river dir must be (sin ry, cos ry)-ish so
+    // dz/dx = -0.605). The Gaussian window keeps the bend local to the crossing
+    // and decays to ~0 well before the deep range, leaving the meander intact.
+    const xb = -12.44, sigma = 12, A = -0.9102;
+    const t = (x - xb) / sigma;
+    const bend = A * (x - xb) * Math.exp(-t * t);
+    return base + w * wind + bend;
   };
   // Sampled polyline + exact point-to-segment distance (|z - riverZ(x)| is only
   // valid for a gently sloped channel; the tortuous gorge needs the true
@@ -99,7 +108,7 @@ export function createWorld(scene, opts = {}) {
     return Math.abs(u) < BRIDGE.halfL + margin && Math.abs(v) < BRIDGE.halfW + margin;
   };
 
-  const MEADOW_FLOOR = -0.2; // soft floor, just above the water plane
+  const MEADOW_FLOOR = 0.3;  // soft floor, kept ~0.35 m above the raised water plane
   function rawHeight(x, z) {
     const r = Math.hypot(x, z);
     const hills =
@@ -124,7 +133,7 @@ export function createWorld(scene, opts = {}) {
   // Canyon cross-section: a narrow flat floor, then ~45 degree walls (slope ~ 1)
   // that climb until they meet the natural terrain — a shallow banked stream in
   // the low meadow, a deep gorge where the same channel cuts the mountains.
-  const CANYON_FLOOR = RIVER_LEVEL - 0.6;   // bed just under the water plane
+  const CANYON_FLOOR = RIVER_LEVEL - 1.1;   // bed held at -1.15: river is now 1.1 m deep
   const CANYON_BED_HALF = 4.5;              // half-width of the flat floor
   function heightWithRiver(x, z) {
     const H = rawHeight(x, z);
@@ -142,7 +151,7 @@ export function createWorld(scene, opts = {}) {
   const A0 = _abut(-BRIDGE.halfL), A1 = _abut(BRIDGE.halfL);
   BRIDGE.y0 = heightWithRiver(A0.x, A0.z);   // world ground height at the -end
   BRIDGE.y1 = heightWithRiver(A1.x, A1.z);   // world ground height at the +end
-  BRIDGE.hump = 1.4;                          // extra rise at mid-span (m)
+  BRIDGE.hump = 1.7;                          // +0.3 lifts the deck; ends stay pinned to y0/y1 (glued)
   const bridgeTop = (u) => {                  // deck top, LOCAL y (rel. water)
     const s = (u + BRIDGE.halfL) / (2 * BRIDGE.halfL);
     const chord = (BRIDGE.y0 + (BRIDGE.y1 - BRIDGE.y0) * s) - RIVER_LEVEL;
@@ -166,7 +175,7 @@ export function createWorld(scene, opts = {}) {
     // more houses strung along the road. The first three sit across the bridge
     // (south of the river); the last three are on the near side. Positions were
     // chosen on buildable ground beside the road (each gets a flattening pad).
-    { x: -23.5, z: -30, rot: 1.19 },
+    { x: -42, z: -48, rot: 0.95 },   // moved clear of the bridge (was -23.5,-30: impeded the deck and hovered)
     { x: -28.5, z: -41, rot: 1.29 },
     { x: -15.8, z: -51, rot: -1.25 },
     { x: 1.2, z: 10, rot: 1.25 },
@@ -290,7 +299,7 @@ export function createWorld(scene, opts = {}) {
 
     // Side profile (u, y rel. water): terrain-anchored deck on top, base near the
     // canyon floor, two round arches spanning the river in the middle.
-    const HL = BRIDGE.halfL, HW = BRIDGE.halfW, BASE = -1.0;
+    const HL = BRIDGE.halfL, HW = BRIDGE.halfW, BASE = -1.5;  // footing ~world -1.55, still in the bed
     const R = 3.0, C1 = 3.3, C2 = -3.3;
     const shape = new THREE.Shape();
     shape.moveTo(-HL, bridgeTop(-HL));
@@ -350,6 +359,7 @@ export function createWorld(scene, opts = {}) {
           vec3 col = mix(uHorizon, uTop, smoothstep(0.0, 0.5, d.y));
           float ca = dot(d, uSun);
           col += vec3(1.0, 0.90, 0.70) * pow(max(ca, 0.0), 8.0) * 0.10; // gentle halo
+          col += vec3(1.0, 0.93, 0.66) * pow(max(ca, 0.0), 3.0) * 0.16; // broad pale-yellow glow
           // crisp-bordered sun disc (~2.4° radius, stylized)
           float disc = smoothstep(cos(0.045), cos(0.041), ca);
           col = mix(col, vec3(1.0, 0.97, 0.86), disc);
@@ -358,7 +368,21 @@ export function createWorld(scene, opts = {}) {
         }`,
     })
   ));
-  scene.fog = new THREE.Fog(0xd4eaf6, 95, 380);
+  // Blue aerial-perspective haze (Leonardesque atmospheric depth): distance fades
+  // toward a pale sky-blue (the sky's own horizon tone, so the ring dissolves
+  // into the sky rather than meeting a wall). Desktop uses FogExp2 — physical
+  // exponential extinction, no hard opaque plane and no near onset, so the
+  // foreground and near-midground stay clear and the haze builds smoothly with
+  // distance, only true distance saturating. Single dial: HAZE_DENSITY (lower =
+  // clearer / longer view, the mountain ring crisper; higher = hazier / shorter).
+  // At 0.0035 the air is near-clear out to ~90 m, ~50% hazed only near ~240 m,
+  // and the ~130 m mountain ring still reads through as a pale silhouette; nudge
+  // by ±0.0005 (≈0.003 clearer, ≈0.004 hazier). Mobile keeps the lighter linear
+  // profile (the on-screen frame budget likes a hard far clip).
+  const HAZE_DENSITY = 0.0035;
+  scene.fog = LOW
+    ? new THREE.Fog(0xd4eaf6, 95, 380)            // mobile: linear, longer/lighter
+    : new THREE.FogExp2(0xd4eaf6, HAZE_DENSITY);  // desktop: physical exponential falloff
 
   // ---- clouds (flat-bottomed cartoon puffs) -----------------------------------------
   const clouds = new THREE.Group();
@@ -521,44 +545,166 @@ export function createWorld(scene, opts = {}) {
     });
   }
 
-  // ---- trees: trunk + two-tone faceted canopy --------------------------------------------
-  // One scale per tree, shared by all three instanced layers (trunk, canopy,
-  // top blob) — independent random scales would detach the canopies.
+  // ---- vegetation helpers (desktop) -------------------------------------------
+  // The vendored three is the core build (no BufferGeometryUtils), so primitives
+  // are merged by hand: each part is made non-indexed (triangle soup) and its
+  // positions are concatenated. Flat shading derives face normals in-shader; we
+  // still computeVertexNormals so the attribute exists. Baked colours are LINEAR
+  // (THREE.Color(hex).r/g/b) to match what `color: hex` would produce. None of
+  // these helpers touch the shared `rand`, so scatter positions are unaffected.
+  const linRGB = (hex) => { const c = new THREE.Color(hex); return [c.r, c.g, c.b]; };
+  const _ni = (g) => (g.index ? g.toNonIndexed() : g);
+  function mergePos(geos) {
+    geos = geos.map(_ni);
+    let n = 0; for (const g of geos) n += g.attributes.position.count;
+    const pos = new Float32Array(n * 3); let o = 0;
+    for (const g of geos) { pos.set(g.attributes.position.array, o); o += g.attributes.position.count * 3; }
+    const out = new THREE.BufferGeometry();
+    out.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    out.computeVertexNormals();
+    return out;
+  }
+  function mergeColored(parts) {
+    parts = parts.map((q) => ({ geo: _ni(q.geo), color: q.color }));
+    let n = 0; for (const q of parts) n += q.geo.attributes.position.count;
+    const pos = new Float32Array(n * 3), col = new Float32Array(n * 3); let o = 0;
+    for (const q of parts) {
+      const a = q.geo.attributes.position.array, m = q.geo.attributes.position.count;
+      pos.set(a, o * 3);
+      for (let i = 0; i < m; i++) { col[(o + i) * 3] = q.color[0]; col[(o + i) * 3 + 1] = q.color[1]; col[(o + i) * 3 + 2] = q.color[2]; }
+      o += m;
+    }
+    const out = new THREE.BufferGeometry();
+    out.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    out.setAttribute('color', new THREE.BufferAttribute(col, 3));
+    out.computeVertexNormals();
+    return out;
+  }
+  // lumpy icosahedron: vertices displaced by a smooth function of DIRECTION, so
+  // duplicated corners move together (no tears) -> a unique faceted blob.
+  function lumpIcosa(radius, amp, off) {
+    const g = new THREE.IcosahedronGeometry(radius, 0);
+    const pa = g.attributes.position;
+    for (let i = 0; i < pa.count; i++) {
+      const x = pa.getX(i), y = pa.getY(i), z = pa.getZ(i);
+      const r = Math.hypot(x, y, z) || 1, nx = x / r, ny = y / r, nz = z / r;
+      const f = 1 + amp * noise.fbm(nx * 1.8 + ny * 0.9 + off, nz * 1.8 - ny * 0.7 + off, 2);
+      pa.setXYZ(i, x * f, y * f, z * f);
+    }
+    return _ni(g);
+  }
+  // tapered cylinder strut a -> b (tree branches), non-indexed.
+  const _vA = new THREE.Vector3(), _vUp = new THREE.Vector3(0, 1, 0), _mR = new THREE.Matrix4(), _qR = new THREE.Quaternion();
+  function strut(ax, ay, az, bx, by, bz, r0, r1) {
+    const dx = bx - ax, dy = by - ay, dz = bz - az, h = Math.hypot(dx, dy, dz) || 1e-3;
+    const g = new THREE.CylinderGeometry(r1, r0, h, 5); g.translate(0, h / 2, 0);
+    _vA.set(dx / h, dy / h, dz / h); _qR.setFromUnitVectors(_vUp, _vA);
+    g.applyMatrix4(_mR.makeRotationFromQuaternion(_qR)); g.translate(ax, ay, az);
+    return _ni(g);
+  }
+
+  // ---- trees ------------------------------------------------------------------
+  // One scale per tree, shared across its instanced layer(s).
   const treeSpots = scatter(110, meadow(5, 6.5, 8, 6))
     .map((sp) => ({ ...sp, s: 0.8 + rand() * 0.8 }));
-  const trunkGeo = new THREE.CylinderGeometry(0.14, 0.22, 2.0, 6);
-  trunkGeo.translate(0, 1.0, 0);
-  const canopyGeo = new THREE.IcosahedronGeometry(1.25, 0);
-  canopyGeo.scale(1, 0.82, 1);
-  canopyGeo.translate(0, 2.6, 0);
-  const canopyTopGeo = new THREE.IcosahedronGeometry(0.8, 0);
-  canopyTopGeo.translate(0.3, 3.5, 0.1);
-  instanced(trunkGeo, toon({ color: '#7a5232' }), treeSpots, { sMin: 0.8, sMax: 1.6, shadow: true });
-  instanced(canopyGeo, toon({ color: '#ffffff', flatShading: true }), treeSpots, {
-    sMin: 0.8, sMax: 1.6, shadow: true,
-    colorsList: ['#3f8a3c', '#4e9b45', '#5da84b'],
-  });
-  instanced(canopyTopGeo, toon({ color: '#ffffff', flatShading: true }), treeSpots, {
-    sMin: 0.8, sMax: 1.6, shadow: true,
-    colorsList: ['#62b04f', '#76b85a', '#8ac562'],
-  });
+  // 8 extra trees filling the open west meadow around the relocated HW cell
+  // (uses the same meadow predicate, so they stay clear of the cell, cottages,
+  // road and river; both the mobile and desktop tree paths read treeSpots).
+  {
+    const acceptTree = meadow(4, 6.5, 8, 7);
+    let need = 8, guard = 6000;
+    while (need > 0 && guard-- > 0) {
+      const x = -46 + rand() * 30;   // x in [-46, -16]
+      const z = -12 + rand() * 24;   // z in [-12, 12]
+      const h = height(x, z);
+      if (acceptTree(x, z, h)) { treeSpots.push({ x, z, h, s: 0.9 + rand() * 0.7 }); need--; }
+    }
+  }
+  if (LOW) {
+    // mobile: cheap trunk + two faceted blobs (unchanged)
+    const trunkGeo = new THREE.CylinderGeometry(0.14, 0.22, 2.0, 6); trunkGeo.translate(0, 1.0, 0);
+    const canopyGeo = new THREE.IcosahedronGeometry(1.25, 0); canopyGeo.scale(1, 0.82, 1); canopyGeo.translate(0, 2.6, 0);
+    const canopyTopGeo = new THREE.IcosahedronGeometry(0.8, 0); canopyTopGeo.translate(0.3, 3.5, 0.1);
+    instanced(trunkGeo, toon({ color: '#7a5232' }), treeSpots, { sMin: 0.8, sMax: 1.6, shadow: true });
+    instanced(canopyGeo, toon({ color: '#ffffff', flatShading: true }), treeSpots, { sMin: 0.8, sMax: 1.6, shadow: true, colorsList: ['#3f8a3c', '#4e9b45', '#5da84b'] });
+    instanced(canopyTopGeo, toon({ color: '#ffffff', flatShading: true }), treeSpots, { sMin: 0.8, sMax: 1.6, shadow: true, colorsList: ['#62b04f', '#76b85a', '#8ac562'] });
+  } else {
+    // desktop: 4 merged variants (trunk + branches + 4-5 lumpy foliage blobs),
+    // vertex-coloured, one flat-shaded draw call each. Per-tree variety = variant
+    // x random yaw/scale; foliage is lush (big, overlapping blobs).
+    const greens = ['#3f8a3c', '#4e9b45', '#5da84b', '#62b04f', '#56a049', '#6ab057'];
+    const brown = linRGB('#7a5232'), brown2 = linRGB('#6b4a2c');
+    const treeVariant = (seed) => {
+      const r = mulberry32(seed), parts = [];
+      const trunk = new THREE.CylinderGeometry(0.13, 0.22, 2.1, 6); trunk.translate(0, 1.05, 0);
+      parts.push({ geo: trunk, color: brown });
+      const nB = 4 + Math.floor(r() * 2), blobs = [];
+      for (let i = 0; i < nB; i++) {
+        const ang = r() * Math.PI * 2, rad = 0.28 + r() * 0.6;
+        const bx = Math.cos(ang) * rad, by = 2.4 + r() * 1.15, bz = Math.sin(ang) * rad;
+        const g = lumpIcosa(0.9 + r() * 0.55, 0.2, r() * 60); g.scale(1, 0.92, 1); g.translate(bx, by, bz);
+        parts.push({ geo: g, color: linRGB(greens[Math.floor(r() * greens.length)]) });
+        blobs.push([bx, by, bz]);
+      }
+      for (let i = 0, nS = 2 + Math.floor(r() * 2); i < nS; i++) {
+        const b = blobs[Math.floor(r() * blobs.length)];
+        parts.push({ geo: strut(0, 1.7, 0, b[0] * 0.7, b[1] - 0.3, b[2] * 0.7, 0.05, 0.09), color: brown2 });
+      }
+      return mergeColored(parts);
+    };
+    const treeMat = toon({ vertexColors: true }); // faceted via the merged geometry's face normals
+    // Variant seeds: 9002 dropped (undesired form), replaced by 9005.
+    const treeSeeds = [9001, 9005, 9003, 9004];
+    for (let vi = 0; vi < 4; vi++) {
+      const grp = treeSpots.filter((_, i) => i % 4 === vi);
+      instanced(treeVariant(treeSeeds[vi]), treeMat, grp, { shadow: true });
+    }
+  }
 
-  // ---- bushes & flowers ---------------------------------------------------------------------
-  const bushGeo = new THREE.IcosahedronGeometry(0.45, 0);
-  bushGeo.scale(1, 0.7, 1);
-  bushGeo.translate(0, 0.26, 0);
-  instanced(bushGeo, toon({ color: '#ffffff', flatShading: true }), scatter(280, meadow(3, 5, 6)), {
-    sMin: 0.7, sMax: 1.6, shadow: true,
-    colorsList: ['#2f7a35', '#3c8a3e', '#48953f'],
-  });
+  // ---- bushes -----------------------------------------------------------------
+  if (LOW) {
+    const bushGeo = new THREE.IcosahedronGeometry(0.45, 0); bushGeo.scale(1, 0.7, 1); bushGeo.translate(0, 0.26, 0);
+    instanced(bushGeo, toon({ color: '#ffffff', flatShading: true }), scatter(280, meadow(3, 5, 6)), { sMin: 0.7, sMax: 1.6, shadow: true, colorsList: ['#2f7a35', '#3c8a3e', '#48953f'] });
+  } else {
+    // desktop: a clump of 3 lumpy icosas; per-instance green keeps the variety.
+    const r = mulberry32(8881), bparts = [];
+    for (let i = 0; i < 3; i++) {
+      const ang = r() * Math.PI * 2, rad = i === 0 ? 0 : 0.16 + r() * 0.2;
+      const g = lumpIcosa(0.3 + r() * 0.18, 0.24, r() * 60); g.scale(1, 0.74, 1);
+      g.translate(Math.cos(ang) * rad, 0.2 + r() * 0.14, Math.sin(ang) * rad);
+      bparts.push(g);
+    }
+    instanced(mergePos(bparts), toon({ color: '#ffffff' }), scatter(280, meadow(3, 5, 6)), { sMin: 0.7, sMax: 1.6, shadow: true, colorsList: ['#2f7a35', '#3c8a3e', '#48953f'] });
+  }
 
-  const flowerGeo = new THREE.IcosahedronGeometry(0.055, 0);
-  flowerGeo.translate(0, 0.2, 0);
+  // ---- flowers ----------------------------------------------------------------
   const flowerColors = ['#ffffff', '#ffd34d', '#ff7eb6', '#b48cff', '#ff9d5c'];
-  instanced(flowerGeo, toon({ color: '#ffffff' }), scatter(420, meadow(2.5, 5, 5)), {
-    sMin: 0.8, sMax: 1.4,
-    colorsList: flowerColors,
-  });
+  // shared bloom icosa (function scope): mobile flowers, desktop blooms, and the
+  // dense per-defect patch below all instance it.
+  const bloomGeo = new THREE.IcosahedronGeometry(0.055, 0); bloomGeo.translate(0, 0.2, 0);
+  if (LOW) {
+    instanced(bloomGeo, toon({ color: '#ffffff' }), scatter(420, meadow(2.5, 5, 5)), { sMin: 0.8, sMax: 1.4, colorsList: flowerColors });
+  } else {
+    // desktop: stem + a small grass tuft at the base (green, one draw call) plus
+    // the coloured bloom on top. A shared per-spot scale keeps them aligned.
+    const flowerSpots = scatter(420, meadow(2.5, 5, 5)).map((sp) => ({ ...sp, s: 0.8 + rand() * 0.6 }));
+    const flowerBase = () => {
+      const r = mulberry32(5151), parts = [];
+      const stem = new THREE.CylinderGeometry(0.008, 0.015, 0.2, 4); stem.translate(0, 0.1, 0);
+      parts.push({ geo: stem, color: linRGB('#4a7d39') });
+      const blades = ['#5aa04a', '#69b257', '#4f9a44'];
+      for (let i = 0; i < 4; i++) {
+        const ang = (i / 4) * Math.PI * 2 + r() * 0.6, h = 0.08 + r() * 0.06, w = 0.018;
+        const dx = Math.cos(ang), dz = Math.sin(ang);
+        const pp = new Float32Array([-w * dz, 0, w * dx, w * dz, 0, -w * dx, dx * 0.05, h, dz * 0.05]);
+        const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pp, 3));
+        parts.push({ geo: g, color: linRGB(blades[i % 3]) });
+      }
+      return mergeColored(parts);
+    };
+    instanced(flowerBase(), toon({ vertexColors: true }), flowerSpots, {});
+    instanced(bloomGeo, toon({ color: '#ffffff' }), flowerSpots, { colorsList: flowerColors });
+  }
 
   // dense flower patch directly beneath each defect
   {
@@ -572,7 +718,7 @@ export function createWorld(scene, opts = {}) {
         patch.push({ x, z, h: height(x, z) });
       }
     }
-    instanced(flowerGeo, toon({ color: '#ffffff' }), patch, {
+    instanced(bloomGeo, toon({ color: '#ffffff' }), patch, {
       sMin: 0.9, sMax: 1.5,
       colorsList: flowerColors,
     });

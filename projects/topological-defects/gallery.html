@@ -32,7 +32,7 @@
   header.page .key { margin: 12px 0 0; font-size: 13px; color: #38505f; display: flex; gap: 18px; align-items: center; }
   header.page .key i { font-style: normal; display: inline-flex; align-items: center; gap: 7px; }
   header.page .key .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
-  .dot.red { background: #e8554a; box-shadow: 0 0 0 1px rgba(0,0,0,.15); }
+  .dot.green { background:#4caf50; box-shadow:0 0 0 1px rgba(0,0,0,.15); }
   .dot.yellow { background: #ffd23f; box-shadow: 0 0 0 1px rgba(0,0,0,.25); }
 
   /* ---- layout: mobile = vertical column, desktop = grid ---- */
@@ -99,7 +99,7 @@
             -webkit-overflow-scrolling: touch; }
   .plaque .aka  { font-style: italic; font-size: 12.5px; line-height: 1.4; color: rgba(243,247,251,.8); }
   .plaque .rule { border: 0; border-top: 1px solid; width: 44%; margin: 8px 0; opacity: .6; }
-  .plaque.red  .rule { color: #e58c7c; }
+  .plaque.green .rule { color:#7fbf6a; }
   .plaque.yellow .rule { color: #e6b833; }
   .plaque .body { font-size: 13px; line-height: 1.5; color: rgba(233,238,243,.94); }
 
@@ -123,8 +123,8 @@
       scroll or trackpad‑pinch to zoom, ✕ to stop. Only one runs at a time.</div>
   </div>
   <p class="key">
-    <i><span class="dot red"></span> spinorial (admits spin‑½)</i>
-    <i><span class="dot yellow"></span> non‑spinorial (integer spin)</i>
+    <i><span class="dot yellow"></span> orientable</i>
+    <i><span class="dot green"></span> non-orientable</i>
   </p>
 </header>
 <main id="gallery"></main>
@@ -143,8 +143,8 @@ TILES.forEach((t) => {
   const tile = el('section', 'tile');
 
   const bar = el('div', 'bar');
-  const dot = el('span', 'dot ' + (t.red ? 'red' : 'yellow'));
-  dot.title = t.red ? 'spinorial (admits spin-½)' : 'non-spinorial (integer spin)';
+  const dot = el('span', 'dot ' + (t.orientable ? 'yellow' : 'green'));
+  dot.title = t.orientable ? 'orientable' : 'non-orientable';
   const title = el('span', 'title'); title.textContent = t.label.title;
   const sub = el('span', 'sub'); sub.textContent = t.sub;
   bar.append(dot, title, sub);
@@ -168,7 +168,7 @@ TILES.forEach((t) => {
   close.setAttribute('aria-label', 'Stop and return to preview'); close.textContent = '✕';
   stage.append(poster, play, loading, close);
 
-  const plaque = el('div', 'plaque ' + (t.red ? 'red' : 'yellow'));
+  const plaque = el('div', 'plaque ' + (t.orientable ? 'yellow' : 'green'));
   const aka = el('div', 'aka'); aka.textContent = t.label.aka;
   const rule = el('hr', 'rule');
   const body = el('div', 'body'); body.textContent = t.label.body;
