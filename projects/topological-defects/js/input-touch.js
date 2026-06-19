@@ -1,21 +1,27 @@
 // Touch controls for the full simulation on a phone/tablet.
 //
-// Two additions, exactly mirroring the desktop "dual controls":
-//   1. One-finger drag on the canvas LOOKS around. Non-inverted, aim-style:
-//      swipe up -> look up, swipe right -> look right (the opposite of the
-//      "drag the world" convention). It writes straight into player.yaw /
-//      player.pitch, which the controller recomposes into the camera each
-//      frame, so it shares the exact same orientation path as mouse-look.
-//   2. Three thumb-sized buttons: bottom-left = cruise slow, bottom-right =
-//      cruise fast (constant-speed glide along the view direction), top-right
-//      = toggle defect outlines. The slow/fast buttons are a 3-way toggle
-//      (off / slow / fast); tapping the lit one turns cruise off.
+// Look: one-finger drag on the canvas looks around. Non-inverted, aim-style:
+// swipe up -> look up, swipe right -> look right (the opposite of the "drag the
+// world" convention). It writes straight into player.yaw / player.pitch, which
+// the controller recomposes into the camera each frame, so it shares the exact
+// same orientation path as desktop mouse-look.
 //
-// State lives with the caller (player.cruise, defect edge visibility); this
-// module only reads/writes it through the supplied callbacks and keeps the
-// buttons' lit state in sync.
+// Four thumb buttons, one per corner, mirroring the desktop keyboard's vertical
+// + cruise controls (the on-screen legend is dropped on touch UI):
+//   * top-left     #moveUp   - HOLD to rise along the WORLD vertical   (= Space)
+//   * bottom-left  #moveDown - HOLD to descend toward the ground       (= C)
+//   * bottom-right #speedBtn - TAP cycles the forward cruise speed:
+//                              still -> slow -> fast -> still
+//   * top-right    #edgesBtn - TAP toggles defect outlines
+//
+// The up/down buttons simply inject the same key codes the controller already
+// reads (player.keys), so vertical flight runs through player.js's identical
+// movement + altitude-clamp path as Space/C -- no special-casing there. The
+// speed button drives the caller's cruise via setCruise/getCruise; the edges
+// button via toggleOutlines/getOutlines. This module only reads and writes that
+// state through the supplied callbacks and keeps each button's lit state in sync.
 
-const LOOK_SENS = 0.005; // rad per pixel — comfortable phone look speed
+const LOOK_SENS = 0.005; // rad per pixel -- comfortable phone look speed
 const PITCH_LIMIT = 1.55;
 
 export function setupMobileControls({ dom, player, setCruise, getCruise, toggleOutlines, getOutlines }) {
@@ -57,30 +63,67 @@ export function setupMobileControls({ dom, player, setCruise, getCruise, toggleO
     hint.classList.add('gone');
   }
 
-  // ---- the three buttons ---------------------------------------------------
-  const slowBtn = document.getElementById('moveSlow');
-  const fastBtn = document.getElementById('moveFast');
+  // ---- the four buttons ----------------------------------------------------
+  const upBtn    = document.getElementById('moveUp');
+  const downBtn  = document.getElementById('moveDown');
+  const speedBtn = document.getElementById('speedBtn');
   const edgesBtn = document.getElementById('edgesBtn');
 
-  function syncCruiseButtons() {
-    const c = getCruise();
-    slowBtn.classList.toggle('active', c === 1);
-    fastBtn.classList.toggle('active', c === 2);
-    slowBtn.setAttribute('aria-pressed', String(c === 1));
-    fastBtn.setAttribute('aria-pressed', String(c === 2));
+  // Press-and-hold: lit while a finger is down, firing onDown once on press and
+  // onUp once on release (lift / cancel / lost capture). Capturing the pointer
+  // keeps the action running even if the thumb drifts off the button before
+  // lifting, and means a press that lands here never also starts a look-drag.
+  function holdButton(el, onDown, onUp) {
+    let held = false;
+    el.addEventListener('pointerdown', (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      if (held) return;
+      held = true;
+      el.setPointerCapture?.(e.pointerId);
+      el.classList.add('active');
+      onDown();
+    });
+    const release = () => {
+      if (!held) return;
+      held = false;
+      el.classList.remove('active');
+      onUp();
+    };
+    el.addEventListener('pointerup', release);
+    el.addEventListener('pointercancel', release);
+    el.addEventListener('lostpointercapture', release);
   }
+
+  // Vertical flight: inject the very keys the controller reads, so up/down share
+  // Space/C's exact movement + clamp path. (Space -> +world-y, KeyC -> -world-y.)
+  holdButton(upBtn,   () => player.keys.add('Space'), () => player.keys.delete('Space'));
+  holdButton(downBtn, () => player.keys.add('KeyC'),  () => player.keys.delete('KeyC'));
+
+  // A plain tap (stopping the touch from also starting a look-drag on canvas).
+  const tap = (el, fn) => el.addEventListener('click', (e) => { e.stopPropagation(); fn(); });
+
+  // Speed: one button cycling the forward cruise still -> slow -> fast -> still.
+  // The next mode always differs from the current, so setCruise just sets it
+  // (its "tap the lit mode to stop" shortcut never fires from this cycle).
+  const NEXT_CRUISE = { 0: 1, 1: 2, 2: 0 };
+  const SPEED_LABEL = { 0: '■ Still', 1: '▶ Slow', 2: '▶▶ Fast' };
+  function syncSpeedButton() {
+    const c = getCruise();
+    speedBtn.textContent = SPEED_LABEL[c];
+    speedBtn.classList.toggle('active', c !== 0); // lit while cruising
+    speedBtn.setAttribute('aria-pressed', String(c !== 0));
+  }
+  tap(speedBtn, () => { setCruise(NEXT_CRUISE[getCruise()]); syncSpeedButton(); });
+
+  // Outlines: unchanged toggle.
   function syncEdgesButton() {
     const on = getOutlines();
     edgesBtn.classList.toggle('active', on);
     edgesBtn.setAttribute('aria-pressed', String(on));
   }
-
-  // Buttons sit above the canvas; tapping one must not also start a look-drag.
-  const tap = (el, fn) => el.addEventListener('click', (e) => { e.stopPropagation(); fn(); });
-  tap(slowBtn, () => { setCruise(1); syncCruiseButtons(); });
-  tap(fastBtn, () => { setCruise(2); syncCruiseButtons(); });
   tap(edgesBtn, () => { toggleOutlines(); syncEdgesButton(); });
 
-  syncCruiseButtons();
+  syncSpeedButton();
   syncEdgesButton();
 }
