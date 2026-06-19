@@ -38,8 +38,8 @@ export function setupMobileControls({ dom, player, setCruise, getCruise, toggleO
     const dx = e.clientX - lastX, dy = e.clientY - lastY;
     lastX = e.clientX; lastY = e.clientY;
     // aim-style, NOT inverted: swipe right -> look right, swipe up -> look up
-    player.yaw -= dx * LOOK_SENS;
-    player.pitch -= dy * LOOK_SENS;
+    player.yaw -= dx * LOOK_SENS * player.parity; // horizontal flips in a mirrored world
+    player.pitch -= dy * LOOK_SENS;               // vertical is unmirrored
     player.pitch = Math.max(-PITCH_LIMIT, Math.min(PITCH_LIMIT, player.pitch));
   });
 

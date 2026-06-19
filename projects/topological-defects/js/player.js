@@ -25,13 +25,15 @@
 import * as THREE from 'three';
 
 const WALK_SPEED = 3.5;  // m/s
-const RUN_MULT = 2.8;
+const RUN_MULT = 4.2;       // run = 1.5× the former (3.5 m/s walk → 14.7 m/s run)
 const SPRING_W = 7.0;    // rad/s — sets the ~1 s recovery time
 const SPRING_ZETA = 0.28; // < 1: underdamped → visible bob
 const TILT_EPS = 0.03;   // rad — below this residual roll, no oscillation
 
 const _qNew = new THREE.Quaternion();
 const _qInv = new THREE.Quaternion();
+const _vUp = new THREE.Vector3();    // scratch: base "up" at a crossing
+const _vCross = new THREE.Vector3(); // scratch: baseUp × carried-up
 
 export class PlayerController {
   constructor(camera, dom, world, opts = {}) {
@@ -58,6 +60,10 @@ export class PlayerController {
     this._tiltAxis = new THREE.Vector3(1, 0, 0);
     this._tiltAngle = 0;
     this._tiltVel = 0;
+    // Handedness/orientation parity of the traveller: +1 normal, −1 mirrored.
+    // Flipped by crossing an orientation-reversing (det −1) face; odd parity
+    // renders the whole world mirrored (see main.js).
+    this.parity = 1;
 
     // Mouse-look needs pointer lock, which only exists on desktop; on a touch
     // device the on-screen drag (js/input-touch.js) writes yaw/pitch directly,
@@ -72,7 +78,11 @@ export class PlayerController {
       });
       document.addEventListener('mousemove', (e) => {
         if (document.pointerLockElement !== dom) return;
-        this.yaw -= e.movementX * 0.0022;
+        // Horizontal look flips with parity: in a mirrored world (odd parity)
+        // the view is reflected left↔right, so dragging right must still pan
+        // toward what sits on the right of the flipped screen. Pitch is
+        // vertical, which the left-right mirror leaves alone.
+        this.yaw -= e.movementX * 0.0022 * this.parity;
         this.pitch -= e.movementY * 0.0022;
         this.pitch = Math.max(-1.55, Math.min(1.55, this.pitch));
       });
@@ -125,8 +135,12 @@ export class PlayerController {
     const v = this._move.set(0, 0, 0);
     if (k.has('KeyW')) v.add(fwd);
     if (k.has('KeyS')) v.sub(fwd);
-    if (k.has('KeyD')) { v.x += cy; v.z -= sy; }
-    if (k.has('KeyA')) { v.x -= cy; v.z += sy; }
+    // Strafe runs along the camera-right axis. In a mirrored world the view
+    // is flipped left↔right, so screen-right is world-left: fold parity in so
+    // D always moves toward the right of the (possibly mirrored) screen.
+    const px = this.parity;
+    if (k.has('KeyD')) { v.x += cy * px; v.z -= sy * px; }
+    if (k.has('KeyA')) { v.x -= cy * px; v.z += sy * px; }
     if (k.has('Space')) v.y += 1;
     if (k.has('KeyC')) v.y -= 1;
     if (k.has('KeyE') || k.has('KeyQ')) {
@@ -153,33 +167,37 @@ export class PlayerController {
       const tp = d.tryTeleport(this.prev, cam.position);
       if (!tp) continue;
       cam.position.copy(tp.position);
+      this.parity *= tp.parity; // det −1 faces flip the traveller's handedness
 
-      // exact new orientation = gluing rotation ∘ current full orientation
-      _qNew.copy(tp.rotation).multiply(cam.quaternion);
+      // Carry the look direction through the FULL gluing isometry — proper
+      // rotation AND any det −1 glide reflection — exactly as `position` was
+      // (tp.linear is that isometry's linear part, translation aside). The
+      // flight velocity follows the look, so the geodesic stays straight across
+      // the seam: no jerk, and the velocity component parallel to the face is
+      // NOT spuriously flipped. Handedness rides in `parity` (main.js mirrors
+      // the view for odd parity).
+      const fwd = this._fwd.set(0, 0, -1).applyQuaternion(cam.quaternion).applyMatrix4(tp.linear).normalize();
+      const up = this._localUp.set(0, 1, 0).applyQuaternion(cam.quaternion).applyMatrix4(tp.linear).normalize();
 
-      // roll-free part: yaw/pitch from the rotated forward direction
-      this._fwd.set(0, 0, -1).applyQuaternion(_qNew);
-      this.yaw = Math.atan2(-this._fwd.x, -this._fwd.z);
-      const fy = Math.max(-1, Math.min(1, this._fwd.y));
+      // roll-free base: yaw/pitch from the carried forward direction
+      this.yaw = Math.atan2(-fwd.x, -fwd.z);
+      const fy = Math.max(-1, Math.min(1, fwd.y));
       this.pitch = Math.max(-1.55, Math.min(1.55, Math.asin(fy)));
       this._euler.set(this.pitch, this.yaw, 0);
       this._baseQ.setFromEuler(this._euler);
 
-      // Offset such that full = offset ∘ base. Since base shares full's
-      // forward direction, the offset is a pure ROLL about the view axis by
-      // angle θ — the bank the crossing imparted to "up". Oscillate ONLY if
-      // θ is non-negligible; a pure-yaw or pure-translation crossing gives
-      // θ ≈ 0 and leaves the view steady (no wobble).
-      _qInv.copy(this._baseQ).invert();
-      _qNew.multiply(_qInv);
-      if (_qNew.w < 0) { // canonical hemisphere → angle in [0, π]
-        _qNew.set(-_qNew.x, -_qNew.y, -_qNew.z, -_qNew.w);
-      }
-      const s = Math.sqrt(Math.max(0, 1 - _qNew.w * _qNew.w));
-      const theta = 2 * Math.acos(Math.min(1, _qNew.w));
-      if (s > 1e-4 && theta > TILT_EPS) {
+      // Residual bank = signed roll about the view axis carrying the base's
+      // "up" onto the carried "up" (both ⊥ fwd): θ = atan2((baseUp×up)·fwd,
+      // baseUp·up). θ = 0 for level flight through a pure glide, and for any
+      // pure-yaw or pure-translation crossing — no wobble there. Otherwise the
+      // tilt becomes a damped spring that bobs upright like a bee.
+      const baseUp = _vUp.set(0, 1, 0).applyQuaternion(this._baseQ);
+      const sinT = _vCross.crossVectors(baseUp, up).dot(fwd);
+      const cosT = Math.max(-1, Math.min(1, baseUp.dot(up)));
+      const theta = Math.atan2(sinT, cosT);
+      if (Math.abs(theta) > TILT_EPS) {
         // damped harmonic oscillator: equilibrium upright, x(0)=θ, x'(0)=0
-        this._tiltAxis.set(_qNew.x / s, _qNew.y / s, _qNew.z / s);
+        this._tiltAxis.copy(fwd);
         this._tiltAngle = theta;
         this._tiltVel = 0;
       }
