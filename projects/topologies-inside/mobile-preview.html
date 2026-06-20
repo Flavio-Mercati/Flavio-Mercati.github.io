@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>topo-inside — mobile preview</title>
+<style>
+  :root { --bezel:#0f1216; --accent:#9fc6ff; --sky:#bcdcf2; }
+  * { box-sizing:border-box; }
+  html, body { height:100%; margin:0; }
+  body {
+    background: radial-gradient(120% 120% at 50% 0%, #222a33 0%, #0b0e12 70%);
+    color:#cdd6e0; font:14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    display:flex; flex-direction:column; align-items:center; gap:16px; padding:22px; min-height:100%;
+  }
+  header { text-align:center; max-width:560px; }
+  header h1 { font-size:18px; margin:0 0 4px; font-weight:600; letter-spacing:.2px; }
+  header p { margin:0; opacity:.72; font-size:13px; }
+  .bar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; justify-content:center; }
+  button {
+    appearance:none; border:1px solid #2c333d; background:#171b21; color:#cdd6e0;
+    padding:7px 13px; border-radius:8px; cursor:pointer; font-size:13px;
+  }
+  button:hover { border-color:#3a4350; }
+  button.active { border-color:var(--accent); color:#fff; background:#1d242d; }
+  .sep { opacity:.4; }
+  .phone {
+    position:relative; background:var(--bezel); border:2px solid #2a3038;
+    border-radius:40px; padding:14px; box-shadow:0 22px 60px rgba(0,0,0,.55);
+    transition: width .22s ease, height .22s ease;
+  }
+  .screen { width:100%; height:100%; border-radius:28px; overflow:hidden; background:var(--sky); }
+  iframe { width:100%; height:100%; border:0; display:block; }
+  footer { opacity:.5; font-size:12px; max-width:600px; text-align:center; }
+  code { background:#171b21; padding:1px 6px; border-radius:5px; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>topo-inside — mobile preview</h1>
+    <p>The touch build — on-screen thumb controls and mobile level-of-detail — running in a
+       phone-sized frame. This is the same page a phone loads; it forces the mobile path with the
+       <code>#mobile</code> URL hash.</p>
+  </header>
+  <div class="bar">
+    <button id="portrait" class="active">Portrait</button>
+    <button id="landscape">Landscape</button>
+    <span class="sep">·</span>
+    <button id="reload">Reload sim</button>
+  </div>
+  <div class="phone" id="phone">
+    <div class="screen">
+      <iframe id="sim" title="topo-inside (mobile build)" src="./index.html#mobile" allow="fullscreen"></iframe>
+    </div>
+  </div>
+  <footer>Drag inside the screen to look; use the on-screen buttons to fly, rise / descend, change
+    speed and hover. On a real phone, open <code>index.html</code> directly. Serve this over the dev
+    server (<code>python3 serve.py</code>) — opening it as a <code>file://</code> will not load the module.</footer>
+  <script>
+    const phone = document.getElementById('phone');
+    const sim = document.getElementById('sim');
+    const sizes = { portrait: [390, 844], landscape: [844, 390] };
+    const PAD = 28; // 2 * .phone padding
+    function setSize(name) {
+      const [w, h] = sizes[name];
+      const maxW = Math.min(window.innerWidth - 48, w);
+      const maxH = Math.min(window.innerHeight - 230, h);
+      const s = Math.max(0.2, Math.min(maxW / w, maxH / h, 1));
+      phone.style.width = (w * s + PAD) + 'px';
+      phone.style.height = (h * s + PAD) + 'px';
+      phone.dataset.mode = name;
+      document.getElementById('portrait').classList.toggle('active', name === 'portrait');
+      document.getElementById('landscape').classList.toggle('active', name === 'landscape');
+    }
+    document.getElementById('portrait').onclick = () => setSize('portrait');
+    document.getElementById('landscape').onclick = () => setSize('landscape');
+    document.getElementById('reload').onclick = () => { sim.src = sim.src; };
+    window.addEventListener('resize', () => setSize(phone.dataset.mode || 'portrait'));
+    setSize('portrait');
+  </script>
+</body>
+</html>

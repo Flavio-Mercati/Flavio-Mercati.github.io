@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>From the inside — flat 3-manifolds</title>
+<style>
+  :root {
+    --bar:       rgba(18, 28, 38, .62);
+    --ink:       #f3f7fb;
+    --muted:     rgba(243,247,251,.72);
+    --plaque-bg: rgba(11, 20, 29, .94);
+    --gap:       22px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    color: var(--ink);
+    background: linear-gradient(180deg, #aed6ee 0%, #d9eef8 38%, #cfe6c4 100%) fixed;
+    min-height: 100dvh;
+    padding: 28px clamp(14px, 3vw, 40px) 60px;
+  }
+
+  /* ---- page header ---- */
+  header.page { max-width: 1000px; margin: 0 auto 30px; text-align: center; }
+  header.page h1 {
+    font-size: clamp(26px, 4vw, 40px); margin: 0 0 14px; font-weight: 700;
+    color: #12202b; letter-spacing: .01em;
+  }
+  header.page .lede {
+    font-size: clamp(15px, 1.6vw, 18px); line-height: 1.6; color: #1c2c38;
+    max-width: 760px; margin: 0 auto 16px;
+  }
+  header.page .howto { font-size: 14px; color: #2a3c48; margin: 6px 0; opacity: .92; }
+  header.page .howto.mobile { display: none; }
+  header.page .key {
+    font-size: 13.5px; color: #233440; margin-top: 12px; letter-spacing: .01em;
+  }
+  header.page .key .dot { display: inline-block; width: 11px; height: 11px; border-radius: 50%;
+    vertical-align: middle; margin: 0 5px 2px 14px; }
+  header.page .key .dot:first-child { margin-left: 0; }
+  .dot.yellow { background: #ffd23f; box-shadow: 0 0 0 1px rgba(0,0,0,.18) inset; }
+  .dot.green  { background: #4caf50; box-shadow: 0 0 0 1px rgba(0,0,0,.18) inset; }
+
+  /* ---- gallery grid ---- */
+  #gallery {
+    display: grid; grid-template-columns: 1fr; gap: var(--gap);
+    max-width: 1850px; margin: 0 auto;
+  }
+  @media (min-width: 1000px) { #gallery { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1400px) { #gallery { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 1700px) { #gallery { grid-template-columns: repeat(4, 1fr); } }
+
+  /* ---- a tile ---- */
+  .tile {
+    display: flex; flex-direction: column;
+    background: var(--plaque-bg); border-radius: 14px; overflow: hidden;
+    box-shadow: 0 14px 36px rgba(8, 18, 26, .34), 0 2px 6px rgba(8,18,26,.28);
+  }
+  .tile .bar {
+    display: flex; align-items: center; gap: 9px; padding: 11px 14px;
+    background: var(--bar); border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+  .bar .dot { width: 12px; height: 12px; border-radius: 50%; flex: 0 0 auto;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.2) inset; }
+  .bar .title { font-weight: 700; font-size: 15px; color: var(--ink); }
+  .bar .sub { font-size: 12.5px; color: var(--muted); margin-left: auto; text-align: right;
+    letter-spacing: .01em; }
+
+  .stage {
+    position: relative; display: block; aspect-ratio: 3 / 2; background: #9ec6e6;
+    overflow: hidden; text-decoration: none;
+  }
+  .stage .poster {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    transition: transform .5s ease;
+  }
+  .stage:hover .poster { transform: scale(1.035); }
+  /* shimmering placeholder until the poster loads (or while it self-heals) */
+  .stage::before {
+    content: ""; position: absolute; inset: 0; z-index: 0;
+    background: linear-gradient(100deg, #a9cfe8 30%, #c7e2f2 50%, #a9cfe8 70%);
+    background-size: 220% 100%; animation: shimmer 1.6s linear infinite;
+  }
+  .stage .poster { position: relative; z-index: 1; }
+  @keyframes shimmer { 0% { background-position: 120% 0; } 100% { background-position: -120% 0; } }
+  .stage .play {
+    position: absolute; z-index: 2; left: 50%; top: 50%; transform: translate(-50%,-50%);
+    color: #fff; font-size: 13px; letter-spacing: .04em; padding: 7px 14px;
+    background: rgba(12, 22, 31, .56); border: 1px solid rgba(255,255,255,.4);
+    border-radius: 999px; backdrop-filter: blur(3px); opacity: 0; transition: opacity .25s ease;
+    pointer-events: none; white-space: nowrap;
+  }
+  .stage:hover .play { opacity: 1; }
+  iframe.capture { position: absolute; width: 1200px; height: 800px; left: -10000px; top: 0;
+    border: 0; visibility: hidden; }
+
+  .plaque { padding: 14px 16px 17px; }
+  .plaque .aka { font-size: 13.5px; color: var(--muted); line-height: 1.5; font-style: italic; }
+  .plaque .rule { border: none; height: 2px; margin: 11px 0; border-radius: 2px; }
+  .plaque.yellow .rule { background: #e6b833; }
+  .plaque.green  .rule { background: #7fbf6a; }
+  .plaque .body { font-size: 14px; color: var(--ink); line-height: 1.6; }
+
+  /* single-column (mobile) sizing: tall tiles, generous margins */
+  @media (max-width: 999px) {
+    #gallery { gap: 0; }
+    .tile { width: 90vw; margin: 3vh auto; }
+    header.page .howto.desktop { display: none; }
+    header.page .howto.mobile { display: block; }
+  }
+  @media (min-width: 1000px) {
+    .stage { aspect-ratio: auto; height: 46dvh; min-height: 360px; }
+  }
+</style>
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.js" } }
+</script>
+</head>
+<body>
+  <header class="page">
+    <h1>From the inside — flat 3-manifolds</h1>
+    <p class="lede">Each frame is one fundamental cell of a closed flat 3-manifold seen from
+      the inside. A small planet sits at the centre; its periodic images recede through the
+      identified walls — exact tiling, no portal rendering. Click any manifold to fly around inside it.</p>
+    <p class="howto desktop">Click a manifold to open the simulation. Use W/A/S/D to fly,
+      mouse to look, E/Q to roll.</p>
+    <p class="howto mobile">Tap a manifold to open the simulation.</p>
+    <p class="key"><span class="dot yellow"></span> yellow dot = orientable
+      <span class="dot green"></span> green dot = non-orientable</p>
+  </header>
+
+  <main id="gallery" aria-label="Flat 3-manifold gallery"></main>
+
+  <script type="module">
+    import { TOPOLOGY_CATALOG } from './js/cell.js';
+
+    const gallery = document.getElementById('gallery');
+
+    // Build one tile per topology, in catalog order.
+    TOPOLOGY_CATALOG.forEach((t, i) => {
+      const orient = t.orientable;
+      const colour = orient ? 'yellow' : 'green';
+      const id = 'tile-' + t.key;
+
+      const tile = document.createElement('section');
+      tile.className = 'tile';
+      tile.id = id;
+
+      // ---- bar ----
+      const bar = document.createElement('div');
+      bar.className = 'bar';
+      bar.innerHTML =
+        `<span class="dot ${colour}"></span>` +
+        `<span class="title"></span>` +
+        `<span class="sub"></span>`;
+      bar.querySelector('.title').textContent = t.label.title;
+      bar.querySelector('.sub').textContent = t.sub;
+
+      // ---- stage (an <a> — clicking navigates, no iframe) ----
+      const stage = document.createElement('a');
+      stage.className = 'stage';
+      stage.href = `index.html?topo=${encodeURIComponent(t.key)}`;
+      const img = document.createElement('img');
+      img.className = 'poster';
+      img.alt = t.label.title + ' — preview';
+      img.loading = 'lazy';
+      img.src = `posters/${t.key}.jpg`;
+      const play = document.createElement('span');
+      play.className = 'play';
+      play.textContent = 'Enter ▸';
+      stage.append(img, play);
+
+      // ---- plaque ----
+      const plaque = document.createElement('div');
+      plaque.className = `plaque ${colour}`;
+      const aka = document.createElement('div'); aka.className = 'aka'; aka.textContent = t.label.aka;
+      const rule = document.createElement('hr'); rule.className = 'rule';
+      const body = document.createElement('div'); body.className = 'body'; body.textContent = t.label.body;
+      plaque.append(aka, rule, body);
+
+      tile.append(bar, stage, plaque);
+      gallery.append(tile);
+
+      // ---- self-healing poster fallback (one attempt per tile) ----
+      // If posters/<key>.jpg 404s (not yet generated), boot an off-screen capture
+      // iframe at index.html?poster&topo=<key>&id=<id>, wait for its postMessage,
+      // set img.src to the captured data URL, then tear the iframe down. The real
+      // poster file takes over the moment it exists.
+      let tried = false;
+      img.addEventListener('error', () => {
+        if (tried) return;
+        tried = true;
+        const cap = document.createElement('iframe');
+        cap.className = 'capture';
+        cap.src = `index.html?poster&topo=${encodeURIComponent(t.key)}&id=${id}`;
+        const onMsg = (e) => {
+          const d = e && e.data;
+          if (!d || d.type !== 'poster' || d.id !== id) return;
+          window.removeEventListener('message', onMsg);
+          if (d.url) img.src = d.url;
+          // tear down the capture iframe after the one frame it rendered
+          setTimeout(() => cap.remove(), 0);
+        };
+        window.addEventListener('message', onMsg);
+        stage.append(cap);
+      });
+    });
+  </script>
+</body>
+</html>

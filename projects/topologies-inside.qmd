@@ -1,0 +1,85 @@
+---
+title: "Flat 3-manifolds, from the inside"
+date: 2026-06-20
+description: "Fly around a little planet at the centre of a closed flat 3-manifold and watch its periodic images recede through the identified walls — exact tiling, no portal tricks."
+categories: [physics, topology, graphics]
+image: topologies-inside/thumb.png
+resources:
+  - topologies-inside/index.html
+  - topologies-inside/js/
+  - topologies-inside/vendor/
+  - topologies-inside/posters/
+---
+
+A companion to the [Topological defects](topological-defects.qmd) walkthrough,
+seen from the other side. Where that project floats tiny portal-glued defects in
+an open landscape and lets you fly *through* them, this one drops you **inside** a
+single fundamental cell of a closed flat 3-manifold. A King-Kai-style spherical
+planet sits at the centre of the cell; because the manifold is flat, the periodic
+images of that one planet seen receding through every wall are drawn **literally**,
+at each deck-group transform — no portal render pass, so the tiling is exact.
+
+You are a small flying body, not a free-floating camera: a faint gravity pulls
+you toward the nearest planet, thrust and drag set a terminal velocity, and you
+coast and curve in when you let go. Fly toward a wall and you re-enter through its
+partner — translated, rotated, or mirror-reversed, depending on the cell.
+
+## The mathematics
+
+Each identified face carries a **gluing isometry**. We split it into a proper
+rotation and a reflection,
+
+$$ g(\mathbf{x}) = D\,\big(R\,\mathbf{x}\big) + \mathbf{t}, \qquad
+   D = \operatorname{diag}(\pm 1, \pm 1, \pm 1), \quad \det R = +1, $$
+
+so that crossing a wall reorients the observer by the proper part $R$ while the
+reflection part $D$ flips **handedness** (parity) without ever being baked into
+the camera's orientation. The crossing is instantaneous: the inside of a flat
+manifold is locally identical to ordinary space, so there is no jolt, spring or
+recovery wobble at the seam.
+
+The cells are colour-coded by **orientability** — whether a consistent sense of
+handedness survives every loop:
+
+- **yellow** marks the **orientable** cells — the six flat platycosms, where every
+  $D = +\mathbf 1$ and only the rotation $R$ acts;
+- **green** marks the **non-orientable** ones, where crossing a glide-reflected
+  wall ($\det D = -1$) hands the world back mirror-reversed, so "left" and "right"
+  stop being globally defined. The whole scene is then rendered through a
+  reflection about the vertical plane through the camera; cross such a wall twice
+  and the reversal cancels.
+
+## Explore
+
+::: {layout-ncol=1}
+
+- **[Gallery →](topologies-inside/topologies_gallery.html)** — a grid of stills,
+  one per manifold. Read each plaque, then click to drop inside that cell. *(Works
+  on a phone.)*
+
+- **[Open the simulation →](topologies-inside/index.html)** — take the observer's
+  seat in the 3-torus straight away. *(Desktop; mouse + keyboard. Append
+  `?topo=half`, `?topo=amphi1`, etc. to start inside another cell.)*
+
+:::
+
+## The cells
+
+Nine fundamental domains, all of them closed, flat, and prime — the space forms
+you get by gluing a Euclidean solid to itself.
+
+- **Orientable** (the six *platycosms*) — the 3-torus $T^3$, the half-, third-,
+  quarter- and sixth-turn flat space forms, and the **Hantzsche–Wendt** *didicosm*
+  that completes the list (a rhombic-dodecahedral cell glued by three
+  perpendicular half-turn screws — the one cell here with no central seam).
+- **Non-orientable** — three of the four non-orientable flat manifolds: the
+  **first amphicosm** (Klein bottle $\times S^1$), the **second amphicosm** (its
+  swap-glide sibling, glued across the diagonal mirror $x=y$), and the **first
+  amphidicosm**, the mirror counterpart of the Hantzsche–Wendt cell. Cross a
+  glide-reflected wall in any of them and the world comes back left–right reversed.
+
+The twisted cube cells (quarter-, half-, sixth- and third-turn) are shown as
+*flattened stand-ins*: all their face-pairs twist, so their edges carry conical
+seams (deficit angles) the smooth manifold has not. That is the honest physics of
+such a cell, not a rendering artefact — the same compromise the
+[defects walkthrough](topological-defects.qmd) documents.
