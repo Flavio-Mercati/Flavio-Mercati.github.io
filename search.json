@@ -7,6 +7,83 @@
     "text": "Welcome to my personal site. I’m a [brief description]. Here I share research projects, side ideas, and notes."
   },
   {
+    "objectID": "projects/topologies-inside.html",
+    "href": "projects/topologies-inside.html",
+    "title": "Flat 3-manifolds, from the inside",
+    "section": "",
+    "text": "A companion to the Topological defects walkthrough, seen from the other side. Where that project floats tiny portal-glued defects in an open landscape and lets you fly through them, this one drops you inside a single fundamental cell of a closed flat 3-manifold. A King-Kai-style spherical planet sits at the centre of the cell; because the manifold is flat, the periodic images of that one planet seen receding through every wall are drawn literally, at each deck-group transform — no portal render pass, so the tiling is exact.\nYou are a small flying body, not a free-floating camera: a faint gravity pulls you toward the nearest planet, thrust and drag set a terminal velocity, and you coast and curve in when you let go. Fly toward a wall and you re-enter through its partner — translated, rotated, or mirror-reversed, depending on the cell."
+  },
+  {
+    "objectID": "projects/topologies-inside.html#the-mathematics",
+    "href": "projects/topologies-inside.html#the-mathematics",
+    "title": "Flat 3-manifolds, from the inside",
+    "section": "The mathematics",
+    "text": "The mathematics\nEach identified face carries a gluing isometry. We split it into a proper rotation and a reflection,\n\\[ g(\\mathbf{x}) = D\\,\\big(R\\,\\mathbf{x}\\big) + \\mathbf{t}, \\qquad\n   D = \\operatorname{diag}(\\pm 1, \\pm 1, \\pm 1), \\quad \\det R = +1, \\]\nso that crossing a wall reorients the observer by the proper part \\(R\\) while the reflection part \\(D\\) flips handedness (parity) without ever being baked into the camera’s orientation. The crossing is instantaneous: the inside of a flat manifold is locally identical to ordinary space, so there is no jolt, spring or recovery wobble at the seam.\nThe cells are colour-coded by orientability — whether a consistent sense of handedness survives every loop:\n\nyellow marks the orientable cells — the six flat platycosms, where every \\(D = +\\mathbf 1\\) and only the rotation \\(R\\) acts;\ngreen marks the non-orientable ones, where crossing a glide-reflected wall (\\(\\det D = -1\\)) hands the world back mirror-reversed, so “left” and “right” stop being globally defined. The whole scene is then rendered through a reflection about the vertical plane through the camera; cross such a wall twice and the reversal cancels."
+  },
+  {
+    "objectID": "projects/topologies-inside.html#explore",
+    "href": "projects/topologies-inside.html#explore",
+    "title": "Flat 3-manifolds, from the inside",
+    "section": "Explore",
+    "text": "Explore\n\n\n\n\nGallery → — a grid of stills, one per manifold. Read each plaque, then click to drop inside that cell. (Works on a phone.)\nOpen the simulation → — take the observer’s seat in the 3-torus straight away. (Desktop; mouse + keyboard. Append ?topo=half, ?topo=amphi1, etc. to start inside another cell.)"
+  },
+  {
+    "objectID": "projects/topologies-inside.html#the-cells",
+    "href": "projects/topologies-inside.html#the-cells",
+    "title": "Flat 3-manifolds, from the inside",
+    "section": "The cells",
+    "text": "The cells\nNine fundamental domains, all of them closed, flat, and prime — the space forms you get by gluing a Euclidean solid to itself.\n\nOrientable (the six platycosms) — the 3-torus \\(T^3\\), the half-, third-, quarter- and sixth-turn flat space forms, and the Hantzsche–Wendt didicosm that completes the list (a rhombic-dodecahedral cell glued by three perpendicular half-turn screws — the one cell here with no central seam).\nNon-orientable — three of the four non-orientable flat manifolds: the first amphicosm (Klein bottle \\(\\times S^1\\)), the second amphicosm (its swap-glide sibling, glued across the diagonal mirror \\(x=y\\)), and the first amphidicosm, the mirror counterpart of the Hantzsche–Wendt cell. Cross a glide-reflected wall in any of them and the world comes back left–right reversed.\n\nThe twisted cube cells (quarter-, half-, sixth- and third-turn) are shown as flattened stand-ins: all their face-pairs twist, so their edges carry conical seams (deficit angles) the smooth manifold has not. That is the honest physics of such a cell, not a rendering artefact — the same compromise the defects walkthrough documents."
+  },
+  {
+    "objectID": "projects/topological-defects.html",
+    "href": "projects/topological-defects.html",
+    "title": "Topological defects: flying through space glued to itself",
+    "section": "",
+    "text": "A topological defect is a region of space that has been cut out and re-glued to itself. Its boundary faces are identified in pairs by rigid motions, so light — and an observer — that leaves through one wall returns through the partner wall, possibly rotated. The simplest case is a cube whose opposite faces are glued straight across by translation: a perfectly transparent block that simply displaces whatever you see through it. Twist the gluing, or glue the faces of a different polyhedron, and you get a whole zoo of richer defects — the space forms and geons that classify the closed 3-manifolds.\nThis project makes those abstract identifications something you can see and move through. You take the seat of a free-floating camera in a stylized open world — rolling hills, a winding river under a stone bridge, cottages, a ring of mountains, drifting clouds — and nine defects float above the meadow, each marked by a signpost. Fly through one and the full gluing is applied to you, orientation included; the view then rights itself with a short, springy wobble."
+  },
+  {
+    "objectID": "projects/topological-defects.html#the-mathematics",
+    "href": "projects/topological-defects.html#the-mathematics",
+    "title": "Topological defects: flying through space glued to itself",
+    "section": "The mathematics",
+    "text": "The mathematics\nEach identified face carries a gluing isometry — a rotation \\(R\\) and a translation \\(\\mathbf{t}\\), applied in the defect’s local frame as\n\\[ g(\\mathbf{x}) = R\\,\\mathbf{x} + \\mathbf{t}. \\]\nThe familiar “twist about the face’s own normal” family is the special case \\(R = R(\\hat{\\mathbf n},\\theta)\\), \\(\\mathbf{t} = -D\\,\\hat{\\mathbf n}\\); the more exotic cells supply an arbitrary \\((R,\\mathbf{t})\\) — and for the non-orientable cells \\(R\\) is a reflection (\\(\\det R = -1\\)), which is exactly what hands the world back mirror-reversed as you cross.\nThe signs are colour-coded by orientability — whether a consistent sense of handedness survives every loop through the cell:\n\nyellow signs mark the orientable cells — here, all six flat platycosms;\ngreen signs mark the non-orientable ones, where crossing a glide-reflected wall hands the world back mirror-reversed, so “left” and “right” stop being globally defined.\n\nWritten into each yellow sign is a second property, spinoriality — whether the cell’s underlying 3-manifold admits half-integer spin, the Friedman–Sorkin mechanism by which topology alone lets a region of space behave like a fermion. The classification is clean: by Hendriks’ theorem the only non-spinorial prime 3-manifolds are \\(S^3\\), \\(S^2\\times S^1\\), and the lens spaces, so every flat orientable cell here is spinorial and its sign reads (spin \\(\\tfrac12\\)); the (spin 1) tag returns with the lens spaces. The non-orientable cells carry pin± rather than spin structure, so they take no tag."
+  },
+  {
+    "objectID": "projects/topological-defects.html#explore",
+    "href": "projects/topological-defects.html#explore",
+    "title": "Topological defects: flying through space glued to itself",
+    "section": "Explore",
+    "text": "Explore\n\n\n\n\nNavigator → — the full open world. Take the observer’s seat and fly through all nine defects in one continuous landscape. (Desktop; mouse + keyboard.)\nGallery → — a grid of windows, one per manifold. Orbit each defect on its own and read its plaque. (Works beautifully on a phone.)\nDocumentation → — the mathematics of the defects, the story of how the visualization was built (wormholes and all), and the rendering technology behind it."
+  },
+  {
+    "objectID": "projects/topological-defects.html#the-defects",
+    "href": "projects/topological-defects.html#the-defects",
+    "title": "Topological defects: flying through space glued to itself",
+    "section": "The defects",
+    "text": "The defects\nNine gluing-cells, all of them closed, flat, and prime — the space forms you get by gluing a Euclidean solid to itself.\n\nOrientable (the six platycosms) — the 3-torus \\(T^3\\), the half-, third-, quarter- and sixth-turn flat space forms, and the Hantzsche–Wendt didicosm that completes the list.\nNon-orientable — three of the four non-orientable flat manifolds: the first amphicosm (Klein bottle \\(\\times S^1\\)), the second amphicosm (its swap-glide sibling, glued across a diagonal mirror), and the first amphidicosm, the mirror counterpart of the Hantzsche–Wendt cell. Cross a glide-reflected wall in any of them and the world comes back left–right reversed; cross it twice and the reversal cancels.\n\nThe twisted cube cells (the quarter- and half-turn) are shown as flattened stand-ins — all three face-pairs twist, so their edges carry conical seams (deficit angles) the smooth manifold has not. That is the real physics of such a defect, not a rendering artefact; the documentation explains where the honesty line falls, why the curved space forms were pulled out pending a faithful rebuild, and why four of the eight Thurston geometries can’t be shown this way at all."
+  },
+  {
+    "objectID": "work.html",
+    "href": "work.html",
+    "title": "Work",
+    "section": "",
+    "text": "Content here."
+  },
+  {
+    "objectID": "projects.html",
+    "href": "projects.html",
+    "title": "Projects",
+    "section": "",
+    "text": "Order By\n      Default\n      \n        Title\n      \n      \n        Date - Oldest\n      \n      \n        Date - Newest\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\n\n\nFlat 3-manifolds, from the inside\n\n\n\nphysics\n\ntopology\n\ngraphics\n\n\n\nFly around a little planet at the centre of a closed flat 3-manifold and watch its periodic images recede through the identified walls — exact tiling, no portal tricks.\n\n\n\n\n\nJun 20, 2026\n\n\n\n\n\n\n\n\n\n\n\n\nTopological defects: flying through space glued to itself\n\n\n\nphysics\n\ntopology\n\ngraphics\n\n\n\nA real-time 3D simulation of how a topological defect in space would look to an observer free to fly around — and through — it.\n\n\n\n\n\nJun 17, 2026\n\n\n\n\n\n\n\n\n\n\n\n\nTessera: an alphabet of 3×3 binary grids\n\n\n\nmathematics\n\ndesign\n\ntypography\n\n\n\nA complete constructed writing system built from the 102 symmetry classes of the 3×3 binary grid, with its own calligraphy and a working font family.\n\n\n\n\n\nJun 12, 2026\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "I’m a researcher at the University of Burgos, Spain working on quantum gravity."
+  },
+  {
     "objectID": "projects/tessera-alphabet.html",
     "href": "projects/tessera-alphabet.html",
     "title": "Tessera: an alphabet of 3×3 binary grids",
@@ -40,55 +117,6 @@
     "title": "Tessera: an alphabet of 3×3 binary grids",
     "section": "Downloads",
     "text": "Downloads\nInstall the fonts and type Tessera anywhere:\n\nTessera-Regular.ttf\nTessera-Bold.ttf\nTessera-Italic.ttf\nTessera-BoldItalic.ttf\ntessera.json — the machine-readable source of truth (grids, orbits, names, codepoints)"
-  },
-  {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "I’m a researcher at the University of Burgos, Spain working on quantum gravity."
-  },
-  {
-    "objectID": "projects.html",
-    "href": "projects.html",
-    "title": "Projects",
-    "section": "",
-    "text": "Order By\n      Default\n      \n        Title\n      \n      \n        Date - Oldest\n      \n      \n        Date - Newest\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\n\n\nTopological defects: flying through space glued to itself\n\n\n\nphysics\n\ntopology\n\ngraphics\n\n\n\nA real-time 3D simulation of how a topological defect in space would look to an observer free to fly around — and through — it.\n\n\n\n\n\nJun 17, 2026\n\n\n\n\n\n\n\n\n\n\n\n\nTessera: an alphabet of 3×3 binary grids\n\n\n\nmathematics\n\ndesign\n\ntypography\n\n\n\nA complete constructed writing system built from the 102 symmetry classes of the 3×3 binary grid, with its own calligraphy and a working font family.\n\n\n\n\n\nJun 12, 2026\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "work.html",
-    "href": "work.html",
-    "title": "Work",
-    "section": "",
-    "text": "Content here."
-  },
-  {
-    "objectID": "projects/topological-defects.html",
-    "href": "projects/topological-defects.html",
-    "title": "Topological defects: flying through space glued to itself",
-    "section": "",
-    "text": "A topological defect is a region of space that has been cut out and re-glued to itself. Its boundary faces are identified in pairs by rigid motions, so light — and an observer — that leaves through one wall returns through the partner wall, possibly rotated. The simplest case is a cube whose opposite faces are glued straight across by translation: a perfectly transparent block that simply displaces whatever you see through it. Twist the gluing, or glue the faces of a different polyhedron, and you get a whole zoo of richer defects — the space forms and geons that classify the closed 3-manifolds.\nThis project makes those abstract identifications something you can see and move through. You take the seat of a free-floating camera in a stylized open world — rolling hills, a winding river under a stone bridge, cottages, a ring of mountains, drifting clouds — and nine defects float above the meadow, each marked by a signpost. Fly through one and the full gluing is applied to you, orientation included; the view then rights itself with a short, springy wobble."
-  },
-  {
-    "objectID": "projects/topological-defects.html#the-mathematics",
-    "href": "projects/topological-defects.html#the-mathematics",
-    "title": "Topological defects: flying through space glued to itself",
-    "section": "The mathematics",
-    "text": "The mathematics\nEach identified face carries a gluing isometry — a rotation \\(R\\) and a translation \\(\\mathbf{t}\\), applied in the defect’s local frame as\n\\[ g(\\mathbf{x}) = R\\,\\mathbf{x} + \\mathbf{t}. \\]\nThe familiar “twist about the face’s own normal” family is the special case \\(R = R(\\hat{\\mathbf n},\\theta)\\), \\(\\mathbf{t} = -D\\,\\hat{\\mathbf n}\\); the more exotic cells supply an arbitrary \\((R,\\mathbf{t})\\) — and for the non-orientable cells \\(R\\) is a reflection (\\(\\det R = -1\\)), which is exactly what hands the world back mirror-reversed as you cross.\nThe signs are colour-coded by orientability — whether a consistent sense of handedness survives every loop through the cell:\n\nyellow signs mark the orientable cells — here, all six flat platycosms;\ngreen signs mark the non-orientable ones, where crossing a glide-reflected wall hands the world back mirror-reversed, so “left” and “right” stop being globally defined.\n\nWritten into each yellow sign is a second property, spinoriality — whether the cell’s underlying 3-manifold admits half-integer spin, the Friedman–Sorkin mechanism by which topology alone lets a region of space behave like a fermion. The classification is clean: by Hendriks’ theorem the only non-spinorial prime 3-manifolds are \\(S^3\\), \\(S^2\\times S^1\\), and the lens spaces, so every flat orientable cell here is spinorial and its sign reads (spin \\(\\tfrac12\\)); the (spin 1) tag returns with the lens spaces. The non-orientable cells carry pin± rather than spin structure, so they take no tag."
-  },
-  {
-    "objectID": "projects/topological-defects.html#explore",
-    "href": "projects/topological-defects.html#explore",
-    "title": "Topological defects: flying through space glued to itself",
-    "section": "Explore",
-    "text": "Explore\n\n\n\n\nNavigator → — the full open world. Take the observer’s seat and fly through all nine defects in one continuous landscape. (Desktop; mouse + keyboard.)\nGallery → — a grid of windows, one per manifold. Orbit each defect on its own and read its plaque. (Works beautifully on a phone.)\nDocumentation → — the mathematics of the defects, the story of how the visualization was built (wormholes and all), and the rendering technology behind it."
-  },
-  {
-    "objectID": "projects/topological-defects.html#the-defects",
-    "href": "projects/topological-defects.html#the-defects",
-    "title": "Topological defects: flying through space glued to itself",
-    "section": "The defects",
-    "text": "The defects\nNine gluing-cells, all of them closed, flat, and prime — the space forms you get by gluing a Euclidean solid to itself.\n\nOrientable (the six platycosms) — the 3-torus \\(T^3\\), the half-, third-, quarter- and sixth-turn flat space forms, and the Hantzsche–Wendt didicosm that completes the list.\nNon-orientable — three of the four non-orientable flat manifolds: the first amphicosm (Klein bottle \\(\\times S^1\\)), the second amphicosm (its swap-glide sibling, glued across a diagonal mirror), and the first amphidicosm, the mirror counterpart of the Hantzsche–Wendt cell. Cross a glide-reflected wall in any of them and the world comes back left–right reversed; cross it twice and the reversal cancels.\n\nThe twisted cube cells (the quarter- and half-turn) are shown as flattened stand-ins — all three face-pairs twist, so their edges carry conical seams (deficit angles) the smooth manifold has not. That is the real physics of such a defect, not a rendering artefact; the documentation explains where the honesty line falls, why the curved space forms were pulled out pending a faithful rebuild, and why four of the eight Thurston geometries can’t be shown this way at all."
   },
   {
     "objectID": "learn.html",

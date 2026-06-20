@@ -2,6 +2,7 @@
   {
     "listing": "/projects.html",
     "items": [
+      "/projects/topologies-inside.html",
       "/projects/topological-defects.html",
       "/projects/tessera-alphabet.html"
     ]
